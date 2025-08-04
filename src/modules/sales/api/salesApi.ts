@@ -1,9 +1,18 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+
+import { axiosBaseQuery } from '@/modules/shared/lib/rtkQueryBase'
+import { createApi } from '@reduxjs/toolkit/query/react'
 
 export const salesApi = createApi({
     reducerPath: 'salesApi',
-    baseQuery: fetchBaseQuery({ baseUrl: '/api/sales' }),
+    baseQuery: axiosBaseQuery(),
     endpoints: (builder) => ({
-        getSales: builder.query({ query: () => '' }),
+        getSales: builder.query<any, void>({
+            query: () => ({
+                url: '/sales/',
+                method: 'get',
+            }),
+        }),
     }),
 })
+
+export const { useGetSalesQuery } = salesApi
