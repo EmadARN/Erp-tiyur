@@ -1,8 +1,8 @@
 import { FaUser } from "react-icons/fa";
-import { PiUsersDuotone } from "react-icons/pi";
+import { HiOutlineUsers } from "react-icons/hi2";
 import Badge from "../ui/Badge";
-import { BsBell } from "react-icons/bs";
-import { CiSettings } from "react-icons/ci";
+import { FiBell } from "react-icons/fi";
+import { AiOutlineSetting } from "react-icons/ai";
 
 const Header = () => {
   return (
@@ -29,14 +29,14 @@ const Header = () => {
       </div>
       <div className="flex items-center space-x-4">
         <Badge content={4} color="bg-orange-600">
-          <BsBell className="text-xl text-gray-700" />
+          <FiBell className="text-xl text-gray-700" />
         </Badge>
 
-        <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center">
-          <PiUsersDuotone className=" w-12 h-12 " />
+        <div className="w-5 h-5  rounded-full flex items-center justify-center">
+          <HiOutlineUsers className=" text-xl" />
         </div>
-        <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center">
-          <CiSettings className="w-8 h-8" />
+        <div className="w-5 h-5  rounded-full flex items-center justify-center">
+          <AiOutlineSetting className="text-xl" />
         </div>
         <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
           <FaUser className="w-4 h-4 text-purple-600" />
