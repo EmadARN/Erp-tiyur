@@ -1,12 +1,17 @@
-import { FaUser } from "react-icons/fa";
-import { HiOutlineUsers } from "react-icons/hi2";
-import Badge from "../ui/Badge";
 import { FiBell } from "react-icons/fi";
+import { HiOutlineUsers } from "react-icons/hi2";
 import { AiOutlineSetting } from "react-icons/ai";
+import Badge from "../ui/Badge";
+import { AccountDrawer } from "./AccountDrawer";
+import { openSettingsDrawer } from "../../store/slice/settingsSlice";
+import { useAppDispatch } from "../../hooks/useAppDispatch";
 
 const Header = () => {
+  const dispatch = useAppDispatch();
+
   return (
-    <header className="flex justify-between items-center p-4 bg-white ">
+    <header className="flex justify-between items-center p-4 bg-white">
+      {/* سمت چپ */}
       <div className="flex items-center space-x-2">
         <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center">
           <span className="text-white font-bold">T1</span>
@@ -27,20 +32,25 @@ const Header = () => {
           />
         </svg>
       </div>
+
+      {/* سمت راست */}
       <div className="flex items-center space-x-4">
         <Badge content={4} color="bg-orange-600">
-          <FiBell className="text-xl text-gray-700" />
+          <FiBell className="text-xl text-gray-700 cursor-pointer" />
         </Badge>
 
-        <div className="w-5 h-5  rounded-full flex items-center justify-center">
-          <HiOutlineUsers className=" text-xl" />
+        <div className="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer">
+          <HiOutlineUsers className="text-xl" />
         </div>
-        <div className="w-5 h-5  rounded-full flex items-center justify-center">
+
+        <div
+          onClick={() => dispatch(openSettingsDrawer())}
+          className="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer"
+        >
           <AiOutlineSetting className="text-xl" />
         </div>
-        <div className="w-8 h-8 bg-purple-200 rounded-full flex items-center justify-center">
-          <FaUser className="w-4 h-4 text-purple-600" />
-        </div>
+
+        <AccountDrawer />
       </div>
     </header>
   );
