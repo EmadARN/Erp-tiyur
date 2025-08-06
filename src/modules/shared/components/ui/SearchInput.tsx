@@ -36,7 +36,7 @@ export const SearchInput = ({
   return (
     <div
       className={cn(
-        "relative flex items-center w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-sm focus-within:ring-2 focus-within:ring-blue-500",
+        "relative flex items-center w-full max-w-md bg-white border border-gray-300 rounded-lg shadow-sm ",
         className
       )}
     >
