@@ -1,0 +1,89 @@
+import { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { AiOutlineHome, AiOutlineUser, AiOutlineLogout } from "react-icons/ai";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
+import { Button } from "../ui/Button";
+
+export function AccountDrawer() {
+  const [open, setOpen] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        drawerRef.current &&
+        !drawerRef.current.contains(event.target as Node)
+      ) {
+        setOpen(false);
+      }
+    };
+
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [open]);
+
+  return (
+    <div className="relative" ref={drawerRef}>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <Avatar className="w-8 h-8">
+          <AvatarImage src="/avatars/01.png" alt="user" />
+          <AvatarFallback>JF</AvatarFallback>
+        </Avatar>
+      </Button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-md p-4 z-50"
+          >
+            <div className="text-center space-y-1">
+              <p className="font-medium text-sm">Jaydon Frankie</p>
+              <p className="text-xs text-gray-500">demo@minimals.cc</p>
+            </div>
+
+            <div className="flex justify-center gap-2 my-4">
+              {["01", "02", "03"].map((id) => (
+                <Avatar key={id} className="w-8 h-8 border border-white">
+                  <AvatarImage src={`/avatars/${id}.png`} />
+                  <AvatarFallback>U</AvatarFallback>
+                </Avatar>
+              ))}
+              <Button variant="outline" size="icon" className="w-8 h-8">
+                +
+              </Button>
+            </div>
+
+            <div className="space-y-2 text-sm">
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <AiOutlineHome className="w-4 h-4" /> Home
+              </Button>
+              <Button variant="ghost" className="w-full justify-start gap-2">
+                <AiOutlineUser className="w-4 h-4" /> Profile
+              </Button>
+            </div>
+
+            <Button
+              variant="destructive"
+              className="mt-4 w-full justify-center gap-2"
+            >
+              <AiOutlineLogout className="w-4 h-4" /> Logout
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
