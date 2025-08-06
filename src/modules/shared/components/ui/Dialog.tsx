@@ -1,74 +1,71 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect } from "react";
-import type { ReactNode } from "react";
+import * as React from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
 
-type DialogProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  title?: string;
-  children: ReactNode;
-};
+interface DialogProps {
+  open: boolean;
+  onOpenChange: (value: boolean) => void;
+  children: React.ReactNode;
+}
 
-export default function Dialog({
-  isOpen,
-  onClose,
-  title,
-  children,
-}: DialogProps) {
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handleEsc);
-    return () => document.removeEventListener("keydown", handleEsc);
-  }, [onClose]);
+export function Dialog({ open, onOpenChange, children }: DialogProps) {
+  React.useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+  }, [open]);
 
-  return (
+  return createPortal(
     <AnimatePresence>
-      {isOpen && (
+      {open && (
         <>
           {/* Overlay */}
           <motion.div
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+            className="fixed inset-0 bg-black/50 z-40"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={() => onOpenChange(false)}
           />
-
-          {/* Dialog Container */}
+          {/* Content */}
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center"
+            className="fixed z-50 top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-white dark:bg-zinc-900 rounded-xl shadow-lg p-6"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
           >
-            <div
-              className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-md p-6 relative"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header */}
-              {title && (
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                  {title}
-                </h2>
-              )}
-
-              {/* Body */}
-              <div className="text-gray-700 dark:text-gray-300">{children}</div>
-
-              {/* Close Button */}
-              <button
-                className="absolute top-3 right-3 text-gray-400 hover:text-gray-700 dark:hover:text-white"
-                onClick={onClose}
-              >
-                &#10005;
-              </button>
-            </div>
+            {children}
           </motion.div>
         </>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
+
+// Subcomponents
+
+export function DialogContent({
+  children,
+  className = "",
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return <div className={`space-y-4 ${className}`}>{children}</div>;
+}
+
+export function DialogHeader({ children }: { children: React.ReactNode }) {
+  return <div className="mb-4">{children}</div>;
+}
+
+export function DialogTitle({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-lg font-semibold">{children}</h2>;
+}
+
+// استفاده:
+Dialog.Content = DialogContent;
+Dialog.Header = DialogHeader;
+Dialog.Title = DialogTitle;
