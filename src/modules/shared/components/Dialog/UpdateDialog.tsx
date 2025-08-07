@@ -19,7 +19,7 @@ export function UpdateDialog({
 
   React.useEffect(() => {
     setFormState(defaultValues);
-  }, [defaultValues]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prev) => ({
