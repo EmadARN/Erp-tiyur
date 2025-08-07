@@ -1,34 +1,39 @@
-import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/ui/DataTable";
 import { Button } from "@/modules/shared/components/ui/Button";
+import { useGetSalesQuery } from "../api/salesApi";
 
 const SalePage = () => {
-  const [page, setPage] = useState(1);
-
-  const members = [
+  const tableHead = [
+    { columnName: "Member", row_id: "username", type: "string" },
+    { columnName: "First Name", row_id: "first_name", type: "string" },
     {
-      avatar:
-        "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-3.jpg",
-      name: "John Michael",
-      email: "john@creative-tim.com",
-      position: "Manager",
-      department: "Organization",
-      status: "online",
-      employedDate: "23/04/18",
+      columnName: "Last Name",
+      row_id: "last_name",
+      type: "string",
+      onClick: (row) => console.log("Clicked:", row),
     },
     {
-      avatar:
-        "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/team-2.jpg",
-      name: "Alexa Liras",
-      email: "alexa@creative-tim.com",
-      position: "Programator",
-      department: "Developer",
-      status: "offline",
-      employedDate: "23/04/18",
+      columnName: "Role",
+      row_id: "role",
+      type: "string",
+      options: ["Admin", "User", "Guest"],
     },
-    // ...
   ];
 
+  const data = [
+    {
+      username: "rezabh",
+      first_name: "Reza",
+      last_name: "Bhm",
+      role: "User",
+    },
+    {
+      username: "alij",
+      first_name: "Ali",
+      last_name: "JJJ",
+      role: "Admin",
+    },
+  ];
   const handleSearch = (query: string) => {
     console.log("در حال جستجو برای:", query);
   };
@@ -46,9 +51,8 @@ const SalePage = () => {
           </svg>
         </Button>
       </div>
-
       {/* 👇 فقط DataTable صدا زده میشه */}
-      <DataTable data={members} showSearch={true} handleSearch={handleSearch} />
+      <DataTable tableHead={tableHead} data={data} />
     </div>
   );
 };
