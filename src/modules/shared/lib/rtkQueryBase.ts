@@ -1,6 +1,7 @@
-import axios, { AxiosError } from 'axios'
 import type { AxiosRequestConfig } from 'axios'
 import type { BaseQueryFn } from '@reduxjs/toolkit/query'
+import type { AxiosError } from 'axios'
+import http from './httpService' // از http استفاده می‌کنیم چون حالا request دارد
 
 type Method = 'get' | 'post' | 'put' | 'patch' | 'delete'
 
@@ -17,7 +18,7 @@ export const axiosBaseQuery =
   > =>
     async ({ url, method, data, params }) => {
       try {
-        const result = await axios.request({
+        const result = await http.request({
           url,
           method,
           data,
