@@ -1,8 +1,13 @@
-import { DataTable } from "@/modules/shared/components/ui/DataTable";
+import { useState } from "react";
+import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { Button } from "@/modules/shared/components/ui/Button";
-import { useGetSalesQuery } from "../api/salesApi";
+import { DataTableFilters } from "@/modules/shared/components/table/DataTableFilters";
+import { DeleteDialog } from "@/modules/shared/components/table/DeleteDialog";
 
 const SalePage = () => {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<any>(null);
+
   const tableHead = [
     { columnName: "Member", row_id: "username", type: "string" },
     { columnName: "First Name", row_id: "first_name", type: "string" },
@@ -10,13 +15,33 @@ const SalePage = () => {
       columnName: "Last Name",
       row_id: "last_name",
       type: "string",
-      onClick: (row) => console.log("Clicked:", row),
+      onClick: (row: any) => {
+        setSelectedItem(row);
+        setDeleteOpen(true);
+      },
     },
     {
       columnName: "Role",
       row_id: "role",
       type: "string",
       options: ["Admin", "User", "Guest"],
+    },
+    {
+      columnName: "Actions",
+      row_id: "actions",
+      type: "custom",
+      render: (row: any) => (
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            setSelectedItem(row);
+            setDeleteOpen(true);
+          }}
+        >
+          حذف
+        </Button>
+      ),
     },
   ];
 
@@ -34,15 +59,26 @@ const SalePage = () => {
       role: "Admin",
     },
   ];
+
   const handleSearch = (query: string) => {
     console.log("در حال جستجو برای:", query);
   };
+
   const onAdd = () => {
     console.log("Add clicked");
   };
 
+  const handleDeleteConfirm = () => {
+    console.log("آیتم حذف شد:", selectedItem);
+    setSelectedItem(null);
+  };
+
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm space-y-6 min-h-screen">
+      {/* فیلترها */}
+      {/* <DataTableFilters /> */}
+
+      {/* دکمه افزودن */}
       <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
         <Button variant="default" size="sm" onClick={onAdd}>
           Add member
@@ -51,8 +87,16 @@ const SalePage = () => {
           </svg>
         </Button>
       </div>
-      {/* 👇 فقط DataTable صدا زده میشه */}
+
+      {/* جدول داده‌ها */}
       <DataTable tableHead={tableHead} data={data} />
+
+      {/* دیالوگ حذف */}
+      <DeleteDialog
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onConfirm={handleDeleteConfirm}
+      />
     </div>
   );
 };
