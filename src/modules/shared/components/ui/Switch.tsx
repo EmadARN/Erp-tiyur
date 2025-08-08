@@ -4,22 +4,47 @@ type SwitchProps = {
   checked: boolean;
   onChange: (checked: boolean) => void;
   label?: string;
+
+  // کلاس‌های سفارشی برای بخش‌های مختلف
+  containerClassName?: string;
+  labelClassName?: string;
+  trackClassName?: string;
+  thumbClassName?: string;
 };
 
-const Switch: React.FC<SwitchProps> = ({ checked, onChange, label }) => {
+const Switch: React.FC<SwitchProps> = ({
+  checked,
+  onChange,
+  label,
+  containerClassName = "",
+  labelClassName = "",
+  trackClassName = "",
+  thumbClassName = "",
+}) => {
   return (
-    <label className="flex items-center space-x-2 cursor-pointer select-none">
-      {label && <span className="text-sm text-gray-700">{label}</span>}
+    <label
+      className={`flex items-center gap-2 cursor-pointer select-none ${containerClassName}`}
+    >
+      {label && (
+        <span className={`text-sm text-gray-700 ${labelClassName}`}>
+          {label}
+        </span>
+      )}
+
       <div
-        className={`w-6 h-4 flex items-center bg-gray-300 rounded-full p-1 transition-colors duration-300 ${
-          checked ? "bg-indigo-500" : ""
-        }`}
+        className={`
+          w-8 h-5 flex items-center rounded-full p-1 transition-colors duration-300
+          ${checked ? "bg-indigo-500" : "bg-gray-300"}
+          ${trackClassName}
+        `}
         onClick={() => onChange(!checked)}
       >
         <div
-          className={`bg-white w-2 h-2 rounded-full shadow-md transform transition-transform duration-300 ${
-            checked ? "translate-x-2" : "translate-x-0"
-          }`}
+          className={`
+            bg-white w-3 h-3 rounded-full shadow-md transform transition-transform duration-300
+            ${checked ? "translate-x-3" : "translate-x-0"}
+            ${thumbClassName}
+          `}
         />
       </div>
     </label>
