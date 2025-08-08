@@ -22,22 +22,6 @@ const SalePage = () => {
       type: "string",
       options: ["Admin", "User", "Guest"],
     },
-    {
-      columnName: "Actions",
-      row_id: "actions",
-      type: "custom",
-      render: (row: any) => (
-        <Button
-          variant="destructive"
-          size="sm"
-          onClick={() => {
-            setSelectedItem(row);
-          }}
-        >
-          حذف
-        </Button>
-      ),
-    },
   ];
 
   const data = [
