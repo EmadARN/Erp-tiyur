@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const app = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    withCredentials: true,
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: false,
 });
 
 app.interceptors.request.use(
@@ -18,7 +18,7 @@ app.interceptors.response.use(
             originalConfig._retry = true;
             try {
                 const { data } = await axios.get(
-                    `${process.env.NEXT_PUBLIC_API_URL}authentication/refresh-token/`,
+                    `${import.meta.env.VITE_API_URL}authentication/refresh-token/`,
                     { withCredentials: true }
                 );
                 if (data) return app(originalConfig);
@@ -30,12 +30,16 @@ app.interceptors.response.use(
     }
 );
 
+// هم کل اینستنس و هم متدها رو اکسپورت می‌کنیم
+export { app };
+
 const http = {
     get: app.get,
     post: app.post,
     delete: app.delete,
     put: app.put,
     patch: app.patch,
+    request: app.request,
 };
 
 export default http;

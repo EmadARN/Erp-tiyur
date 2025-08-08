@@ -1,10 +1,11 @@
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
+import { Button } from "./Button";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
-  siblingCount?: number; // چند صفحه اطراف صفحه فعلی نمایش داده شود
+  siblingCount?: number; // How many pages to show on each side of the current page
 }
 
 export const Pagination = ({
@@ -39,46 +40,43 @@ export const Pagination = ({
 
   return (
     <div className="flex justify-center items-center gap-2 mt-4 select-none">
-      {/* قبلی */}
-      <button
+      {/* Previous */}
+      <Button
+        variant="outline"
+        size="icon"
         disabled={currentPage === 1}
         onClick={() => onPageChange(currentPage - 1)}
-        className="px-2 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
       >
         <FiChevronLeft />
-      </button>
+      </Button>
 
-      {/* شماره صفحات */}
+      {/* Page numbers */}
       {pageRange.map((page, index) =>
         page === "..." ? (
           <span key={index} className="px-2 py-1 text-gray-500">
             ...
           </span>
         ) : (
-          <button
+          <Button
             key={index}
+            variant={page === currentPage ? "default" : "outline"}
+            size="sm"
             onClick={() => onPageChange(page)}
-            className={`px-3 py-1 rounded border 
-              ${
-                page === currentPage
-                  ? "bg-blue-500 text-white"
-                  : "hover:bg-gray-100"
-              }
-            `}
           >
             {page}
-          </button>
+          </Button>
         )
       )}
 
-      {/* بعدی */}
-      <button
+      {/* Next */}
+      <Button
+        variant="outline"
+        size="icon"
         disabled={currentPage === totalPages}
         onClick={() => onPageChange(currentPage + 1)}
-        className="px-2 py-1 border rounded hover:bg-gray-100 disabled:opacity-50"
       >
         <FiChevronRight />
-      </button>
+      </Button>
     </div>
   );
 };

@@ -1,6 +1,11 @@
+import { Button } from "@/modules/shared/components/ui/Button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/modules/shared/components/ui/Dialog";
 import * as React from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/Dialog";
-import { Button } from "../ui/Button";
 
 interface UpdateDialogProps {
   open: boolean;
@@ -19,7 +24,7 @@ export function UpdateDialog({
 
   React.useEffect(() => {
     setFormState(defaultValues);
-  }, [defaultValues]);
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prev) => ({

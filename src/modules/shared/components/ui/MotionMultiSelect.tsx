@@ -1,28 +1,42 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import CustomCheckbox from "./Checkbox";
+import { Button } from "./Button";
 
 type Option = {
   value: string;
   label: string;
 };
 
-interface SelectProps {
+interface MultiSelectProps {
   options: Option[];
-  value: string;
-  onChange: (value: string) => void;
+  value: string[];
+  onChange: (value: string[]) => void;
+  placeholder?: string;
 }
 
-const MotionSelectBox: React.FC<SelectProps> = ({
+const MotionMultiSelect: React.FC<MultiSelectProps> = ({
   options,
   value,
   onChange,
+  placeholder = "Select...",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
 
-  const selectedLabel = options.find((o) => o.value === value)?.label || "";
+  const toggleOption = (optionValue: string) => {
+    if (value.includes(optionValue)) {
+      onChange(value.filter((v) => v !== optionValue));
+    } else {
+      onChange([...value, optionValue]);
+    }
+  };
 
-  // بستن منو با کلیک بیرون
+  const selectedLabels = options
+    .filter((o) => value.includes(o.value))
+    .map((o) => o.label)
+    .join(", ");
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -40,13 +54,14 @@ const MotionSelectBox: React.FC<SelectProps> = ({
 
   return (
     <div ref={selectRef} className="w-full max-w-sm min-w-[200px] relative">
-      {/* دکمه سلکت */}
-      <button
+      {/* Select Button */}
+      <Button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="w-full bg-transparent text-slate-700 text-sm border border-slate-200 rounded pl-3 pr-8 py-2 flex justify-between items-center transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm"
+        variant="outline"
+        className="w-full bg-transparent text-slate-700 text-sm pl-3 pr-8 py-2 flex justify-between items-center transition duration-300 ease focus:outline-none shadow-sm"
       >
-        {selectedLabel || "Select..."}
+        {selectedLabels || placeholder}
         <motion.svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -63,9 +78,9 @@ const MotionSelectBox: React.FC<SelectProps> = ({
             d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9"
           />
         </motion.svg>
-      </button>
+      </Button>
 
-      {/* منوی بازشو */}
+      {/* Dropdown Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.ul
@@ -78,15 +93,16 @@ const MotionSelectBox: React.FC<SelectProps> = ({
             {options.map((option) => (
               <li
                 key={option.value}
-                onClick={() => {
-                  onChange(option.value);
-                  setIsOpen(false);
-                }}
-                className={`px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 ${
-                  option.value === value ? "bg-slate-100" : ""
-                }`}
+                className="px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 flex items-center gap-2"
+                onClick={() => toggleOption(option.value)}
               >
-                {option.label}
+                <CustomCheckbox
+                  checked={value.includes(option.value)}
+                  onChange={() => toggleOption(option.value)}
+                  size="md"
+                  color="slate"
+                />
+                <span>{option.label}</span>
               </li>
             ))}
           </motion.ul>
@@ -96,4 +112,4 @@ const MotionSelectBox: React.FC<SelectProps> = ({
   );
 };
 
-export default MotionSelectBox;
+export default MotionMultiSelect;

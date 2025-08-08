@@ -1,30 +1,62 @@
 import React from "react";
+import clsx from "clsx";
 
 interface CustomCheckboxProps {
   checked: boolean;
   onChange: (checked: boolean) => void;
   id?: string;
+  color?: "slate" | "blue" | "green" | "red" | "purple" | "yellow";
+  size?: "sm" | "md" | "lg";
+  className?: string;
 }
+
+const sizeClasses = {
+  sm: "h-4 w-4",
+  md: "h-5 w-5",
+  lg: "h-6 w-6",
+};
+
+const colorClasses = {
+  slate: "checked:bg-slate-800 checked:border-slate-800",
+  blue: "checked:bg-blue-600 checked:border-blue-600",
+  green: "checked:bg-green-600 checked:border-green-600",
+  red: "checked:bg-red-600 checked:border-red-600",
+  purple: "checked:bg-purple-600 checked:border-purple-600",
+  yellow: "checked:bg-yellow-500 checked:border-yellow-500",
+};
 
 const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
   checked,
   onChange,
   id = "checkbox",
+  color = "slate",
+  size = "md",
+  className = "",
 }) => {
   return (
-    <div className="inline-flex items-center">
+    <div className={clsx("inline-flex items-center", className)}>
       <label className="flex items-center cursor-pointer relative">
         <input
           type="checkbox"
           id={id}
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
-          className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
+          className={clsx(
+            "peer cursor-pointer appearance-none rounded border border-slate-300 shadow hover:shadow-md transition-all",
+            sizeClasses[size],
+            colorClasses[color]
+          )}
         />
         <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            className="h-3.5 w-3.5"
+            className={clsx(
+              size === "sm"
+                ? "h-3 w-3"
+                : size === "lg"
+                ? "h-4 w-4"
+                : "h-3.5 w-3.5"
+            )}
             viewBox="0 0 20 20"
             fill="currentColor"
             stroke="currentColor"
@@ -43,24 +75,3 @@ const CustomCheckbox: React.FC<CustomCheckboxProps> = ({
 };
 
 export default CustomCheckbox;
-
-
-
-
-
-
-//how to use
-
-// const CheckboxExample = () => {
-//     const [isChecked, setIsChecked] = useState(false);
-  
-//     return (
-//       <div className="p-4">
-//         <CustomCheckbox checked={isChecked} onChange={setIsChecked} />
-//         <p className="mt-2 text-sm text-slate-600">
-//           Checked: {isChecked ? "Yes" : "No"}
-//         </p>
-//       </div>
-//     );
-//   };
-  
