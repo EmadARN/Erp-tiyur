@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { Button } from "@/modules/shared/components/ui/Button";
-import { DataTableFilters } from "@/modules/shared/components/table/DataTableFilters";
-import { DeleteDialog } from "@/modules/shared/components/table/DeleteDialog";
 
 const SalePage = () => {
-  const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
   const tableHead = [
@@ -17,7 +14,6 @@ const SalePage = () => {
       type: "string",
       onClick: (row: any) => {
         setSelectedItem(row);
-        setDeleteOpen(true);
       },
     },
     {
@@ -36,7 +32,6 @@ const SalePage = () => {
           size="sm"
           onClick={() => {
             setSelectedItem(row);
-            setDeleteOpen(true);
           }}
         >
           حذف
@@ -68,16 +63,8 @@ const SalePage = () => {
     console.log("Add clicked");
   };
 
-  const handleDeleteConfirm = () => {
-    console.log("آیتم حذف شد:", selectedItem);
-    setSelectedItem(null);
-  };
-
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm space-y-6 min-h-screen">
-      {/* فیلترها */}
-      {/* <DataTableFilters /> */}
-
       {/* دکمه افزودن */}
       <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
         <Button variant="default" size="sm" onClick={onAdd}>
@@ -90,13 +77,6 @@ const SalePage = () => {
 
       {/* جدول داده‌ها */}
       <DataTable tableHead={tableHead} data={data} />
-
-      {/* دیالوگ حذف */}
-      <DeleteDialog
-        open={deleteOpen}
-        onClose={() => setDeleteOpen(false)}
-        onConfirm={handleDeleteConfirm}
-      />
     </div>
   );
 };

@@ -174,7 +174,7 @@ export const DataTableFilters = () => {
           </div>
         </div>
 
-        <div className="p-6">
+        <div>
           <MotionMultiSelect
             options={options}
             value={directions}
