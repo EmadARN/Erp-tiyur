@@ -1,10 +1,11 @@
 import { useRoutes } from "react-router-dom";
 import { salesRoutes } from "@/modules/sales/routes";
+import { authRoutes } from "@/modules/auth/routes";
 
 export const AppRoutes = () => {
   const routes = [
     ...salesRoutes,
-    // ... سایر ماژول‌ها
+    ...authRoutes
   ];
 
   const element = useRoutes(routes);
