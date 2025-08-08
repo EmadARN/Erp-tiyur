@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { debounce } from "lodash";
+import React, { useEffect, useState, useRef } from "react";
 
 interface AutoCompleteProps {
   fetchSuggestions: (query: string) => Promise<string[]>;
@@ -16,29 +15,36 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
   const [results, setResults] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Debounced fetch
-  const debouncedFetch = useCallback(
-    debounce(async (q: string) => {
-      if (!q.trim()) {
-        setResults([]);
-        return;
-      }
+  const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
+    }
+
+    debounceTimeout.current = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await fetchSuggestions(q);
+        const res = await fetchSuggestions(query);
         setResults(res);
       } catch (err) {
         console.error("Fetch error:", err);
       } finally {
         setLoading(false);
       }
-    }, 400),
-    []
-  );
+    }, 400);
 
-  useEffect(() => {
-    debouncedFetch(query);
-  }, [query, debouncedFetch]);
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, [query, fetchSuggestions]);
 
   return (
     <div className="w-full max-w-md relative">
@@ -76,24 +82,3 @@ const AutoComplete: React.FC<AutoCompleteProps> = ({
 };
 
 export default AutoComplete;
-
-
-
-//how to use
-
-// const mockFetch = async (query: string): Promise<string[]> => {
-//     const allItems = ["Apple", "Banana", "Blueberry", "Blackberry", "Mango", "Melon"];
-//     return new Promise((resolve) => {
-//       setTimeout(() => {
-//         resolve(allItems.filter((item) => item.toLowerCase().includes(query.toLowerCase())));
-//       }, 500);
-//     });
-//   };
-
-//   const handleSelect = (value: string) => {
-//     console.log("Selected:", value);
-//   };
-
-//   <div className="p-6">
-//   <AutoComplete fetchSuggestions={mockFetch} onSelect={handleSelect} />
-// </div>
