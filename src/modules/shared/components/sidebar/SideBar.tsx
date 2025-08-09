@@ -5,6 +5,7 @@ import { ToggleButton } from "./ToggleButton";
 import { NavSection } from "./NavSection";
 import { TreeNode } from "./TreeNode";
 import { navItems, treeData } from "../../constants/sidebarData";
+import { useThemeSettings } from "../../hooks/useThemeSettings";
 
 interface OpenNodes {
   [key: string]: boolean;
@@ -13,6 +14,7 @@ interface OpenNodes {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [openNodes, setOpenNodes] = useState<OpenNodes>({});
+  const { sidebarColor } = useThemeSettings();
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
@@ -33,11 +35,19 @@ const Sidebar = () => {
     collapsed: { opacity: 0, display: "none" },
   };
 
+  //  clors Redux state
+  const sidebarBgClass =
+    sidebarColor === "white"
+      ? "bg-white text-gray-900"
+      : "bg-[rgb(16,24,40)] text-white";
+
   return (
     <motion.aside
-      className={cn("h-screen bg-gray-800 text-white flex flex-col relative ", {
-        "items-center": isCollapsed,
-      })}
+      className={cn(
+        "h-screen flex flex-col relative transition-colors duration-300",
+        sidebarBgClass,
+        { "items-center": isCollapsed }
+      )}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3 }}
