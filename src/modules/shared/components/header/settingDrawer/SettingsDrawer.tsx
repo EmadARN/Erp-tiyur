@@ -6,6 +6,8 @@ import { ColorSection } from "./ColorSection";
 import { PresetSection } from "./PresetSection";
 import { FontSection } from "./FontSection";
 import { FontSizeSection } from "./FontSizeSection";
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
+import { cn } from "@/modules/shared/helpers";
 
 type Props = {
   open: boolean;
@@ -16,17 +18,8 @@ type Props = {
 export function SettingsDrawer({ open, onClose, dashboardRef }: Props) {
   const drawerRef = useRef<HTMLDivElement>(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [settings, setSettings] = useState({
-    mode: false,
-    contrast: false,
-    rtl: false,
-    compact: true,
-    layout: "left",
-    color: "integrate",
-    preset: "green",
-    font: "public",
-    fontSize: 16,
-  });
+
+  const { mode, rtl: isRtl } = useThemeSettings();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -68,19 +61,21 @@ export function SettingsDrawer({ open, onClose, dashboardRef }: Props) {
     }
   };
 
-  const updateSettings = (newSettings: Partial<typeof settings>) => {
-    setSettings((prev) => ({ ...prev, ...newSettings }));
-  };
-
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          initial={{ x: "100%" }}
+          initial={{ x: isRtl ? "-100%" : "100%" }}
           animate={{ x: 0 }}
-          exit={{ x: "100%" }}
+          exit={{ x: isRtl ? "-100%" : "100%" }}
           transition={{ duration: 0.3 }}
-          className={`fixed top-0 right-0 h-full w-[400px] bg-white shadow-lg z-50 rounded-l-2xl p-5 overflow-y-auto`}
+          className={cn(
+            "fixed top-0 h-full w-[400px] shadow-lg z-50 p-5",
+            isRtl
+              ? "left-0 rounded-r-2xl"
+              : "right-0 rounded-l-2xl overflow-y-auto",
+            mode === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
+          )}
           ref={drawerRef}
         >
           <SettingsHeader
@@ -89,14 +84,11 @@ export function SettingsDrawer({ open, onClose, dashboardRef }: Props) {
             isFullscreen={isFullscreen}
           />
 
-          <ToggleSection settings={settings} updateSettings={updateSettings} />
-          <ColorSection settings={settings} updateSettings={updateSettings} />
-          <PresetSection settings={settings} updateSettings={updateSettings} />
-          <FontSection settings={settings} updateSettings={updateSettings} />
-          <FontSizeSection
-            settings={settings}
-            updateSettings={updateSettings}
-          />
+          <ToggleSection />
+          <ColorSection />
+          <PresetSection />
+          <FontSection />
+          <FontSizeSection />
         </motion.div>
       )}
     </AnimatePresence>

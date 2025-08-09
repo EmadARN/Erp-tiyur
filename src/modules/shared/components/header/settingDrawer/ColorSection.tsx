@@ -1,37 +1,41 @@
-type Settings = {
-  color: string;
-};
+import { Button } from "@/modules/shared/components/ui/Button";
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
+import { setSidebarColor } from "@/modules/shared/store/slice/themeSlice";
+import { useDispatch } from "react-redux";
 
-type Props = {
-  settings: Settings;
-  updateSettings: (newSettings: Partial<Settings>) => void;
-};
+export function ColorSection() {
+  const dispatch = useDispatch();
+  const { sidebarColor } = useThemeSettings();
 
-export function ColorSection({ settings, updateSettings }: Props) {
   return (
     <div className="mt-8">
       <p className="text-xs text-gray-600 mb-2">Color</p>
       <div className="flex gap-3">
-        <button
-          onClick={() => updateSettings({ color: "integrate" })}
-          className={`flex-1 h-14 rounded-lg border ${
-            settings.color === "integrate"
-              ? "border-green-500 bg-green-50"
+        <Button
+          onClick={() => dispatch(setSidebarColor("white"))}
+          variant={sidebarColor === "white" ? "default" : "outline"}
+          className={
+            sidebarColor === "white"
+              ? "bg-green-500 hover:bg-green-600"
               : "border-gray-200"
-          }`}
+          }
+          size="lg"
         >
-          <div className="text-sm font-medium text-gray-700">Integrate</div>
-        </button>
-        <button
-          onClick={() => updateSettings({ color: "apparent" })}
-          className={`flex-1 h-14 rounded-lg border ${
-            settings.color === "apparent"
-              ? "border-gray-500 bg-gray-100"
+          Integrate
+        </Button>
+
+        <Button
+          onClick={() => dispatch(setSidebarColor("rgb(16,24,40)"))}
+          variant={sidebarColor === "rgb(16,24,40)" ? "default" : "outline"}
+          className={
+            sidebarColor === "rgb(16,24,40)"
+              ? "bg-gray-500 hover:bg-gray-600"
               : "border-gray-200"
-          }`}
+          }
+          size="lg"
         >
-          <div className="text-sm font-medium text-gray-700">Apparent</div>
-        </button>
+          Apparent
+        </Button>
       </div>
     </div>
   );

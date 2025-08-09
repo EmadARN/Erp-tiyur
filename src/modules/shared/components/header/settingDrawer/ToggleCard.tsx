@@ -1,4 +1,5 @@
 import Switch from "../../ui/Switch";
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
 
 type Props = {
   icon: React.ReactNode;
@@ -8,13 +9,29 @@ type Props = {
 };
 
 export function ToggleCard({ icon, label, value, onToggle }: Props) {
+  const { rtl: isRtl } = useThemeSettings();
+
   return (
-    <div className="group bg-gray-50 hover:bg-gray-100 rounded-xl p-4 flex flex-col justify-between">
-      <div className="w-full flex justify-between gap-2 text-gray-700">
+    <div
+      className={`
+        group rounded-xl p-4 flex flex-col justify-between
+        bg-sidebar text-sidebar-foreground
+        hover:bg-sidebar/80
+      `}
+    >
+      <div
+        className={`w-full flex justify-between gap-2 ${
+          isRtl ? "flex-row-reverse" : ""
+        }`}
+      >
         <span className="text-xl">{icon}</span>
-        <Switch checked={value} onChange={onToggle} />
+        <Switch
+          checked={value}
+          onChange={onToggle}
+          trackClassName="bg-sidebar-border"
+        />
       </div>
-      <div className="pt-4">
+      <div className={`pt-4 ${isRtl ? "text-right" : ""}`}>
         <span className="text-xs font-bold">{label}</span>
       </div>
     </div>
