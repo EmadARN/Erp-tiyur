@@ -5,14 +5,23 @@ import Badge from "../ui/Badge";
 import { AccountDrawer } from "./AccountDrawer";
 import { openSettingsDrawer } from "../../store/slice/settingsSlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { useThemeSettings } from "../../hooks/useThemeSettings";
 
 const Header = () => {
   const dispatch = useAppDispatch();
+  const { rtl } = useThemeSettings();
 
   return (
-    <header className="flex justify-between items-center p-4 bg-white">
-      {/* سمت چپ */}
-      <div className="flex items-center space-x-2">
+    <header
+      className={`flex justify-between items-center p-4 bg-white ${
+        rtl ? "flex-row-reverse" : "flex-row"
+      }`}
+    >
+      <div
+        className={`flex items-center ${
+          rtl ? "space-x-reverse space-x-2" : "space-x-2"
+        }`}
+      >
         <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center">
           <span className="text-white font-bold">T1</span>
         </div>
@@ -33,8 +42,12 @@ const Header = () => {
         </svg>
       </div>
 
-      {/* سمت راست */}
-      <div className="flex items-center space-x-4">
+      {/* سمت آیکون‌ها */}
+      <div
+        className={`flex items-center ${
+          rtl ? "flex-row-reverse space-x-4" : "space-x-4"
+        }`}
+      >
         <Badge content={4} color="bg-orange-600">
           <FiBell className="text-xl text-gray-700 cursor-pointer" />
         </Badge>

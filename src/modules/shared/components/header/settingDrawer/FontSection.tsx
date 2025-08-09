@@ -1,20 +1,23 @@
 import { fonts } from "@/modules/shared/constants/data";
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
 import {
   setFont,
   type FontFamily,
 } from "@/modules/shared/store/slice/themeSlice";
-import type { RootState } from "@/modules/shared/types";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export function FontSection() {
   const dispatch = useDispatch();
-  const font = useSelector((state: RootState) => state.theme.font);
-
+  const { rtl, font } = useThemeSettings();
   return (
     <div className="mt-8">
-      <h3 className="text-xs font-bold px-3 py-1 inline-block bg-gray-800 text-white rounded-full mb-3">
+      <p
+        className={`text-xs text-gray-600 mb-2 ${
+          rtl ? "text-right" : "text-left"
+        }`}
+      >
         Font
-      </h3>
+      </p>
       <p className="text-xs text-gray-600 mb-2 mt-4">Family</p>
       <div className="grid grid-cols-2 gap-4">
         {fonts.map((f) => (

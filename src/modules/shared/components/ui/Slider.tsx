@@ -114,6 +114,7 @@ const Slider: React.FC<SliderProps> = ({
           <div className="text-sm text-gray-700 font-medium text-right">
             {format(value)}
           </div>
+
           <input
             type="range"
             value={value}

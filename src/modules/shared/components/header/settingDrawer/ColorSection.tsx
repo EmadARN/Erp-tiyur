@@ -2,15 +2,27 @@ import { Button } from "@/modules/shared/components/ui/Button";
 import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
 import { setSidebarColor } from "@/modules/shared/store/slice/themeSlice";
 import { useDispatch } from "react-redux";
+import { cn } from "@/modules/shared/helpers"; // اگه تابع cn داری
 
 export function ColorSection() {
   const dispatch = useDispatch();
-  const { sidebarColor } = useThemeSettings();
+  const { sidebarColor, rtl } = useThemeSettings();
 
   return (
     <div className="mt-8">
-      <p className="text-xs text-gray-600 mb-2">Color</p>
-      <div className="flex gap-3">
+      <p
+        className={`text-xs text-gray-600 mb-2 ${
+          rtl ? "text-right" : "text-left"
+        }`}
+      >
+        Color
+      </p>
+      <div
+        className={cn("flex gap-3", {
+          "flex-row": !rtl,
+          "flex-row-reverse": rtl,
+        })}
+      >
         <Button
           onClick={() => dispatch(setSidebarColor("white"))}
           variant={sidebarColor === "white" ? "default" : "outline"}

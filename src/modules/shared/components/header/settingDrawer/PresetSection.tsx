@@ -11,6 +11,7 @@ const presets: { value: PresetColor; color: string }[] = [
   { value: "purple", color: "bg-purple-500" },
   { value: "orange", color: "bg-orange-500" },
 ];
+
 export function PresetSection() {
   const {
     preset,
@@ -27,16 +28,20 @@ export function PresetSection() {
   return (
     <div className="mt-8">
       {/* Title */}
-      <h3
-        className={`text-xs font-bold px-3 py-1 inline-block rounded-full mb-3 ${
-          isDark ? "bg-gray-200 text-gray-900" : "bg-gray-800 text-white"
+
+      <p
+        className={`text-xs text-gray-600 mb-2 ${
+          isRtl ? "text-right" : "text-left"
         }`}
       >
-        Presets
-      </h3>
+        Preset
+      </p>
 
       {/* Preset Grid */}
-      <div className="grid grid-cols-2 gap-4">
+      <div
+        className={`grid grid-cols-2 gap-4 ${isRtl ? "direction-rtl" : ""}`}
+        style={{ direction }}
+      >
         {presets.map(({ value, color }) => {
           const isActive = preset === value;
 
@@ -52,7 +57,7 @@ export function PresetSection() {
                     ? "hover:bg-gray-700"
                     : "hover:bg-gray-50"
                 }
-                ${isRtl ? "flex-row-reverse" : ""}
+                ${isRtl ? "flex-row-reverse" : "flex-row"}
               `}
               style={{
                 fontFamily: font,

@@ -14,7 +14,7 @@ interface OpenNodes {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [openNodes, setOpenNodes] = useState<OpenNodes>({});
-  const { sidebarColor } = useThemeSettings();
+  const { sidebarColor, rtl } = useThemeSettings();
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
@@ -27,7 +27,7 @@ const Sidebar = () => {
 
   const sidebarVariants = {
     expanded: { width: "250px" },
-    collapsed: { width: "100px" },
+    collapsed: { width: "110px" },
   };
 
   const textVariants = {
@@ -35,7 +35,7 @@ const Sidebar = () => {
     collapsed: { opacity: 0, display: "none" },
   };
 
-  //  clors Redux state
+  // رنگ و متن بر اساس حالت
   const sidebarBgClass =
     sidebarColor === "white"
       ? "bg-white text-gray-900"
@@ -44,17 +44,20 @@ const Sidebar = () => {
   return (
     <motion.aside
       className={cn(
-        "h-screen flex flex-col relative transition-colors duration-300",
+        "relative top-0 h-screen flex flex-col transition-colors duration-300",
         sidebarBgClass,
+        rtl ? "right-0 text-right" : "left-0 text-left",
         { "items-center": isCollapsed }
       )}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3 }}
     >
-      <div className="absolute -right-8.5">
+      {/* دکمه باز/بستن در سمت مخالف */}
+      <div className={cn("absolute top-5", rtl ? "-left-8.5" : "-right-8.5")}>
         <ToggleButton isCollapsed={isCollapsed} onToggle={toggleSidebar} />
       </div>
+
       <div className="mt-20">
         <NavSection
           isCollapsed={isCollapsed}

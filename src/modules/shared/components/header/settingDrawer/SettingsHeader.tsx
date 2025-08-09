@@ -17,7 +17,7 @@ export function SettingsHeader({
   isFullscreen,
 }: Props) {
   const dispatch = useDispatch();
-  const { mode } = useThemeSettings();
+  const { mode, rtl } = useThemeSettings();
 
   const handleRefresh = () => {
     dispatch(resetTheme());
@@ -30,10 +30,14 @@ export function SettingsHeader({
       : "hover:text-black focus:ring-black/10";
 
   return (
-    <div className="flex items-center justify-between mb-6">
+    <div
+      className={`flex items-center justify-between mb-6 ${
+        rtl ? "flex-row-reverse" : "flex-row"
+      }`}
+    >
       <h2 className="text-xl font-semibold">Settings</h2>
 
-      <div className="flex items-center ">
+      <div className={`flex items-center ${rtl ? "flex-row-reverse" : ""}`}>
         <Button
           variant="ghost"
           size="icon"

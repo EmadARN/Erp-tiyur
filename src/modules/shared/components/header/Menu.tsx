@@ -4,10 +4,13 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { navItems, treeData } from "../../constants/sidebarData";
 import { RiMenu2Fill } from "react-icons/ri";
+import { useThemeSettings } from "../../hooks/useThemeSettings";
+import { cn } from "../../helpers";
 
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openNodes, setOpenNodes] = useState<{ [key: string]: boolean }>({});
+  const { rtl } = useThemeSettings();
 
   const toggleNode = (id: string) => {
     setOpenNodes((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -15,10 +18,13 @@ const Menu = () => {
 
   return (
     <>
-      {/* دکمه همبرگر – فقط وقتی منو بسته است نمایش داده شود */}
+      {/* دکمه همبرگر */}
       {!isOpen && (
         <button
-          className="fixed top-4 left-4 z-50 text-2xl text-gray-800 cursor-pointer"
+          className={cn(
+            "fixed top-4 z-50 text-2xl text-gray-800 cursor-pointer",
+            rtl ? "right-4 rotate-180" : "left-4"
+          )}
           onClick={() => setIsOpen(true)}
         >
           <RiMenu2Fill />
@@ -31,11 +37,14 @@ const Menu = () => {
           <>
             {/* منوی کشویی */}
             <motion.div
-              initial={{ x: "-100%" }}
+              initial={{ x: rtl ? "100%" : "-100%" }}
               animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
+              exit={{ x: rtl ? "100%" : "-100%" }}
               transition={{ duration: 0.3 }}
-              className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-40 p-4"
+              className={cn(
+                "fixed top-0 h-full bg-white shadow-lg z-40 p-4 w-64",
+                rtl ? "right-0" : "left-0"
+              )}
             >
               {/* لینک‌های ساده */}
               <ul className="space-y-2">
@@ -43,7 +52,12 @@ const Menu = () => {
                   <li key={item.id}>
                     <Link
                       to={item.path}
-                      className="flex items-center space-x-2 text-gray-800 hover:text-blue-500"
+                      className={cn(
+                        "flex items-center text-gray-800 hover:text-blue-500",
+                        rtl
+                          ? "flex-row-reverse space-x-reverse space-x-2"
+                          : "flex-row space-x-2"
+                      )}
                     >
                       <span className="text-xl">{item.icon}</span>
                       <span>{item.label}</span>
@@ -57,10 +71,20 @@ const Menu = () => {
                 {treeData.map((node) => (
                   <li key={node.id}>
                     <div
-                      className="flex items-center justify-between cursor-pointer text-gray-800 hover:text-blue-500"
+                      className={cn(
+                        "flex items-center justify-between cursor-pointer text-gray-800 hover:text-blue-500",
+                        rtl && "flex-row-reverse"
+                      )}
                       onClick={() => toggleNode(node.id)}
                     >
-                      <div className="flex items-center space-x-2">
+                      <div
+                        className={cn(
+                          "flex items-center",
+                          rtl
+                            ? "flex-row-reverse space-x-reverse space-x-2"
+                            : "flex-row space-x-2"
+                        )}
+                      >
                         <span className="text-xl">{node.icon}</span>
                         <span>{node.label}</span>
                       </div>
@@ -80,13 +104,21 @@ const Menu = () => {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
-                          className="ml-6 mt-2 space-y-1 overflow-hidden"
+                          className={cn(
+                            "mt-2 space-y-1 overflow-hidden",
+                            rtl ? "mr-6" : "ml-6"
+                          )}
                         >
                           {node.children.map((child) => (
                             <li key={child.id}>
                               <Link
                                 to={child.path}
-                                className="flex items-center space-x-2 text-sm text-gray-600 hover:text-blue-500"
+                                className={cn(
+                                  "flex items-center text-sm text-gray-600 hover:text-blue-500",
+                                  rtl
+                                    ? "flex-row-reverse space-x-reverse space-x-2"
+                                    : "flex-row space-x-2"
+                                )}
                               >
                                 <span className="text-lg">{child.icon}</span>
                                 <span>{child.label}</span>
