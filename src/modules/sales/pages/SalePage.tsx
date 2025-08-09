@@ -1,9 +1,17 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { Button } from "@/modules/shared/components/ui/Button";
+import SectionTitle from "@/modules/shared/components/ui/Sectiontitle";
+import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
 
 const SalePage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
+
+   const breadcrumbItems = [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Components", href: "/docs/components" },
+    { label: "Sale" }, // آیتم آخر معمولاً لینک نداره
+  ];
 
   const tableHead = [
     { columnName: "Member", row_id: "username", type: "string" },
@@ -50,13 +58,18 @@ const SalePage = () => {
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm space-y-6 min-h-screen">
       {/* دکمه افزودن */}
-      <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
+      <div className="flex  justify-between gap-2 shrink-0 sm:flex-row">
+        <SectionTitle title="Sale"/>
         <Button variant="default" size="sm" onClick={onAdd}>
           Add member
           <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 24 24">
             <path d="M19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
           </svg>
         </Button>
+      </div>
+
+      <div>
+        <Breadcrumb items={breadcrumbItems}/>
       </div>
 
       {/* جدول داده‌ها */}

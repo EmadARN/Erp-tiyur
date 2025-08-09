@@ -3,7 +3,7 @@ import { AppRoutes } from "./router";
 import { ScrollToTop } from "./modules/shared/helpers/ScrollToTop";
 import { useThemeSettings } from "./modules/shared/hooks/useThemeSettings";
 import { useEffect } from "react";
-
+import { Toaster } from 'react-hot-toast';
 const App = () => {
   const { fontSize } = useThemeSettings();
 
@@ -17,6 +17,7 @@ const App = () => {
     <BrowserRouter>
       <ScrollToTop />
       <AppRoutes />
+      <Toaster position="top-center" />
     </BrowserRouter>
   );
 };

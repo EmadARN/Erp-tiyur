@@ -1,6 +1,22 @@
+import toast from 'react-hot-toast';
 
-function useToast() {
+export const useToast = () => {
+  const showToast = (message: string, type: 'success' | 'error' | 'loading' | 'default' = 'default') => {
+    switch(type) {
+      case 'success':
+        toast.success(message);
+        break;
+      case 'error':
+        toast.error(message);
+        break;
+      case 'loading':
+        toast.loading(message);
+        break;
+      default:
+        toast(message);
+        break;
+    }
+  };
 
-}
-
-export { useToast };
+  return { showToast };
+};
