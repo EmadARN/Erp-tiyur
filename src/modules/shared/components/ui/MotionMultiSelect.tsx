@@ -9,17 +9,21 @@ type Option = {
 };
 
 interface MultiSelectProps {
+  id?: string | number;
   options: Option[];
   value: string[];
   onChange: (value: string[]) => void;
   placeholder?: string;
+  className?: string;
 }
 
 const MotionMultiSelect: React.FC<MultiSelectProps> = ({
+  id,
   options,
   value,
   onChange,
   placeholder = "Select...",
+  className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);

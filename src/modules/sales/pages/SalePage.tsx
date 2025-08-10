@@ -3,10 +3,7 @@ import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { Button } from "@/modules/shared/components/ui/Button";
 import SectionTitle from "@/modules/shared/components/ui/Sectiontitle";
 import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
-import {CreateDialog} from "@/modules/shared/components/dialog__/CreateDialog.tsx";
-
-
-
+import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 
 const SalePage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -28,7 +25,7 @@ const SalePage = () => {
     },
   ]);
 
-   const breadcrumbItems = [
+  const breadcrumbItems = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "Components", href: "/docs/components" },
     { label: "Sale" }, // آیتم آخر معمولاً لینک نداره
@@ -55,50 +52,50 @@ const SalePage = () => {
 
   const table_filter = [
     {
-      label: 'price (Toman)',
-      type: 'range',
-      name: 'price-range',
+      label: "price (Toman)",
+      type: "range",
+      name: "price-range",
       max: 1000,
       min: 10,
       step: 10,
-      defaultValue: [100, 500] // پیش‌فرض بازه
+      defaultValue: [100, 500], // پیش‌فرض بازه
     },
     {
-      name: 'location',
-      label: 'location',
-      type: 'autocomplete',
-      options: ['vanak', 'zanjan', 'fereshte'],
-      placeholder: 'search for location',
-      defaultValue: 'vanak'
+      name: "location",
+      label: "location",
+      type: "autocomplete",
+      options: ["vanak", "zanjan", "fereshte"],
+      placeholder: "search for location",
+      defaultValue: "vanak",
     },
     {
-      name: 'sort-by',
-      label: 'sort by',
-      type: 'select-box',
-      options: ['max-price', 'low-price'],
-      defaultValue: 'max-price'
+      name: "sort-by",
+      label: "sort by",
+      type: "select-box",
+      options: ["max-price", "low-price"],
+      defaultValue: "max-price",
     },
     {
-      name: 'price-based',
-      label: 'price-based',
-      type: 'switch',
-      defaultValue: true
+      name: "price-based",
+      label: "price-based",
+      type: "switch",
+      defaultValue: true,
     },
     {
-      name: 'construction-based',
-      label: 'costruction select',
-      type: 'multi-select',
-      options: ['iran', 'dubai'],
-      defaultValue: ['iran']
+      name: "construction-based",
+      label: "costruction select",
+      type: "multi-select",
+      options: ["iran", "dubai"],
+      defaultValue: ["iran"],
     },
     {
-      name: 'price-form',
-      label: 'price',
-      type: 'range-box',
-      defaultValue: [200, 800]
-    }
+      name: "price-form",
+      label: "price",
+      type: "range-box",
+      defaultValue: [200, 800],
+    },
   ];
-  const create_dialog_configs = [
+  const createDialogConfigs = [
     {
       name: "title",
       label: "title product",
@@ -127,26 +124,51 @@ const SalePage = () => {
     },
   ];
 
+  const updateDialogConfigs = [
+    {
+      name: "title",
+      label: "عنوان محصول",
+      type: "string-input",
+    },
+    {
+      name: "sort-by",
+      label: "مرتب‌سازی بر اساس",
+      type: "select-box",
+      options: ["max-price", "low-price"],
+    },
+    {
+      name: "price-based",
+      label: "بر اساس قیمت",
+      type: "switch",
+    },
+    {
+      name: "construction-based",
+      label: "انتخاب محل ساخت",
+      type: "multi-select",
+      options: ["iran", "dubai"],
+    },
+  ];
 
-
+  const existingData = {
+    title: "product-145",
+    "sort-by": "max-price",
+    "price-based": true,
+    "construction-based": ["iran"],
+  };
   const handleSearch = (query: string) => {
     console.log("در حال جستجو برای:", query);
   };
 
-  const onAdd = () => {
-    console.log("Add clicked");
-  };
-
   const OnCreate = () => {
     console.log("Add OnCreate");
-    setCreateIndex(true)
+    setCreateIndex();
   };
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm space-y-6 min-h-screen">
       {/* دکمه افزودن */}
       <div className="flex  justify-between gap-2 shrink-0 sm:flex-row">
-        <SectionTitle title="Sale"/>
+        <SectionTitle title="Sale" />
         <Button variant="default" size="sm" onClick={OnCreate}>
           Add member
           <svg className="w-4 h-4 ml-2" fill="currentColor" viewBox="0 0 24 24">
@@ -156,22 +178,28 @@ const SalePage = () => {
       </div>
 
       <div>
-        <Breadcrumb items={breadcrumbItems}/>
+        <Breadcrumb items={breadcrumbItems} />
       </div>
 
-      <DataTable tableHead={tableHead} data={table_data} handleSearch={handleSearch}
-
-                 tableFilters={table_filter} filterData={filterData} setFilterData={setFilterData}
+      <DataTable
+        tableHead={tableHead}
+        data={table_data}
+        handleSearch={handleSearch}
+        tableFilters={table_filter}
+        filterData={filterData}
+        setFilterData={setFilterData}
+        updateDialogConfigs={updateDialogConfigs}
+        existingData={existingData}
       />
 
       <CreateDialog
-          open={createIndex !== null}
-          onClose={() => setCreateIndex(null)}
-          onConfirm={() => {
-            if (createIndex !== null) OnCreate?.(createIndex);
-            setCreateIndex(null);
-          }}
-          configs={create_dialog_configs}
+        open={createIndex !== null}
+        onClose={() => setCreateIndex(null)}
+        onConfirm={() => {
+          if (createIndex !== null) OnCreate?.(createIndex);
+          setCreateIndex(null);
+        }}
+        configs={createDialogConfigs}
       />
     </div>
   );

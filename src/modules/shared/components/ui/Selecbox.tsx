@@ -7,15 +7,19 @@ type Option = {
 };
 
 interface SelectProps {
+  id?: String | number;
   options: Option[];
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 }
 
 const MotionSelectBox: React.FC<SelectProps> = ({
+  id,
   options,
   value,
   onChange,
+  className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef<HTMLDivElement>(null);
