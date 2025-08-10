@@ -5,12 +5,17 @@ import SectionTitle from "@/modules/shared/components/ui/Sectiontitle";
 import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import type { TableColumn, TableFilter } from "@/modules/shared/types";
+import { useGetSalesQuery } from "../api/salesApi";
 
 const SalePage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [filterData, setFilterData] = useState<boolean>([]);
   const [createIndex, setCreateIndex] = useState<number | null>(null);
 
+  const { data, error, loading } = useGetSalesQuery();
+
+  console.log("saledata", data);
+  console.log("error", error);
   const [table_data, setTableData] = useState<any>([
     {
       username: "rezabh",
@@ -161,7 +166,7 @@ const SalePage = () => {
   };
 
   const OnCreate = (index: number | null) => {
-    console.log("Add OnCreate",index);
+    console.log("Add OnCreate", index);
     setCreateIndex();
   };
 
