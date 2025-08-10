@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import TextInput from "@/modules/auth/components/TextInput";
 import { Link } from "react-router-dom";
 import logo from "../../../assets/images/logo.png";
-import { useToast } from '@/modules/shared/hooks/use-toast';
+import { useToast } from "@/modules/shared/hooks/use-toast";
+import TextInput from "@/modules/shared/components/ui/TextInput";
 const LoginPage: React.FC = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -49,7 +49,7 @@ const LoginPage: React.FC = () => {
               <TextInput
                 onChange={setUserName}
                 inputType="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
+                className="w-full px-4 py-2  focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
                 placeholder="Enter your username"
               />
             </div>
@@ -59,12 +59,15 @@ const LoginPage: React.FC = () => {
               <TextInput
                 onChange={setPassword}
                 inputType="password"
-                className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
+                className="w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
                 placeholder="Enter your password"
               />
             </div>
 
-            <button onClick={()=>   showToast('پیام موفقیت!', 'error')} className="w-full bg-blue-500 cursor-pointer hover:bg-blue-800 text-white py-2 rounded font-medium transition">
+            <button
+              onClick={() => showToast("پیام موفقیت!", "error")}
+              className="w-full bg-blue-500 cursor-pointer hover:bg-blue-800 text-white py-2 rounded font-medium transition"
+            >
               Singin
             </button>
           </div>
