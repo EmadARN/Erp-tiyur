@@ -9,9 +9,20 @@ import Tooltip from "../ui/Tooltip";
 import { FiEdit2 } from "react-icons/fi";
 import { MdCancel } from "react-icons/md";
 import { UpdateDialog } from "@/modules/sales/components/UpdateDialog";
-import { DataTableFilters } from "./DataTableFilters";
+import {DynamicFilters} from "./DataTableFilters";
 import { Drawer } from "../ui/Drawer";
+import {CreateDialog} from "@/modules/shared/components/dialog__/CreateDialog.tsx";
+// import log = require("eslint-plugin-react/lib/util/log");
 type ColumnType = "string" | "button" | "input" | "select";
+
+
+
+
+
+
+
+
+
 
 type TableColumn = {
   columnName: string;
@@ -22,7 +33,8 @@ type TableColumn = {
 };
 
 type DynamicTableProps = {
-  tableHead: TableColumn[];
+    tableHead: TableColumn[];
+    tableFilters: TableColumn[];
   data: Record<string, any>[];
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;
@@ -31,10 +43,12 @@ type DynamicTableProps = {
 };
 
 export const DataTable: React.FC<DynamicTableProps> = ({
-  tableHead,
+  tableHead,tableFilters,
+ filterData, setFilterData,
   data,
   onDelete,
   onEdit,
+    onCreate,
   showSearch = true,
   handleSearch,
 }) => {
@@ -44,6 +58,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   const [bulkMode, setBulkMode] = useState<"edit" | null>(null);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  // const [filterData, setFilterData] = useState<boolean>([]);
 
   setShowFilters;
   const isAllSelected = data.length > 0 && selectedRows.length === data.length;
@@ -64,6 +79,38 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     setBulkMode(null);
   };
 
+
+    const update_dialog_configs = [
+        {
+            name: "title",
+            label: "عنوان محصول",
+            type: "string-input",
+        },
+        {
+            name: "sort-by",
+            label: "مرتب‌سازی بر اساس",
+            type: "select-box",
+            options: ["max-price", "low-price"],
+        },
+        {
+            name: "price-based",
+            label: "بر اساس قیمت",
+            type: "switch",
+        },
+        {
+            name: "construction-based",
+            label: "انتخاب محل ساخت",
+            type: "multi-select",
+            options: ["iran", "dubai"],
+        },
+    ];
+    const existingData = {
+        "title": "product-145",
+        "sort-by": "max-price",
+        "price-based": true,
+        "construction-based": ["iran"],
+    };
+
   return (
     <div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
       {/* Top Bar */}
@@ -72,6 +119,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
 
         {/* Advanced Filter Menu */}
         <div className="relative ml-auto">
+          {/*<SearchInput  value={'search koniii'} onSearch={handleSearch} placeholder={'search ela bashgolakh'}/>*/}
           <Button
             variant="outline"
             size="sm"
@@ -94,16 +142,17 @@ export const DataTable: React.FC<DynamicTableProps> = ({
                 >
                   Close
                 </Button>
+
               </div>
 
               <div className="space-y-4 mb-6">
-                <DataTableFilters />
+                <DynamicFilters filtersConfig={tableFilters} data={filterData} setData={setFilterData}/>
               </div>
 
               <Button
                 size="sm"
                 className="w-full bg-black text-white px-4 py-1 rounded-md hover:bg-gray-800"
-                onClick={() => setShowFilters(false)}
+                onClick={() => console.log('data : ', filterData)}
               >
                 Apply Filters
               </Button>
@@ -125,6 +174,8 @@ export const DataTable: React.FC<DynamicTableProps> = ({
               Bulk Edit
             </Button>
           ) : (
+
+              <>
             <Button
               variant="ghost"
               className="w-full flex items-center gap-2 justify-start py-2 px-3 text-sm text-red-500 hover:bg-red-50 transition"
@@ -136,6 +187,20 @@ export const DataTable: React.FC<DynamicTableProps> = ({
               <MdCancel className="w-4 h-4" />
               Cancel
             </Button>
+
+                <Button
+                    variant="ghost"
+                    className="w-full flex items-center gap-2 justify-start py-2 px-3 text-sm text-red-500 hover:bg-red-50 transition"
+                    onClick={() => {
+                      setBulkMode(null);
+                    }}
+                    size="sm"
+                >
+                  <MdCancel className="w-4 h-4" />
+                  edit this
+                </Button>
+
+              </>
           )}
         </div>
       </div>
@@ -316,7 +381,10 @@ export const DataTable: React.FC<DynamicTableProps> = ({
           if (editIndex !== null) onEdit?.(editIndex);
           setEditIndex(null);
         }}
+        configs={update_dialog_configs}
+        data={existingData}
       />
+
       <DeleteDialog
         open={deleteIndex !== null}
         onClose={() => setDeleteIndex(null)}
