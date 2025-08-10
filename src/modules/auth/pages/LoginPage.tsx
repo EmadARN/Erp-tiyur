@@ -1,12 +1,29 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // 👈 اضافه شد
 import logo from "../../../assets/images/logo.png";
 import { useToast } from "@/modules/shared/hooks/use-toast";
 import TextInput from "@/modules/shared/components/ui/TextInput";
+import { useLoginMutation } from "../api/Login";
+
 const LoginPage: React.FC = () => {
-  const [userName, setUserName] = useState("");
+  const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  const [login, { isLoading }] = useLoginMutation();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login({ username, password }).unwrap();
+      showToast("Login successful", "success");
+
+      navigate("/dashboard");
+    } catch (err: any) {
+      showToast(err?.data?.message || "Login failed", "error");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-200 to-blue-400 px-4">
@@ -43,7 +60,7 @@ const LoginPage: React.FC = () => {
             Slaughterhouse Management Panel Login
           </h1>
 
-          <div className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-dark text-sm mb-1">Username </label>
               <TextInput
@@ -65,12 +82,13 @@ const LoginPage: React.FC = () => {
             </div>
 
             <button
-              onClick={() => showToast("پیام موفقیت!", "error")}
-              className="w-full bg-blue-500 cursor-pointer hover:bg-blue-800 text-white py-2 rounded font-medium transition"
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-blue-500 cursor-pointer hover:bg-blue-800 text-white py-2 rounded font-medium transition disabled:opacity-50"
             >
-              Singin
+              {isLoading ? "Signing in..." : "Sign in"}
             </button>
-          </div>
+          </form>
 
           <div className="flex justify-between text-sm text-dark mt-4">
             <Link to="#" className="hover:text-blue-600">
