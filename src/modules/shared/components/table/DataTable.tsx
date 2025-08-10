@@ -12,6 +12,7 @@ import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import { DynamicFilters } from "./DataTableFilters";
 import { Drawer } from "../ui/Drawer";
 import type { TableColumn, TableFilter } from "../../types";
+import { FiFilter } from "react-icons/fi";
 
 
 
@@ -83,7 +84,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
             size="sm"
             onClick={() => setShowFilters(!showFilters)}
           >
-            Filters
+            <FiFilter />
           </Button>
           <Drawer
             open={showFilters}
@@ -121,15 +122,13 @@ export const DataTable: React.FC<DynamicTableProps> = ({
           </Drawer>
         </div>
 
-        <div className="ml-auto mt-4  bg-white border border-gray-200 rounded-lg shadow-lg p-1.5">
+        <div className="pl-4 min-h-[90px] flex flex-col justify-center">
           {bulkMode !== "edit" ? (
             <Button
-              variant="ghost"
-              className="w-full flex items-center gap-2 justify-start py-2 px-3 text-sm text-slate-700 hover:bg-slate-100 transition"
-              onClick={() => {
-                setBulkMode("edit");
-              }}
+              variant="outline"
               size="sm"
+              className="w-full flex items-center gap-2 justify-start px-3 py-2 text-sm text-slate-700 hover:bg-slate-100 transition"
+              onClick={() => setBulkMode("edit")}
             >
               <FiEdit2 className="w-4 h-4" />
               Bulk Edit
@@ -138,11 +137,9 @@ export const DataTable: React.FC<DynamicTableProps> = ({
             <>
               <Button
                 variant="ghost"
-                className="w-full flex items-center gap-2 justify-start py-2 px-3 text-sm text-red-500 hover:bg-red-50 transition"
-                onClick={() => {
-                  setBulkMode(null);
-                }}
                 size="sm"
+                className="w-full flex items-center gap-2 justify-start px-3 py-2 text-sm text-red-500 hover:bg-red-50 transition"
+                onClick={() => setBulkMode(null)}
               >
                 <MdCancel className="w-4 h-4" />
                 Cancel
@@ -150,14 +147,12 @@ export const DataTable: React.FC<DynamicTableProps> = ({
 
               <Button
                 variant="ghost"
-                className="w-full flex items-center gap-2 justify-start py-2 px-3 text-sm text-red-500 hover:bg-red-50 transition"
-                onClick={() => {
-                  setBulkMode(null);
-                }}
                 size="sm"
+                className="w-full flex items-center gap-2 justify-start px-3 py-2 text-sm text-blue-600 hover:bg-blue-50 transition"
+                onClick={() => console.log("Edit clicked")}
               >
-                <MdCancel className="w-4 h-4" />
-                edit this
+                <FiEdit2 className="w-4 h-4" />
+                Edit This
               </Button>
             </>
           )}
