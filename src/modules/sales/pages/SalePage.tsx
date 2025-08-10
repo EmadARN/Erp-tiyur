@@ -4,6 +4,7 @@ import { Button } from "@/modules/shared/components/ui/Button";
 import SectionTitle from "@/modules/shared/components/ui/Sectiontitle";
 import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
+import type { TableColumn, TableFilter } from "@/modules/shared/types";
 
 const SalePage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -31,7 +32,7 @@ const SalePage = () => {
     { label: "Sale" }, // آیتم آخر معمولاً لینک نداره
   ];
 
-  const tableHead = [
+  const tableHead: TableColumn[] = [
     { columnName: "Member", row_id: "username", type: "string" },
     { columnName: "First Name", row_id: "first_name", type: "string" },
     {
@@ -50,7 +51,7 @@ const SalePage = () => {
     },
   ];
 
-  const table_filter = [
+  const table_filter: TableFilter[] = [
     {
       label: "price (Toman)",
       type: "range",
@@ -159,8 +160,8 @@ const SalePage = () => {
     console.log("در حال جستجو برای:", query);
   };
 
-  const OnCreate = () => {
-    console.log("Add OnCreate");
+  const OnCreate = (index: number | null) => {
+    console.log("Add OnCreate",index);
     setCreateIndex();
   };
 

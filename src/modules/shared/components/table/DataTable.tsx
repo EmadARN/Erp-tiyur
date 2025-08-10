@@ -11,21 +11,18 @@ import { MdCancel } from "react-icons/md";
 import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import { DynamicFilters } from "./DataTableFilters";
 import { Drawer } from "../ui/Drawer";
+import type { TableColumn, TableFilter } from "../../types";
 
-type ColumnType = "string" | "button" | "input" | "select";
 
-type TableColumn = {
-  columnName: string;
-  row_id: string;
-  type: ColumnType;
-  onClick?: (row: any) => void;
-  options?: string[];
-};
 
 type DynamicTableProps = {
   tableHead: TableColumn[];
-  tableFilters: TableColumn[];
+  tableFilters: TableFilter[]; 
   data: Record<string, any>[];
+  filterData?: any; 
+  setFilterData?: React.Dispatch<React.SetStateAction<any>>; 
+  updateDialogConfigs?: any; 
+  existingData?: any; 
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;
   onCreate?: () => void;
