@@ -12,7 +12,7 @@ interface BreadcrumbProps {
 const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
   return (
     <nav aria-label="breadcrumb" className="w-max">
-      <ol className="flex w-full flex-wrap items-center rounded-md bg-slate-50 px-4 py-2">
+      <ol className="flex w-full flex-wrap items-center rounded-md  px-4 py-2">
         {items.map((item, index) => (
           <li
             key={index}
@@ -27,7 +27,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
             )}
 
             {index < items.length - 1 && (
-              <span className="pointer-events-none mx-2 text-slate-800">-</span>
+              <span className="pointer-events-none mx-2 text-slate-800">.</span>
             )}
           </li>
         ))}
