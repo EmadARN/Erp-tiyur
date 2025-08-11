@@ -6,6 +6,8 @@ import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import type { TableColumn, TableFilter } from "@/modules/shared/types";
 import { useGetSalesQuery } from "../api/salesApi";
+import { GoPlus } from "react-icons/go";
+import PageHeader from "@/modules/shared/components/header/PageHeader";
 
 const SalePage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
@@ -172,22 +174,12 @@ const SalePage = () => {
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-gray-900">List</h1>
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-
-        <Button
-          onClick={OnCreate}
-          className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-        >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-          </svg>
-          Add user
-        </Button>
-      </div>
+      <PageHeader
+        title="List"
+        breadcrumbItems={breadcrumbItems}
+        onCreate={OnCreate}
+        createLabel="Add user"
+      />
 
       <DataTable
         tableHead={tableHead}
