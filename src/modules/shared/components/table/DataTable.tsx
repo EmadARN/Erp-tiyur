@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/Button";
 import { SearchInput } from "../ui/SearchInput";
 import { Pagination } from "../ui/Pagination";
@@ -52,13 +52,17 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [showFilters, setShowFilters] = useState<boolean>(false);
 
-  const isAllSelected = data.length > 0 && selectedRows.length === data.length;
+  const isAllSelected = data?.length > 0 && selectedRows.length === data.length;
 
   const toggleRowSelection = (index: number) => {
     setSelectedRows((prev) =>
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
+  // useEffect(() => {
+  //   console.log(data, "dataTableee");
+  // }, [data]);
+  console.log(data, "dataTableee");
 
   const toggleSelectAll = () => {
     setSelectedRows(isAllSelected ? [] : data.map((_, index) => index));
@@ -90,6 +94,10 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     setDetailData(row);
     setDetailOpen(true);
   };
+
+  function getNestedValue(obj: any, path: string) {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+  }
 
   return (
     <div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
@@ -183,102 +191,109 @@ export const DataTable: React.FC<DynamicTableProps> = ({
           </thead>
 
           <tbody>
-            {data?.map((row, rowIndex) => (
-              <tr
-                key={rowIndex}
-                className={selectedRows.includes(rowIndex) ? "bg-blue-50" : ""}
-              >
-                <td className="p-4 border-b border-blue-gray-50">
-                  <CustomCheckbox
-                    checked={selectedRows.includes(rowIndex)}
-                    onChange={() => toggleRowSelection(rowIndex)}
-                    color="blue"
-                    size="sm"
-                  />
-                </td>
+            {data &&
+              data.map((row, rowIndex) => {
+        
 
-                {tableHead.map((col, colIndex) => {
-                  const value = row[col.row_id];
-                  let displayType = col.type;
-
-                  if (bulkMode === "edit" && col.type === "string") {
-                    displayType = "input";
-                  }
-
-                  return (
-                    <td
-                      key={colIndex}
-                      className="p-4 border-b border-blue-gray-50 whitespace-nowrap"
-                    >
-                      {(() => {
-                        switch (displayType) {
-                          case "string":
-                            return <span>{value}</span>;
-                          case "button":
-                            return (
-                              <Button
-                                onClick={() => col.onClick?.(row)}
-                                variant="outline"
-                                size="sm"
-                              >
-                                {value}
-                              </Button>
-                            );
-                          case "input":
-                            return (
-                              <input
-                                className="border rounded p-1 text-sm w-full"
-                                defaultValue={value}
-                              />
-                            );
-                          case "select":
-                            return (
-                              <select
-                                className="border rounded p-1 text-sm w-full"
-                                defaultValue={value}
-                              >
-                                {col.options?.map((opt) => (
-                                  <option key={opt} value={opt}>
-                                    {opt}
-                                  </option>
-                                ))}
-                              </select>
-                            );
-                          default:
-                            return <span>{value}</span>;
-                        }
-                      })()}
+                return (
+                  <tr
+                    key={rowIndex}
+                    className={
+                      selectedRows.includes(rowIndex) ? "bg-blue-50" : ""
+                    }
+                  >
+                    <td className="p-4 border-b border-blue-gray-50">
+                      <CustomCheckbox
+                        checked={selectedRows.includes(rowIndex)}
+                        onChange={() => toggleRowSelection(rowIndex)}
+                        color="blue"
+                        size="sm"
+                      />
                     </td>
-                  );
-                })}
 
-                {!bulkMode && (
-                  <td className="p-4 border-b border-blue-gray-50 space-x-2 whitespace-nowrap">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setEditIndex(rowIndex)}
-                    >
-                      <HiOutlinePencil className="w-4 h-4 text-blue-500" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setDeleteIndex(rowIndex)}
-                    >
-                      <LuTrash2 className="w-4 h-4 text-red-500" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => openDetailDialog(row)}
-                    >
-                      <MdRemoveRedEye className="w-4 h-4 text-gray-500" />
-                    </Button>
-                  </td>
-                )}
-              </tr>
-            ))}
+                    {tableHead.map((col, colIndex) => {
+                     const value = getNestedValue(row, col.row_id);
+                      let displayType = col.type;
+
+                      if (bulkMode === "edit" && col.type === "string") {
+                        displayType = "input";
+                      }
+
+                      return (
+                        <td
+                          key={colIndex}
+                          className="p-4 border-b border-blue-gray-50 whitespace-nowrap"
+                        >
+                          {(() => {
+                            switch (displayType) {
+                              case "string":
+                                return <span>{value}</span>;
+                              case "button":
+                                return (
+                                  <Button
+                                    onClick={() => col.onClick?.(row)}
+                                    variant="outline"
+                                    size="sm"
+                                  >
+                                    {value}
+                                  </Button>
+                                );
+                              case "input":
+                                return (
+                                  <input
+                                    className="border rounded p-1 text-sm w-full"
+                                    defaultValue={value}
+                                  />
+                                );
+                              case "select":
+                                return (
+                                  <select
+                                    className="border rounded p-1 text-sm w-full"
+                                    defaultValue={value}
+                                  >
+                                    {col.options?.map((opt) => (
+                                      <option key={opt} value={opt}>
+                                        {opt}
+                                      </option>
+                                    ))}
+                                  </select>
+                                );
+                              default:
+                                return <span>{value}</span>;
+                            }
+                          })()}
+                        </td>
+                      );
+                    })}
+
+                    {!bulkMode && (
+                      <td className="p-4 border-b border-blue-gray-50 space-x-2 whitespace-nowrap">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setEditIndex(rowIndex)}
+                        >
+                          <HiOutlinePencil className="w-4 h-4 text-blue-500" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => setDeleteIndex(rowIndex)}
+                        >
+                          <LuTrash2 className="w-4 h-4 text-red-500" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openDetailDialog(row)}
+                        >
+                          <MdRemoveRedEye className="w-4 h-4 text-gray-500" />
+                        </Button>
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
       </div>
@@ -325,3 +340,12 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     </div>
   );
 };
+
+
+{
+  name:{
+    car:12
+  }
+  
+
+}
