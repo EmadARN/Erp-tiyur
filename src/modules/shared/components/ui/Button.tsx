@@ -10,9 +10,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "default", size = "default", ...props }, ref) => {
+  ({ className, variant = "default", size = "default", type = "button", ...props }, ref) => {
     const base =
-      "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-nonedisabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+      "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus:outline-none disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
 
     const variantClasses: Record<ButtonVariant, string> = {
       default: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
@@ -32,6 +32,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
+        type={type}  // اضافه کردن type اینجا بسیار مهمه
         className={cn(
           base,
           variantClasses[variant],
