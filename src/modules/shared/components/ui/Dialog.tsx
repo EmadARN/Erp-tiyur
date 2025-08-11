@@ -31,7 +31,10 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
           />
           {/* Content */}
           <motion.div
-            className="fixed z-50 top-1/2 left-1/2 w-full max-w-md -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-lg p-6"
+            className="fixed z-50 top-1/2 left-1/2 w-full max-w-md 
+                       -translate-x-1/2 -translate-y-1/2 
+                       bg-white rounded-xl shadow-lg p-6
+                       max-h-[90vh] overflow-y-auto"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -46,7 +49,6 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
 }
 
 // Subcomponents
-
 export function DialogContent({
   children,
   className = "",

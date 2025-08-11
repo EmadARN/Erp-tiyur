@@ -5,25 +5,44 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/modules/shared/components/ui/Dialog";
-import SelectBox from "@/modules/shared/components/ui/Selecbox";
-import Switch from "@/modules/shared/components/ui/Switch";
-import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
-import type { ConfigItem, OptionType } from "../../types";
 
 interface DetailDialogProps {
   open: boolean;
   onClose: () => void;
-  configs: ConfigItem[];
   data: Record<string, any>;
 }
 
-export function DetailDialog({
-  open,
-  onClose,
-  configs,
-  data,
-}: DetailDialogProps) {
+// تابع بازگشتی برای فلت کردن آبجکت
+const flattenObject = (obj: Record<string, any>, parentKey = ""): Record<string, any> => {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    const newKey = parentKey ? `${parentKey} ${key}` : key;
+    if (value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+      Object.assign(acc, flattenObject(value, newKey));
+    } else {
+      acc[newKey] = value;
+    }
+    return acc;
+  }, {} as Record<string, any>);
+};
+
+// تابع قشنگ‌کردن متن لیبل + حذف تکراری‌ها
+const formatKey = (key: string) => {
+  // آندرلاین به فاصله
+  const words = key.replace(/_/g, " ").split(" ");
+
+  // حذف کلمات تکراری پشت سر هم
+  const uniqueWords = words.filter((word, index, arr) => word && word !== arr[index - 1]);
+
+  // حروف اول بزرگ
+  return uniqueWords
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+};
+
+export function DetailDialog({ open, onClose, data }: DetailDialogProps) {
+  const flatData = flattenObject(data);
+
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="space-y-6 max-w-lg w-full px-4 sm:px-6">
@@ -32,76 +51,19 @@ export function DetailDialog({
         </DialogHeader>
 
         <div className="space-y-6">
-          {configs.map((cfg) => {
-            const value = data[cfg.name];
-
-            const options: OptionType[] = (cfg.options ?? []).map((opt) =>
-              typeof opt === "string" ? { value: opt, label: opt } : opt
-            );
-
-            switch (cfg.type) {
-              case "string-input":
-                return (
-                  <div key={cfg.name} className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">
-                      {cfg.label}
-                    </label>
-                    <TextInput
-                      value={value ?? ""}
-                      inputType="text"
-                      disabled
-                      className="w-full bg-gray-100 cursor-not-allowed"
-                    />
-                  </div>
-                );
-
-              case "select-box":
-                return (
-                  <div key={cfg.name} className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">
-                      {cfg.label}
-                    </label>
-                    <SelectBox
-                      options={options}
-                      value={value}
-                      className="bg-gray-100 cursor-not-allowed"
-                    />
-                  </div>
-                );
-
-              case "switch":
-                return (
-                  <div
-                    key={cfg.name}
-                    className="flex items-center justify-between space-x-2"
-                  >
-                    <span className="text-sm font-medium text-gray-700">
-                      {cfg.label}
-                    </span>
-                    <Switch checked={!!value} />
-                  </div>
-                );
-
-              case "multi-select":
-                return (
-                  <div key={cfg.name} className="space-y-1">
-                    <label className="block text-sm font-medium text-gray-700">
-                      {cfg.label}
-                    </label>
-                    <MotionMultiSelect
-                      options={options}
-                      value={value}
-                      disabled
-                      placeholder=""
-                      className="bg-gray-100 cursor-not-allowed"
-                    />
-                  </div>
-                );
-
-              default:
-                return null;
-            }
-          })}
+          {Object.entries(flatData).map(([key, value]) => (
+            <div key={key} className="space-y-1">
+              <label className="block text-sm font-medium text-gray-700">
+                {formatKey(key)}
+              </label>
+              <TextInput
+                value={String(value ?? "")}
+                inputType="text"
+                disabled
+                className="w-full bg-gray-100 cursor-not-allowed"
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex justify-end pt-4">
