@@ -12,27 +12,27 @@ export const buyProductApi = createApi({
         method: "get",
       }),
     }),
-    getBuyProductDetails: builder.query<any, void>({
-      query: () => ({
-        url: "/buy-product/c/test_str/",
+    getBuyProductDetails: builder.mutation<any, { id: number | string }>({
+      query: ({ id }) => ({
+        url: `/buy-product/c/${id}/`,
         method: "get",
       }),
     }),
-    postBuyProduct: builder.mutation<any, { id: number; name: string }>({
+    postBuyProduct: builder.mutation<any, { data: any }>({
       query: (body) => ({
         url: "/buy-product/create/",
         method: "post",
         data: body,
       }),
     }),
-    patchBuyProduct: builder.mutation<any, { id: number; name: string }>({
+    patchBuyProduct: builder.mutation<any, { id: number | string; data: any }>({
       query: ({ id, ...patchData }) => ({
         url: `/buy-product/c/${id}/`,
         method: "patch",
         data: patchData,
       }),
     }),
-    deleteBuyProduct: builder.mutation<any, number>({
+    deleteBuyProduct: builder.mutation<any, { id: number | string }>({
       query: (id) => ({
         url: `/buy-product/c/${id}/`,
         method: "delete",
@@ -43,7 +43,7 @@ export const buyProductApi = createApi({
 
 export const {
   useGetBuyProductQuery,
-  useGetBuyProductDetailsQuery,
+  useGetBuyProductDetailsMutation,
   usePostBuyProductMutation,
   usePatchBuyProductMutation,
   useDeleteBuyProductMutation,
