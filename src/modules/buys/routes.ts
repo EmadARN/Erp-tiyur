@@ -1,7 +1,7 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
 import React from "react";
 import type { RouteObject } from "react-router-dom";
-import BuyPage from "./pages/BuyPage";
+import BuyPage from "./pages/BuyProductPage";
 
 export const buysRoutes: RouteObject[] = [
   {
@@ -9,7 +9,7 @@ export const buysRoutes: RouteObject[] = [
     element: React.createElement(DashboardLayout),
     children: [
       {
-        path: "buys", // Maps to /dashboard/sales
+        path: "buy/product", // Maps to /dashboard/sales
         element: React.createElement(BuyPage),
       },
     ],

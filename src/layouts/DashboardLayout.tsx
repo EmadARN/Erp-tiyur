@@ -14,24 +14,33 @@ const DashboardLayout = () => {
   return (
     <div
       ref={dashboardRef}
-      className={cn("flex h-screen", rtl ? "flex-row-reverse" : "flex-row")}
+      className={cn(
+        "flex h-screen min-h-screen",
+        rtl ? "flex-row-reverse" : "flex-row"
+      )}
     >
-      <div className="hidden md:block">
+      {/* Sidebar دسکتاپ */}
+      <div className="hidden lg:block">
         <Sidebar />
       </div>
 
-      <div className="block md:hidden">
+      {/* منوی موبایل */}
+      <div className="block lg:hidden">
         <Menu />
       </div>
 
+      {/* بخش محتوای اصلی */}
       <div
         className={cn(
           "flex flex-1 flex-col",
-          rtl ? "mr-12 md:mr-4" : "ml-12 md:ml-4"
+          // در موبایل padding جانبی کمتر و در دسکتاپ فاصله به sidebar
+          rtl
+            ? "mr-0 sm:mr-4 md:mr-6 lg:mr-12"
+            : "ml-0 sm:ml-4 md:ml-6 lg:ml-12"
         )}
       >
         <Header />
-        <main className="p-4 overflow-auto">
+        <main className="p-4 overflow-auto min-h-0 flex-1">
           <Outlet />
         </main>
       </div>

@@ -3,11 +3,11 @@ import { salesApi } from "@/modules/sales/api/salesApi";
 import uiSettingsReducer from "./slice/settingsSlice";
 import themeReducer from "./slice/themeSlice";
 import { LoginApi } from "@/modules/auth/api/Login";
-import { buysApi } from "@/modules/buys/api/buyApi";
+import { buyProductApi } from "@/modules/buys/api/buyProductApi";
 
 export const rootReducer = combineReducers({
   [salesApi.reducerPath]: salesApi.reducer,
-  [buysApi.reducerPath]: buysApi.reducer,
+  [buyProductApi.reducerPath]: buyProductApi.reducer,
   [LoginApi.reducerPath]: LoginApi.reducer,
   uiSetting: uiSettingsReducer,
   theme: themeReducer,

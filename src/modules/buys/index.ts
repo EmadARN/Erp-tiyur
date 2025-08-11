@@ -1,1 +1,1 @@
-export { default as BuyPage } from './pages/BuyPage';
+export { default as BuyPage } from './pages/BuyProductPage';

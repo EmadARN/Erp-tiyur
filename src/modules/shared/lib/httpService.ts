@@ -46,6 +46,6 @@ setupInterceptors(kernelApi);
 setupInterceptors(saleApi);
 setupInterceptors(buyApi);
 
-const http = { kernelApi, saleApi ,buyApi};
+const http = { kernelApi, saleApi, buyApi };
 
 export default http;

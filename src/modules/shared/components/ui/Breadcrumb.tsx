@@ -1,4 +1,5 @@
 import React from "react";
+import { LuDot } from "react-icons/lu";
 
 type BreadcrumbItem = {
   label: string;
@@ -27,7 +28,9 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
             )}
 
             {index < items.length - 1 && (
-              <span className="pointer-events-none mx-2 text-slate-800">.</span>
+              <span className="pointer-events-none mx-2 text-slate-800">
+                <LuDot />
+              </span>
             )}
           </li>
         ))}
@@ -37,9 +40,6 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items }) => {
 };
 
 export default Breadcrumb;
-
-
-
 
 // //items :   const breadcrumbItems = [
 //     { label: "Docs", href: "/docs" },
