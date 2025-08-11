@@ -1,21 +1,64 @@
-import  { useState } from "react";
+import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
-import { Button } from "@/modules/shared/components/ui/Button";
-import Breadcrumb from "@/modules/shared/components/ui/Breadcrumb";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import type { TableColumn, TableFilter } from "@/modules/shared/types";
-import { useGetBuysQuery } from "../api/buyApi";
+import {
+  useGetBuyProductDetailsQuery,
+  useGetBuyProductQuery,
+  usePostBuyProductMutation,
+  usePatchBuyProductMutation,
+  useDeleteBuyProductMutation,
+} from "../api/buyProductApi";
+import PageHeader from "@/modules/shared/components/header/PageHeader";
 
-const BuyPage = () => {
+const BuyProductPage = () => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [filterData, setFilterData] = useState<boolean>([]);
   const [createIndex, setCreateIndex] = useState<number | null>(null);
 
-  const { data, error, loading } = useGetBuysQuery();
+  // دریافت داده‌های GET
+  const { data, error, isLoading } = useGetBuyProductQuery();
+  const { data: data2, error: error2 } = useGetBuyProductDetailsQuery();
 
-  console.log("buydata", data);
-  console.log("error", error);
-  const [table_data, setTableData] = useState<any>([
+  // هوک‌های mutation برای POST, PATCH, DELETE
+  const [postBuyProduct] = usePostBuyProductMutation();
+  const [patchBuyProduct] = usePatchBuyProductMutation();
+  const [deleteBuyProduct] = useDeleteBuyProductMutation();
+
+  // // داده‌های نمونه برای تست
+  // const samplePostData = { id: 123, name: "emad" };
+  // const samplePatchData = { id: 123, name: "emad updated" };
+  // const sampleDeleteId = 123;
+
+  // // توابع تست
+  // const testPost = async () => {
+  //   try {
+  //     const res = await postBuyProduct(samplePostData).unwrap();
+  //     console.log("POST response:", res);
+  //   } catch (err) {
+  //     console.error("POST error:", err);
+  //   }
+  // };
+
+  // const testPatch = async () => {
+  //   try {
+  //     const res = await patchBuyProduct(samplePatchData).unwrap();
+  //     console.log("PATCH response:", res);
+  //   } catch (err) {
+  //     console.error("PATCH error:", err);
+  //   }
+  // };
+
+  // const testDelete = async () => {
+  //   try {
+  //     const res = await deleteBuyProduct(sampleDeleteId).unwrap();
+  //     console.log("DELETE response:", res);
+  //   } catch (err) {
+  //     console.error("DELETE error:", err);
+  //   }
+  // };
+
+  const table_data = [
     {
       username: "rezabh",
       first_name: "Reza",
@@ -28,12 +71,6 @@ const BuyPage = () => {
       last_name: "JJJ",
       role: "Admin",
     },
-  ]);
-
-  const breadcrumbItems = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Components", href: "/docs/components" },
-    { label: "Sale" }, // آیتم آخر معمولاً لینک نداره
   ];
 
   const tableHead: TableColumn[] = [
@@ -63,7 +100,7 @@ const BuyPage = () => {
       max: 1000,
       min: 10,
       step: 10,
-      defaultValue: [100, 500], // پیش‌فرض بازه
+      defaultValue: [100, 500],
     },
     {
       name: "location",
@@ -100,6 +137,7 @@ const BuyPage = () => {
       defaultValue: [200, 800],
     },
   ];
+
   const createDialogConfigs = [
     {
       name: "title",
@@ -160,33 +198,30 @@ const BuyPage = () => {
     "price-based": true,
     "construction-based": ["iran"],
   };
+
+  const breadcrumbItems = [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Buy", href: "/dashboard/buy" },
+    { label: "Buy Product" },
+  ];
+
   const handleSearch = (query: string) => {
     console.log("در حال جستجو برای:", query);
   };
 
   const OnCreate = (index: number | null) => {
     console.log("Add OnCreate", index);
-    setCreateIndex();
+    setCreateIndex(index);
   };
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-lg font-semibold text-gray-900">List</h1>
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-
-        <Button
-          onClick={OnCreate}
-          className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-        >
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" />
-          </svg>
-          Add user
-        </Button>
-      </div>
+      <PageHeader
+        title="Buy Product"
+        breadcrumbItems={breadcrumbItems}
+        onCreate={() => OnCreate(1)}
+        createLabel="Add Buy Product"
+      />
 
       <DataTable
         tableHead={tableHead}
@@ -212,4 +247,4 @@ const BuyPage = () => {
   );
 };
 
-export default BuyPage;
+export default BuyProductPage;
