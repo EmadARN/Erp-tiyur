@@ -4,14 +4,16 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 //Update Dialogs:
+export type InputTypes = "string-input" | "int-input" | "float-input";
+
 export type OptionType = { value: string; label: string };
 export interface ConfigItem {
   name: string;
   label: string;
-  type: "string-input" | "select-box" | "switch" | "multi-select";
+  type: "string-input" | "select-box" | "switch" | "multi-select" | InputTypes;
   defaultValue?: any;
   options?: OptionType[] | string[];
-  required?: string;
+  required?: boolean;
 }
 
 type ColumnType =
@@ -38,14 +40,14 @@ export type TableFilter = {
   placeholder?: string;
   defaultValue?: any;
   type: ColumnType;
-  options?:string[]
+  options?: string[]
 };
 
 
 export type TableColumn = {
-    columnName: string;
-    row_id: string;
-    type: ColumnType;
-    onClick?: (row: any) => void;
-    options?: string[];
-  };
+  columnName: string;
+  row_id: string;
+  type: ColumnType;
+  onClick?: (row: any) => void;
+  options?: string[];
+};
