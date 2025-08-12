@@ -15,7 +15,7 @@ export const buyProductApi = createApi({
       }),
       providesTags: ["BuyProduct"], // این query تگ BuyProduct را فراهم می‌کند
     }),
-    getBuyProductDetails: builder.mutation<any, { id: number | string }>({
+    getBuyProductDetails: builder.query<any, { id: number | string }>({
       query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "get",
@@ -57,7 +57,7 @@ export const buyProductApi = createApi({
 
 export const {
   useGetBuyProductQuery,
-  useGetBuyProductDetailsMutation,
+  useGetBuyProductDetailsQuery,
   usePostBuyProductMutation,
   usePatchBuyProductMutation,
   useDeleteBulkBuyProductMutation,

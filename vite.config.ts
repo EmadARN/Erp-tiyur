@@ -8,17 +8,17 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/kernel": {
-        target: "http://192.168.60.23:8000",
+        target: "http://192.168.43.201:8000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/kernel/, "/api/v1"),
       },
       "/api/buy": {
-        target: "http://192.168.60.23:8001",
+        target: "http://192.168.43.201:8001",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/buy/, "/api/v1"),
       },
       "/api/sale": {
-        target: "http://192.168.60.23:8002",
+        target: "http://192.168.43.201:8002",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/sale/, "/api/v1"),
       },

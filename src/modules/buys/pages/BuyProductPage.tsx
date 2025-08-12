@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import {
-  useGetBuyProductDetailsMutation,
   useGetBuyProductQuery,
   usePostBuyProductMutation,
   usePatchBuyProductMutation,
   useDeleteBuyProductMutation,
   useDeleteBulkBuyProductMutation,
+  useGetBuyProductDetailsQuery,
 } from "../api/buyProductApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import toast from "react-hot-toast";
@@ -33,12 +33,12 @@ import type {
   OwnerType,
   ProductType,
 } from "../model/buysTypes";
+import { useNavigate } from "react-router-dom";
 
 const BuyProductPage = () => {
-  const [selectedItem, setSelectedItem] = useState<any>(null);
   const [filterData, setFilterData] = useState<any[]>([]);
   const [filterData2, setFilterData2] = useState<any[]>([]);
-
+  const [tableData, setTableData] = useState([]);
   const [kernelData, setKernelData] = useState<KernelData>({
     cars: [],
     agriculture: [],
@@ -48,11 +48,39 @@ const BuyProductPage = () => {
   });
   const [createIndex, setCreateIndex] = useState<number | null>(null);
 
-  // دریافت داده‌های GET
-  const [getBuyProductDetails] = useGetBuyProductDetailsMutation();
-  const { data: tableData, isLoading } = useGetBuyProductQuery(filterData, {
+  const navigate = useNavigate()
+
+  const { data: tableDatas, isLoading } = useGetBuyProductQuery(filterData, {
     refetchOnMountOrArgChange: true,
   });
+
+  // تابع کمکی برای گرفتن مقدار بر اساس مسیر "car.driver.contact.name"
+  function getValueByPath(obj: any, path: string) {
+    if (!obj || !path) return "";
+    return path.split(".").reduce((acc, key) => acc?.[key], obj);
+  }
+
+  // تابع جستجو
+  function handleSearch(
+    rows: any[],
+    tableHead: { row_id: string }[],
+    searchTerm: string
+  ) {
+    if (searchTerm === "") return setTableData(tableDatas); // اگه سرچ خالی بود، کل دیتا برگرده
+    const lowerSearch = searchTerm.toString().toLowerCase();
+
+    const result = rows.filter((row) =>
+      tableHead.some(({ row_id }) => {
+        const value = getValueByPath(row, row_id);
+        return String(value ?? "")
+          .toLowerCase()
+          .includes(lowerSearch);
+      })
+    );
+
+
+    setTableData({ data: result });
+  }
 
   const { data: Product } = useGetProductQuery(filterData || {});
   const { data: owners } = useGetProductOwnerQuery(filterData || {});
@@ -60,8 +88,6 @@ const BuyProductPage = () => {
   const { data: drivers } = useGetDriverQuery(filterData || {});
   const { data: agriculture } = useGetAgricultureQuery(filterData || {});
   const { data: cities } = useGetCityQuery(filterData || {});
-
-  const tableDatas = Array.isArray(tableData?.data) ? tableData.data : [];
 
   // هوک‌های mutation برای POST, PATCH, DELETE
   const [postBuyProduct] = usePostBuyProductMutation();
@@ -104,32 +130,16 @@ const BuyProductPage = () => {
   useEffect(() => {
     setKernelData(memoedKernelData);
   }, [memoedKernelData]);
-  useEffect(() => {}, [filterData]);
 
-  const existingData = {
-    title: "product-145",
-    "sort-by": "max-price",
-    "price-based": true,
-    "construction-based": ["iran"],
-  };
+  useEffect(() => {
+    setTableData(tableDatas);
+  }, [tableDatas]);
 
   const breadcrumbItems = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "Buy", href: "/dashboard/buy" },
     { label: "Buy Product" },
   ];
-
-  const handleSearch = (value: string) => {
-    setFilterData((prev: Record<string, any>) => {
-      const next = { ...prev };
-      if (!value.trim()) {
-        delete next.search;
-      } else {
-        next.search = value.trim();
-      }
-      return next;
-    });
-  };
 
   function handleFilterOnChange() {
     const processFilterData = (x) => {
@@ -170,6 +180,9 @@ const BuyProductPage = () => {
       await deleteBuyProduct({ id: index }).unwrap();
       toast.success("Data delete successfully!");
     } catch (err) {
+      if(err.response?.status === 500) {
+        navigate("/500")
+      }
       toast.error("Failed to delete data.");
     }
   };
@@ -180,6 +193,9 @@ const BuyProductPage = () => {
       }).unwrap();
       toast.success("Data delete successfully!");
     } catch (err) {
+      if(err.response?.status === 500) {
+        navigate("/500")
+      }
       toast.error("Failed to delete data.");
     }
   };
@@ -206,6 +222,9 @@ const BuyProductPage = () => {
       await postBuyProduct(formattedData).unwrap();
       toast.success("Data sent successfully!");
     } catch (err) {
+      if(err.response?.status === 500) {
+        navigate("/500")
+      }
       toast.error("Failed to send data.");
     }
   }
@@ -269,7 +288,11 @@ const BuyProductPage = () => {
       }).unwrap();
       toast.success("Data update successfully!");
     } catch (err) {
+      if(err.response?.status === 500) {
+        navigate("/500")
+      }
       toast.error("Failed to update data.");
+
     }
   }
   if (isLoading) {
@@ -290,10 +313,13 @@ const BuyProductPage = () => {
 
       <DataTable
         tableHead={tableHead}
-        data={tableDatas}
-        handleSearch={handleSearch}
+        data={Array.isArray(tableData?.data) ? tableData.data : []}
+        handleSearch={(term) =>
+          handleSearch(tableData.data ?? [], tableHead, term)
+        }
         deleteHandler={deleteHandler}
         bulkDeleteHandler={bulkDeleteHandler}
+        useGetBuyProductDetailsQuery={useGetBuyProductDetailsQuery}
         tableFilters={tableFilter}
         filterData={filterData2}
         setFilterData={setFilterData2}
@@ -306,7 +332,6 @@ const BuyProductPage = () => {
           products: kernelData.products,
         })}
         onUpdateConfirm={handleUpdateConfirm}
-        existingData={existingData}
       />
 
       <CreateDialog

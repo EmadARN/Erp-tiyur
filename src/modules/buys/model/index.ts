@@ -5,18 +5,18 @@ export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
 
   // car info
-  { columnName: "Car", row_id: "car.car", type: "string" },
-  { columnName: "Driver", row_id: "car.driver", type: "string" },
+  { columnName: "Car", row_id: "car.car.car_number", type: "string" },
+  { columnName: "Driver", row_id: "car.driver.contact.name", type: "string" },
 
   // order info
   {
     columnName: "Agriculture",
-    row_id: "order_information.agriculture",
+    row_id: "order_information.agriculture.name",
     type: "string",
   },
   {
     columnName: "Product Owner",
-    row_id: "order_information.product_owner",
+    row_id: "order_information.product_owner.contact.name",
     type: "string",
   },
   {
@@ -24,153 +24,7 @@ export const tableHead: TableColumn[] = [
     row_id: "order_information.slaughter_type",
     type: "string",
   },
-  // {
-  //   columnName: "Order Type",
-  //   row_id: "order_information.order_type",
-  //   type: "string",
-  // },
-  // {
-  //   columnName: "Product",
-  //   row_id: "order_information.product",
-  //   type: "string",
-  // },
-
-  // // numeric fields
-  // {
-  //   columnName: "Required Weight",
-  //   row_id: "required_weight",
-  //   type: "number",
-  // },
-  // {
-  //   columnName: "Required Number",
-  //   row_id: "required_number",
-  //   type: "number",
-  // },
-  // { columnName: "Weight", row_id: "weight", type: "number" },
-
-  // // quality & status
-  // { columnName: "Quality", row_id: "quality", type: "string" },
-  // {
-  //   columnName: "Status",
-  //   row_id: "status",
-  //   type: "string",
-  //   options: ["pending for verified", "approved", "rejected"],
-  // },
-
-  // // create info
-  // { columnName: "Created Date", row_id: "create.date", type: "date" },
-  // { columnName: "Created By", row_id: "create.user", type: "string" },
-
-  // // verified
-  // {
-  //   columnName: "Verified Date",
-  //   row_id: "verified.user_date.date",
-  //   type: "date",
-  // },
-  // {
-  //   columnName: "Verified By",
-  //   row_id: "verified.user_date.user",
-  //   type: "string",
-  // },
-  // {
-  //   columnName: "Verified Status",
-  //   row_id: "verified.status",
-  //   type: "boolean",
-  // },
-  // {
-  //   columnName: "Verified Description",
-  //   row_id: "verified.description",
-  //   type: "string",
-  // },
-
-  // // received
-  // {
-  //   columnName: "Received Date",
-  //   row_id: "received.user_date.date",
-  //   type: "date",
-  // },
-  // {
-  //   columnName: "Received By",
-  //   row_id: "received.user_date.user",
-  //   type: "string",
-  // },
-  // {
-  //   columnName: "Received Status",
-  //   row_id: "received.status",
-  //   type: "boolean",
-  // },
-  // {
-  //   columnName: "Received Description",
-  //   row_id: "received.description",
-  //   type: "string",
-  // },
-
-  // // finished
-  // {
-  //   columnName: "Finished Date",
-  //   row_id: "finished.user_date.date",
-  //   type: "date",
-  // },
-  // {
-  //   columnName: "Finished By",
-  //   row_id: "finished.user_date.user",
-  //   type: "string",
-  // },
-  // {
-  //   columnName: "Finished Status",
-  //   row_id: "finished.status",
-  //   type: "boolean",
-  // },
-  // {
-  //   columnName: "Finished Description",
-  //   row_id: "finished.description",
-  //   type: "string",
-  // },
-
-  // // done
-  // { columnName: "Done Date", row_id: "done.user_date.date", type: "date" },
-  // { columnName: "Done By", row_id: "done.user_date.user", type: "string" },
-  // { columnName: "Done Status", row_id: "done.status", type: "boolean" },
-  // {
-  //   columnName: "Done Description",
-  //   row_id: "done.description",
-  //   type: "string",
-  // },
-
-  // // cancelled
-  // {
-  //   columnName: "Cancelled Date",
-  //   row_id: "cancelled.user_date.date",
-  //   type: "date",
-  // },
-  // {
-  //   columnName: "Cancelled By",
-  //   row_id: "cancelled.user_date.user",
-  //   type: "string",
-  // },
-  // {
-  //   columnName: "Cancelled Status",
-  //   row_id: "cancelled.status",
-  //   type: "boolean",
-  // },
-  // {
-  //   columnName: "Cancelled Description",
-  //   row_id: "cancelled.description",
-  //   type: "string",
-  // },
-
-  // // prices
-  // {
-  //   columnName: "Purchase Price per Unit",
-  //   row_id: "price.purchase_price_per_unit",
-  //   type: "number",
-  // },
-  // { columnName: "Cost Price", row_id: "price.cost_price", type: "number" },
-  // {
-  //   columnName: "Transportation Price",
-  //   row_id: "price.transportation_price",
-  //   type: "number",
-  // },
+  
 ];
 
 
@@ -249,7 +103,7 @@ export function getCreateDialogConfigs({
     {
       name: "required_weight",
       label: "Required Weight",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: true,
     },
@@ -346,7 +200,7 @@ export function getUpdateDialogConfigs({
     {
       name: "required_weight",
       label: "Required Weight",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: true,
     },
@@ -360,7 +214,7 @@ export function getUpdateDialogConfigs({
     {
       name: "weight",
       label: "Weight",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: false,
     },
@@ -553,21 +407,21 @@ export function getUpdateDialogConfigs({
     {
       name: "price.purchase_price_per_unit",
       label: "Purchase Price per Unit",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: false,
     },
     {
       name: "price.cost_price",
       label: "Cost Price",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: false,
     },
     {
       name: "price.transportation_price",
       label: "Transportation Price",
-      type: "float-input",
+      type: "int-input",
       defaultValue: 0,
       required: false,
     },

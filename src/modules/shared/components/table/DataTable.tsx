@@ -20,7 +20,7 @@ type DynamicTableProps = {
   filterData?: any;
   setFilterData?: React.Dispatch<React.SetStateAction<any>>;
   updateDialogConfigs?: any;
-  existingData?: any;
+  
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;
   onCreate?: () => void;
@@ -30,6 +30,7 @@ type DynamicTableProps = {
   bulkDeleteHandler?: (index: number | null) => void;
   onUpdateConfirm?: () => void;
   applyFilter?: () => void;
+  useGetBuyProductDetailsQuery:any
 };
 
 export const DataTable: React.FC<DynamicTableProps> = ({
@@ -37,6 +38,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   tableFilters,
   filterData,
   setFilterData,
+  useGetBuyProductDetailsQuery,
   applyFilter,
   data,
   onDelete,
@@ -47,7 +49,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   handleSearch,
   updateDialogConfigs,
   onUpdateConfirm,
-  existingData,
+
 }) => {
   const [page, setPage] = useState(1);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -115,9 +117,30 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     setDetailOpen(true);
   };
 
-  function getNestedValue(obj: any, path: string) {
-    return path.split(".").reduce((acc, key) => acc && acc[key], obj);
+  function getNestedValue(obj: any, path: string ) {
+     return path.split(".").reduce((acc, key) => acc && acc[key], obj);
+ 
+
+    
   }
+
+
+
+
+  const flattenObject = (obj: Record<string, any>, parentKey = ""): Record<string, any> => {
+    return Object.entries(obj).reduce((acc, [key, value]) => {
+      const newKey = parentKey ? `${parentKey} ${key}` : key;
+      if (value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+        Object.assign(acc, flattenObject(value, newKey));
+      } else {
+        acc[newKey] = value;
+      }
+      return acc;
+    }, {} as Record<string, any>);
+  };
+  
+
+
 
   // هنگام تغییر صفحه، انتخاب‌های ردیف‌ها را ریست کنیم
   useEffect(() => {
@@ -342,6 +365,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
 
       <UpdateDialog
         open={editIndex !== null}
+        useGetBuyProductDetailsQuery={useGetBuyProductDetailsQuery}
         onClose={() => {
           setEditIndex(null);
           setEditRowData(null);

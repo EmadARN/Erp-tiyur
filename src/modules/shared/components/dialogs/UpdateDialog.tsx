@@ -10,7 +10,7 @@ import SelectBox from "@/modules/shared/components/ui/Selecbox";
 import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
-import type { ConfigItem, OptionType } from "../../types";
+import type { ConfigItem, InputTypes, OptionType } from "../../types";
 
 interface UpdateDialogProps {
   open: boolean;
@@ -56,24 +56,58 @@ export function UpdateDialog({
   open,
   onClose,
   onConfirm,
+  useGetBuyProductDetailsQuery,
   configs,
   data,
 }: UpdateDialogProps) {
   const [formData, setFormData] = React.useState<Record<string, any>>({});
+  const { data: detailData} = useGetBuyProductDetailsQuery(
+    { id: data.id },
+    {
+      skip: !data?.id, 
+    }
+  );
 
   React.useEffect(() => {
-    if (data) {
-      const flat = flattenObject(data);
+    console.log("detao;",detailData)
+    if (detailData) {
+      const flat = flattenObject(detailData);
       setFormData(flat);
     }
-  }, [data]);
+  }, [detailData]);
+  
 
-  const handleChange = (name: string, value: string | string[] | boolean) => {
+  function handleChange(
+    name: string,
+    value: string | string[] | boolean,
+    type?: InputTypes
+  ) {
+    let parsedValue: string | number | string[] | boolean = value;
+
+    if (type === "int-input") {
+      console.log("1");
+      if (typeof value === "string") {
+        console.log("2");
+        parsedValue = value === "" ? "" : parseInt(value, 10);
+
+        if (isNaN(parsedValue as number)) parsedValue = "";
+      }
+      console.log("3");
+    } else if (type === "float-input") {
+      console.log("4");
+      if (typeof value === "string") {
+        parsedValue = value;
+        if (value !== "" && !isNaN(Number(value))) {
+          parsedValue = parseFloat(value);
+        }
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: parsedValue,
     }));
-  };
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,7 +150,9 @@ export function UpdateDialog({
                       }
                       isFloat={cfg.type === "float-input"}
                       value={String(value ?? "")}
-                      onChange={(val) => handleChange(cfg.name, val)}
+                      onChange={(value) =>
+                        handleChange(cfg.name, value, cfg.type as InputTypes)
+                      }
                       className="w-full"
                     />
                   </div>
