@@ -5,12 +5,15 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 export const buyProductApi = createApi({
   reducerPath: "buysApi",
   baseQuery: axiosBaseQuery(http.buyApi),
+  tagTypes: ["BuyProduct"], // تعریف تگ برای مدیریت کش
   endpoints: (builder) => ({
-    getBuyProduct: builder.query<any, void>({
-      query: () => ({
+    getBuyProduct: builder.query<any, any>({
+      query: (filters = {}) => ({
         url: "/buy-product/",
         method: "get",
+        params: filters, // پشتیبانی از پارامترهای فیلتر و جستجو
       }),
+      providesTags: ["BuyProduct"], // این query تگ BuyProduct را فراهم می‌کند
     }),
     getBuyProductDetails: builder.mutation<any, { id: number | string }>({
       query: ({ id }) => ({
@@ -18,25 +21,36 @@ export const buyProductApi = createApi({
         method: "get",
       }),
     }),
-    postBuyProduct: builder.mutation<any, { data: any }>({
+    postBuyProduct: builder.mutation<any, any>({
       query: (body) => ({
         url: "/buy-product/create/",
         method: "post",
         data: body,
       }),
+      invalidatesTags: ["BuyProduct"], // بعد از POST، تگ BuyProduct را invalidate می‌کند
     }),
     patchBuyProduct: builder.mutation<any, { id: number | string; data: any }>({
-      query: ({ id, ...patchData }) => ({
+      query: ({ id, data }) => ({
         url: `/buy-product/c/${id}/`,
         method: "patch",
-        data: patchData,
+        data,
       }),
+      invalidatesTags: ["BuyProduct"], // بعد از PATCH، تگ BuyProduct را invalidate می‌کند
+    }),
+    deleteBulkBuyProduct: builder.mutation<any, { data: any }>({
+      query: ({ data }) => ({
+        url: '/buy-product/',
+        method: "delete",
+        data,
+      }),
+      invalidatesTags: ["BuyProduct"], // بعد از PATCH، تگ BuyProduct را invalidate می‌کند
     }),
     deleteBuyProduct: builder.mutation<any, { id: number | string }>({
-      query: (id) => ({
+      query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "delete",
       }),
+      invalidatesTags: ["BuyProduct"], // بعد از DELETE، تگ BuyProduct را invalidate می‌کند
     }),
   }),
 });
@@ -46,5 +60,6 @@ export const {
   useGetBuyProductDetailsMutation,
   usePostBuyProductMutation,
   usePatchBuyProductMutation,
+  useDeleteBulkBuyProductMutation,
   useDeleteBuyProductMutation,
 } = buyProductApi;
