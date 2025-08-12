@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Button } from "../ui/Button";
 import { SearchInput } from "../ui/SearchInput";
 import { Pagination } from "../ui/Pagination";
@@ -8,7 +8,6 @@ import Tooltip from "../ui/Tooltip";
 import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import type { TableColumn, TableFilter } from "../../types";
 import { TableFilterDrawer } from "./TableFilterDrawer";
-import { BulkEditToolbar } from "./BulkEditToolbar";
 import { MdRemoveRedEye } from "react-icons/md";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
@@ -27,6 +26,10 @@ type DynamicTableProps = {
   onCreate?: () => void;
   showSearch?: boolean;
   handleSearch?: (query: string) => void;
+  deleteHandler?: (index: number | null) => void;
+  bulkDeleteHandler?: (index: number | null) => void;
+  onUpdateConfirm?: () => void;
+  applyFilter?: () => void;
 };
 
 export const DataTable: React.FC<DynamicTableProps> = ({
@@ -34,13 +37,16 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   tableFilters,
   filterData,
   setFilterData,
+  applyFilter,
   data,
   onDelete,
   onEdit,
-  onCreate,
+  deleteHandler,
+  bulkDeleteHandler,
   showSearch = true,
   handleSearch,
   updateDialogConfigs,
+  onUpdateConfirm,
   existingData,
 }) => {
   const [page, setPage] = useState(1);
@@ -51,6 +57,22 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   const [bulkMode, setBulkMode] = useState<"edit" | null>(null);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [editRowData, setEditRowData] = useState<Record<string, any> | null>(
+    null
+  );
+
+  // تعداد آیتم‌های هر صفحه
+  const itemsPerPage = 10;
+
+  // محاسبه داده‌های صفحه‌بندی‌شده
+  const paginatedData = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.slice(startIndex, endIndex);
+  }, [data, page]);
+
+  // محاسبه تعداد کل صفحات
+  const totalPages = Math.ceil(data.length / itemsPerPage);
 
   const isAllSelected = data?.length > 0 && selectedRows.length === data.length;
 
@@ -59,10 +81,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
-  // useEffect(() => {
-  //   console.log(data, "dataTableee");
-  // }, [data]);
-  console.log(data, "dataTableee");
 
   const toggleSelectAll = () => {
     setSelectedRows(isAllSelected ? [] : data.map((_, index) => index));
@@ -70,18 +88,20 @@ export const DataTable: React.FC<DynamicTableProps> = ({
 
   const handleBulkDelete = () => {
     selectedRows.forEach((i) => onDelete?.(i));
+    const delete_list = selectedRows.map((index) => data[index].id);
+    console.log(delete_list, "jjjjjj");
+    bulkDeleteHandler(delete_list);
+
     setSelectedRows([]);
     setBulkMode(null);
   };
 
-  // تعریف تنظیمات نمایش برای DetailDialog (باید بر اساس نیازت تنظیم کنی)
   const detailConfigs = tableHead.map((col) => {
     let type: "string-input" | "select-box" | "switch" | "multi-select" =
       "string-input";
     if (col.options && col.options.length > 0) {
       type = col.type === "string" ? "select-box" : (col.type as any);
     }
-    // اگر بخوای می‌تونی اینجا منطق دقیق‌تر هم اضافه کنی
     return {
       name: col.row_id,
       label: col.columnName,
@@ -96,8 +116,13 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   };
 
   function getNestedValue(obj: any, path: string) {
-    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+    return path.split(".").reduce((acc, key) => acc && acc[key], obj);
   }
+
+  // هنگام تغییر صفحه، انتخاب‌های ردیف‌ها را ریست کنیم
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [page]);
 
   return (
     <div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
@@ -105,28 +130,28 @@ export const DataTable: React.FC<DynamicTableProps> = ({
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 p-4">
         {showSearch && handleSearch && (
           <div className="w-full md:w-auto">
-            <SearchInput onSearch={handleSearch} />
+            <SearchInput
+              value={filterData.search || ""}
+              onSearch={handleSearch}
+            />
           </div>
         )}
 
         <div className="flex items-center gap-2">
-          {/* Filters Drawer */}
           <TableFilterDrawer
             open={showFilters}
             onClose={() => setShowFilters(!showFilters)}
             tableFilters={tableFilters}
             filterData={filterData}
             setFilterData={setFilterData}
-            onApply={() => console.log("data : ", filterData)}
+            onApply={applyFilter}
           />
-
-          {/* Bulk Edit Toolbar */}
-          <BulkEditToolbar
+          {/* <BulkEditToolbar
             bulkMode={bulkMode}
             onEnterBulkMode={() => setBulkMode("edit")}
             onCancel={() => setBulkMode(null)}
             onEdit={() => console.log("Edit clicked")}
-          />
+          /> */}
         </div>
       </div>
 
@@ -191,109 +216,111 @@ export const DataTable: React.FC<DynamicTableProps> = ({
           </thead>
 
           <tbody>
-            {data &&
-              data.map((row, rowIndex) => {
-        
+            {paginatedData.map((row, rowIndex) => {
+              // محاسبه اندیس واقعی ردیف در آرایه اصلی
+              const originalIndex = (page - 1) * itemsPerPage + rowIndex;
+              return (
+                <tr
+                  key={originalIndex}
+                  className={
+                    selectedRows.includes(originalIndex) ? "bg-blue-50" : ""
+                  }
+                >
+                  <td className="p-4 border-b border-blue-gray-50">
+                    <CustomCheckbox
+                      checked={selectedRows.includes(originalIndex)}
+                      onChange={() => toggleRowSelection(originalIndex)}
+                      color="blue"
+                      size="sm"
+                    />
+                  </td>
 
-                return (
-                  <tr
-                    key={rowIndex}
-                    className={
-                      selectedRows.includes(rowIndex) ? "bg-blue-50" : ""
+                  {tableHead.map((col, colIndex) => {
+                    const value = getNestedValue(row, col.row_id);
+                    let displayType = col.type;
+
+                    if (bulkMode === "edit" && col.type === "string") {
+                      displayType = "input";
                     }
-                  >
-                    <td className="p-4 border-b border-blue-gray-50">
-                      <CustomCheckbox
-                        checked={selectedRows.includes(rowIndex)}
-                        onChange={() => toggleRowSelection(rowIndex)}
-                        color="blue"
-                        size="sm"
-                      />
-                    </td>
 
-                    {tableHead.map((col, colIndex) => {
-                     const value = getNestedValue(row, col.row_id);
-                      let displayType = col.type;
-
-                      if (bulkMode === "edit" && col.type === "string") {
-                        displayType = "input";
-                      }
-
-                      return (
-                        <td
-                          key={colIndex}
-                          className="p-4 border-b border-blue-gray-50 whitespace-nowrap"
-                        >
-                          {(() => {
-                            switch (displayType) {
-                              case "string":
-                                return <span>{value}</span>;
-                              case "button":
-                                return (
-                                  <Button
-                                    onClick={() => col.onClick?.(row)}
-                                    variant="outline"
-                                    size="sm"
-                                  >
-                                    {value}
-                                  </Button>
-                                );
-                              case "input":
-                                return (
-                                  <input
-                                    className="border rounded p-1 text-sm w-full"
-                                    defaultValue={value}
-                                  />
-                                );
-                              case "select":
-                                return (
-                                  <select
-                                    className="border rounded p-1 text-sm w-full"
-                                    defaultValue={value}
-                                  >
-                                    {col.options?.map((opt) => (
-                                      <option key={opt} value={opt}>
-                                        {opt}
-                                      </option>
-                                    ))}
-                                  </select>
-                                );
-                              default:
-                                return <span>{value}</span>;
-                            }
-                          })()}
-                        </td>
-                      );
-                    })}
-
-                    {!bulkMode && (
-                      <td className="p-4 border-b border-blue-gray-50 space-x-2 whitespace-nowrap">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setEditIndex(rowIndex)}
-                        >
-                          <HiOutlinePencil className="w-4 h-4 text-blue-500" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => setDeleteIndex(rowIndex)}
-                        >
-                          <LuTrash2 className="w-4 h-4 text-red-500" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => openDetailDialog(row)}
-                        >
-                          <MdRemoveRedEye className="w-4 h-4 text-gray-500" />
-                        </Button>
+                    return (
+                      <td
+                        key={colIndex}
+                        className="p-4 border-b border-blue-gray-50 whitespace-nowrap"
+                      >
+                        {(() => {
+                          switch (displayType) {
+                            case "string":
+                              return <span>{value}</span>;
+                            case "button":
+                              return (
+                                <Button
+                                  onClick={() => col.onClick?.(row)}
+                                  variant="outline"
+                                  size="sm"
+                                >
+                                  {value}
+                                </Button>
+                              );
+                            case "input":
+                              return (
+                                <input
+                                  className="border rounded p-1 text-sm w-full"
+                                  defaultValue={value}
+                                />
+                              );
+                            case "select":
+                              return (
+                                <select
+                                  className="border rounded p-1 text-sm w-full"
+                                  defaultValue={value}
+                                >
+                                  {col.options?.map((opt) => (
+                                    <option key={opt} value={opt}>
+                                      {opt}
+                                    </option>
+                                  ))}
+                                </select>
+                              );
+                            default:
+                              return <span>{value}</span>;
+                          }
+                        })()}
                       </td>
-                    )}
-                  </tr>
-                );
-              })}
+                    );
+                  })}
+
+                  {!bulkMode && (
+                    <td className="p-4 border-b border-blue-gray-50 space-x-2 whitespace-nowrap">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          setEditIndex(originalIndex);
+                          setEditRowData(row);
+                        }}
+                      >
+                        <HiOutlinePencil className="w-4 h-4 text-blue-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setDeleteIndex(row.id)}
+                      >
+                        <LuTrash2 className="w-4 h-4 text-red-500" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => openDetailDialog(row)}
+                      >
+                        <MdRemoveRedEye className="w-4 h-4 text-gray-500" />
+                      </Button>
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
@@ -301,34 +328,33 @@ export const DataTable: React.FC<DynamicTableProps> = ({
       {/* Pagination */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-2 px-6 pb-4 pt-2">
         <div className="text-sm text-gray-500 whitespace-nowrap">
-          Current page: {page}
+          Showing {paginatedData.length} of {data.length} items | Current page:{" "}
+          {page}
         </div>
         <Pagination
           currentPage={page}
-          totalPages={10}
+          totalPages={totalPages}
           onPageChange={(p) => setPage(p)}
         />
       </div>
 
       {/* Dialogs */}
+
       <UpdateDialog
         open={editIndex !== null}
-        onClose={() => setEditIndex(null)}
-        onConfirm={() => {
-          if (editIndex !== null) onEdit?.(editIndex);
+        onClose={() => {
           setEditIndex(null);
+          setEditRowData(null);
         }}
+        onConfirm={onUpdateConfirm}
         configs={updateDialogConfigs}
-        data={existingData}
+        data={editRowData ?? {}}
       />
 
       <DeleteDialog
         open={deleteIndex !== null}
         onClose={() => setDeleteIndex(null)}
-        onConfirm={() => {
-          if (deleteIndex !== null) onDelete?.(deleteIndex);
-          setDeleteIndex(null);
-        }}
+        onConfirm={() => deleteHandler && deleteHandler(deleteIndex)}
       />
 
       <DetailDialog
@@ -340,12 +366,3 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     </div>
   );
 };
-
-
-{
-  name:{
-    car:12
-  }
-  
-
-}
