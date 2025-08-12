@@ -64,6 +64,7 @@ const LoginPage: React.FC = () => {
             <div>
               <label className="block text-dark text-sm mb-1">Username </label>
               <TextInput
+                value={username}
                 onChange={setUserName}
                 inputType="text"
                 className="w-full px-4 py-2  focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
@@ -74,6 +75,7 @@ const LoginPage: React.FC = () => {
             <div>
               <label className="block text-dark text-sm mb-1">Password</label>
               <TextInput
+                value={password}
                 onChange={setPassword}
                 inputType="password"
                 className="w-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary text-[#111]"
