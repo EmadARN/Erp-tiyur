@@ -34,6 +34,7 @@ import type {
   ProductType,
 } from "../model/buysTypes";
 import { useNavigate } from "react-router-dom";
+import Loading from "@/modules/shared/components/ui/Loading";
 
 const BuyProductPage = () => {
   const [filterData, setFilterData] = useState<any[]>([]);
@@ -296,7 +297,7 @@ const BuyProductPage = () => {
     }
   }
   if (isLoading) {
-    return <div className="p-4 text-center">Loading...</div>;
+    return <Loading/>;
   }
 
   if (!tableData || tableData.length === 0) {
