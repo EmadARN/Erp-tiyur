@@ -28,8 +28,8 @@ function setupInterceptors(apiInstance: AxiosInstance) {
       if (err.response?.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
         try {
-          const { data } = await axios.get(
-            `${import.meta.env.VITE_API_KERNEL_URL}auth/refresh`,
+          const { data } = await axios.post(
+            `${import.meta.env.VITE_API_KERNEL_URL}/auth/refresh`,
             { withCredentials: true }
           );
           if (data) return apiInstance(originalConfig);
