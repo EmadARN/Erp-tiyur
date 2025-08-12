@@ -16,10 +16,15 @@ type InputTypes =
   | "week";
 
 interface TextInputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "type"> {
+  extends Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    "onChange" | "type" | "step"
+  > {
   inputType?: InputTypes;
   onChange?: (value: string) => void;
   inputClassName?: string;
+  className?: string;
+  isFloat?: boolean;
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
@@ -30,20 +35,23 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       onChange,
       inputClassName = "",
       className = "",
-      value,
+      value = "", // مقدار پیش‌فرض برای جلوگیری از undefined
+      isFloat = false,
       ...rest
     },
     ref
   ) => {
-    // wrapper className برای کنترل پدر اگر لازم بود
+    const step = inputType === "number" && isFloat ? "any" : undefined;
+
     return (
       <div className={className}>
         <input
           ref={ref}
           type={inputType}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ""} // اطمینان از اینکه مقدار همیشه رشته است
           onChange={(e) => onChange && onChange(e.target.value)}
+          step={step}
           className={`w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-[#111] ${inputClassName}`}
           {...rest}
         />
