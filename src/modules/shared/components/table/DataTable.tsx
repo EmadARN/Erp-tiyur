@@ -13,7 +13,10 @@ import { LuTrash2 } from "react-icons/lu";
 import { DetailDialog } from "../dialogs/DetailDialog";
 import SelectBox from "@/modules/shared/components/ui/Selecbox";
 import { FiFilter } from "react-icons/fi";
-import type { BuyProduct, FiltersRecord } from "@/modules/buys/model/buysTypes";
+import type {
+  BuyProduct,
+  FiltersRecord,
+} from "@/modules/buys/model/buysProduct";
 
 interface DataTableProps {
   tableHead: TableColumn[];

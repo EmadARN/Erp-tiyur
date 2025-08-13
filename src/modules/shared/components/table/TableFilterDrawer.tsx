@@ -3,7 +3,7 @@ import { Button } from "../ui/Button";
 import { Drawer } from "../ui/Drawer";
 import { DynamicFilters } from "./DataTableFilters";
 import type { TableFilter } from "../../types";
-import { type FiltersRecord } from "@/modules/buys/model/buysTypes";
+import { type FiltersRecord } from "@/modules/buys/model/buysProduct";
 import type { OptionType } from "../../types/common";
 
 type TableFilterDrawerProps = {

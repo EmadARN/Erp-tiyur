@@ -5,7 +5,7 @@ import Switch from "../ui/Switch";
 import AutoComplete from "../ui/Autocomplete";
 import { InputRangeBox } from "../ui/InputRangeBox";
 import MotionMultiSelect from "../ui/MotionMultiSelect";
-import { type FiltersRecord } from "@/modules/buys/model/buysTypes";
+import { type FiltersRecord } from "@/modules/buys/model/buysProduct";
 import { type OptionType } from "../../types/common";
 
 type FilterItem = {
