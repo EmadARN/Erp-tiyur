@@ -1,14 +1,19 @@
 import { useRoutes } from "react-router-dom";
-import { salesRoutes } from "@/modules/sales/routes";
+import { saleRoutes } from "@/modules/sales/routes";
+import { productionRoutes } from "@/modules/production/routes";
+import { wareHouseRoutes } from "@/modules/wareHouse/routes";
+
 import { authRoutes } from "@/modules/auth/routes";
 import { buysRoutes } from "@/modules/buys/routes";
 import { NotFoundPage, ServerErrorPage } from "@/modules/errors";
 
 export const AppRoutes = () => {
   const routes = [
-    ...salesRoutes,
+    ...saleRoutes,
     ...authRoutes,
     ...buysRoutes,
+    ...productionRoutes,
+    ...wareHouseRoutes,
     {
       path: "/500",
       element: <ServerErrorPage />,
