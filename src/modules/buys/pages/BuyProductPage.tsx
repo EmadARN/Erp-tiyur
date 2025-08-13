@@ -28,18 +28,27 @@ import {
 } from "@/modules/shared/api/shareApi";
 import type {
   AgricultureType,
+  BuyProduct,
   CarType,
   DriverType,
+  FiltersRecord,
+  GetProduct,
+  KernelData,
+  OrdersResponse,
   OwnerType,
   ProductType,
 } from "../model/buysTypes";
 import { useNavigate } from "react-router-dom";
 import Loading from "@/modules/shared/components/ui/Loading";
+import NoData from "@/modules/shared/components/ui/NoData";
+import { FiBox } from "react-icons/fi";
 
 const BuyProductPage = () => {
-  const [filterData, setFilterData] = useState<any[]>([]);
-  const [filterData2, setFilterData2] = useState<any[]>([]);
-  const [tableData, setTableData] = useState([]);
+  const [paramsfilterData, setParamsFilterData] = useState<Record<string, any>>(
+    {}
+  );
+  const [filterData, setFilterData] = useState<FiltersRecord>({});
+  const [tableData, setTableData] = useState<OrdersResponse | null>(null);
   const [kernelData, setKernelData] = useState<KernelData>({
     cars: [],
     agriculture: [],
@@ -47,27 +56,41 @@ const BuyProductPage = () => {
     owners: [],
     products: [],
   });
+
   const [createIndex, setCreateIndex] = useState<number | null>(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const { data: tableDatas, isLoading } = useGetBuyProductQuery(filterData, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data: tableDatas, isLoading } = useGetBuyProductQuery(
+    paramsfilterData,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   // تابع کمکی برای گرفتن مقدار بر اساس مسیر "car.driver.contact.name"
-  function getValueByPath(obj: any, path: string) {
+  function getValueByPath(obj: GetProduct, path: string): any {
     if (!obj || !path) return "";
-    return path.split(".").reduce((acc, key) => acc?.[key], obj);
+
+    return path.split(".").reduce<any>((acc, key) => {
+      if (acc && typeof acc === "object" && key in acc) {
+        return (acc as Record<string, any>)[key];
+      }
+      return undefined;
+    }, obj);
   }
 
   // تابع جستجو
   function handleSearch(
-    rows: any[],
+    rows: GetProduct[],
     tableHead: { row_id: string }[],
     searchTerm: string
   ) {
-    if (searchTerm === "") return setTableData(tableDatas); // اگه سرچ خالی بود، کل دیتا برگرده
+    if (searchTerm === "" && tableDatas) {
+      setTableData(tableDatas);
+      return;
+    }
+
     const lowerSearch = searchTerm.toString().toLowerCase();
 
     const result = rows.filter((row) =>
@@ -79,16 +102,15 @@ const BuyProductPage = () => {
       })
     );
 
-
     setTableData({ data: result });
   }
 
-  const { data: Product } = useGetProductQuery(filterData || {});
-  const { data: owners } = useGetProductOwnerQuery(filterData || {});
-  const { data: cars } = useGetCarQuery(filterData || {});
-  const { data: drivers } = useGetDriverQuery(filterData || {});
-  const { data: agriculture } = useGetAgricultureQuery(filterData || {});
-  const { data: cities } = useGetCityQuery(filterData || {});
+  const { data: Product } = useGetProductQuery(paramsfilterData || {});
+  const { data: owners } = useGetProductOwnerQuery(paramsfilterData || {});
+  const { data: cars } = useGetCarQuery(paramsfilterData || {});
+  const { data: drivers } = useGetDriverQuery(paramsfilterData || {});
+  const { data: agriculture } = useGetAgricultureQuery(paramsfilterData || {});
+  const { data: cities } = useGetCityQuery(paramsfilterData || {});
 
   // هوک‌های mutation برای POST, PATCH, DELETE
   const [postBuyProduct] = usePostBuyProductMutation();
@@ -143,67 +165,61 @@ const BuyProductPage = () => {
   ];
 
   function handleFilterOnChange() {
-    const processFilterData = (x) => {
-      return Object.entries(x).reduce((acc, [key, data]) => {
+    const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
+      return Object.values(dataObj).reduce<Record<string, any>>((acc, data) => {
         if (data.type === "range-box" || data.type === "range") {
-          return {
-            ...acc,
-            [`${data.name}__gte`]: data.value[0],
-            [`${data.name}__lte`]: data.value[1],
-          };
+          acc[`${data.name}__gte`] = data.value[0];
+          acc[`${data.name}__lte`] = data.value[1];
         } else if (
           ["switch", "select-box", "autocomplete"].includes(data.type)
         ) {
-          return {
-            ...acc,
-            [data.name]: data.value,
-          };
+          acc[data.name] = data.value;
         } else if (data.type === "multi-select") {
-          return {
-            ...acc,
-            [`${data.name}__in`]: data.value,
-          };
+          acc[`${data.name}__in`] = data.value;
         }
-        return acc; // در صورت عدم تطابق، آبجکت تجمیع‌شده بدون تغییر برمی‌گردد
+        return acc;
       }, {});
     };
 
-    const x = processFilterData(filterData2);
-    setFilterData(x);
+    const result = processFilterData(filterData);
+    setParamsFilterData(result);
   }
 
   const OnCreate = (index: number | null) => {
     setCreateIndex(index);
   };
 
-  const deleteHandler = async (index) => {
+  const deleteHandler = async (index: string) => {
     try {
       await deleteBuyProduct({ id: index }).unwrap();
       toast.success("Data delete successfully!");
-    } catch (err) {
-      if(err.response?.status === 500) {
-        navigate("/500")
+    } catch (err: any) {
+      if (err.response?.status === 500) {
+        navigate("/500");
       }
       toast.error("Failed to delete data.");
     }
   };
-  const bulkDeleteHandler = async (arrayIndex) => {
+
+  const bulkDeleteHandler = async (arrayIndex: string[]) => {
     try {
       await deleteBulkBuyProduct({
         data: { data: arrayIndex },
       }).unwrap();
       toast.success("Data delete successfully!");
-    } catch (err) {
-      if(err.response?.status === 500) {
-        navigate("/500")
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 500) {
+          navigate("/500");
+        }
       }
       toast.error("Failed to delete data.");
     }
   };
-  bulkDeleteHandler;
 
   async function handCreateleConfirm(data: Record<string, any>) {
-    const formattedData = {
+    const formattedData: Partial<BuyProduct> = {
       car: {
         car: data["car.car"],
         driver: data["car.driver"],
@@ -222,9 +238,12 @@ const BuyProductPage = () => {
     try {
       await postBuyProduct(formattedData).unwrap();
       toast.success("Data sent successfully!");
-    } catch (err) {
-      if(err.response?.status === 500) {
-        navigate("/500")
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 500) {
+          navigate("/500");
+        }
       }
       toast.error("Failed to send data.");
     }
@@ -259,7 +278,8 @@ const BuyProductPage = () => {
 
     return result;
   }
-  const mergeDataWithDefault = (data, defaultData) => {
+
+  const mergeDataWithDefault = (data: any, defaultData: any) => {
     const result = { ...defaultData };
 
     for (const key in data) {
@@ -289,20 +309,29 @@ const BuyProductPage = () => {
       }).unwrap();
       toast.success("Data update successfully!");
     } catch (err) {
-      if(err.response?.status === 500) {
-        navigate("/500")
+      if (err && typeof err === "object" && "response" in err) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 500) {
+          navigate("/500");
+        }
       }
       toast.error("Failed to update data.");
-
     }
   }
   if (isLoading) {
-    return <Loading/>;
+    return <Loading />;
   }
 
-  if (!tableData || tableData.length === 0) {
-    return <div className="p-4 text-center">No data found</div>;
+  if (!tableData?.data || tableData.data.length === 0) {
+    return (
+      <NoData
+        title="No products found"
+        description="Try adjusting your filters"
+        icon={<FiBox className="w-12 h-12 text-blue-500" />}
+      />
+    );
   }
+
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
@@ -322,8 +351,8 @@ const BuyProductPage = () => {
         bulkDeleteHandler={bulkDeleteHandler}
         useGetBuyProductDetailsQuery={useGetBuyProductDetailsQuery}
         tableFilters={tableFilter}
-        filterData={filterData2}
-        setFilterData={setFilterData2}
+        filterData={filterData}
+        setFilterData={setFilterData}
         applyFilter={handleFilterOnChange}
         updateDialogConfigs={getUpdateDialogConfigs({
           cars: kernelData.cars,

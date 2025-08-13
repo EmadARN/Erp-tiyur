@@ -1,3 +1,4 @@
+
 import type { ConfigItem, TableColumn, TableFilter } from "@/modules/shared/types";
 import type { KernelData } from "./buysTypes";
 
@@ -24,7 +25,7 @@ export const tableHead: TableColumn[] = [
     row_id: "order_information.slaughter_type",
     type: "string",
   },
-  
+
 ];
 
 
@@ -495,7 +496,7 @@ export const updateDialogDocs = {
     "cost_price": 0,
     "transportation_price": 0
   }
-}
+} as const;
 
 
 export const tableFilter: TableFilter[] = [
@@ -561,7 +562,7 @@ export const tableFilter: TableFilter[] = [
   {
     name: "create__date",
     label: "Create Date",
-    type: "date-range",
+    type: "range",
     defaultValue: ["2025-01-01", "2025-12-31"],
   },
   {

@@ -9,7 +9,7 @@ export const buysRoutes: RouteObject[] = [
     element: React.createElement(DashboardLayout),
     children: [
       {
-        path: "buy/product", // Maps to /dashboard/sales
+        path: "buy/product",
         element: React.createElement(BuyPage),
       },
     ],
