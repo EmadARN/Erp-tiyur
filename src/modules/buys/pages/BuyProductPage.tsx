@@ -9,7 +9,7 @@ import {
   getUpdateDialogConfigs,
   tableFilter,
   tableHead,
-} from "../model";
+} from "../model/buyProductIndex.ts";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";
@@ -103,6 +103,21 @@ const BuyProductPage = () => {
           description="Try adjusting your filters or creating a new product."
           icon={<FiBox className="w-12 h-12 text-blue-500" />}
         />
+
+
+        <CreateDialog
+            open={createIndex !== null}
+            onClose={() => setCreateIndex(null)}
+            onConfirm={handleCreateConfirm}
+            configs={getCreateDialogConfigs(kernelData)}
+            customMessage={
+              isKernelDataEmpty
+                  ? "Cannot create a new entry because essential data (like cars or drivers) is missing."
+                  : undefined
+            }
+            isConfirmDisabled={isKernelDataEmpty}
+        />
+
       </div>
     );
   }
