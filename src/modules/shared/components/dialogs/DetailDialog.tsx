@@ -14,10 +14,18 @@ interface DetailDialogProps {
 }
 
 // تابع بازگشتی برای فلت کردن آبجکت
-const flattenObject = (obj: Record<string, any>, parentKey = ""): Record<string, any> => {
+const flattenObject = (
+  obj: Record<string, any>,
+  parentKey = ""
+): Record<string, any> => {
   return Object.entries(obj).reduce((acc, [key, value]) => {
     const newKey = parentKey ? `${parentKey} ${key}` : key;
-    if (value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+    if (
+      value &&
+      typeof value === "object" &&
+      !Array.isArray(value) &&
+      !(value instanceof Date)
+    ) {
       Object.assign(acc, flattenObject(value, newKey));
     } else {
       acc[newKey] = value;
@@ -32,7 +40,9 @@ const formatKey = (key: string) => {
   const words = key.replace(/_/g, " ").split(" ");
 
   // حذف کلمات تکراری پشت سر هم
-  const uniqueWords = words.filter((word, index, arr) => word && word !== arr[index - 1]);
+  const uniqueWords = words.filter(
+    (word, index, arr) => word && word !== arr[index - 1]
+  );
 
   // حروف اول بزرگ
   return uniqueWords
@@ -45,12 +55,12 @@ export function DetailDialog({ open, onClose, data }: DetailDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="space-y-6 max-w-lg w-full px-4 sm:px-6">
+      <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Details View</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {Object.entries(flatData).map(([key, value]) => (
             <div key={key} className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">
@@ -66,7 +76,7 @@ export function DetailDialog({ open, onClose, data }: DetailDialogProps) {
           ))}
         </div>
 
-        <div className="flex justify-end pt-4">
+        <div className="flex justify-end pt-4 md:col-span-2">
           <Button variant="ghost" onClick={onClose}>
             Close
           </Button>

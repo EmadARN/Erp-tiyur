@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "../ui/Button";
 import { Drawer } from "../ui/Drawer";
-import { FiFilter } from "react-icons/fi";
 import { DynamicFilters } from "./DataTableFilters";
 import type { TableFilter } from "../../types";
 
@@ -24,9 +23,6 @@ export const TableFilterDrawer: React.FC<TableFilterDrawerProps> = ({
 }) => {
   return (
     <div className="relative ml-auto">
-      <Button variant="outline" size="sm" onClick={onClose}>
-        <FiFilter />
-      </Button>
       <Drawer open={open} onClose={onClose} width={360}>
         <div className="p-5">
           <div className="flex items-center justify-between mb-4">

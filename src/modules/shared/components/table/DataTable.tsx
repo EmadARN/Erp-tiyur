@@ -11,6 +11,7 @@ import { MdRemoveRedEye } from "react-icons/md";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { DetailDialog } from "../dialogs/DetailDialog";
+import { FiFilter } from "react-icons/fi";
 
 type DynamicTableProps = {
   tableHead: TableColumn[];
@@ -19,17 +20,18 @@ type DynamicTableProps = {
   filterData?: any;
   setFilterData?: React.Dispatch<React.SetStateAction<any>>;
   updateDialogConfigs?: any;
-  
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;
   onCreate?: () => void;
-  // deleteHandler?: (index: number | null) => void;
-  deleteHandler?:(id: string) => Promise<void>
-  // bulkDeleteHandler?: (index: number | null) => void;
-  bulkDeleteHandler?:(arrayIndex: string[]) => Promise<void>
+  deleteHandler?: (id: string) => Promise<void>;
+  bulkDeleteHandler?: (arrayIndex: string[]) => Promise<void>;
   onUpdateConfirm?: (data: Record<string, any>) => Promise<void>;
   applyFilter?: () => void;
-  useGetBuyProductDetailsQuery:any
+  useGetBuyProductDetailsQuery: any;
+  showFilterButton?: boolean;
+  isFilterDrawerOpen?: boolean;
+  onFilterDrawerClose?: () => void;
+  onFilterIconClick?: () => void;
 };
 
 export const DataTable: React.FC<DynamicTableProps> = ({
@@ -46,7 +48,10 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   bulkDeleteHandler,
   updateDialogConfigs,
   onUpdateConfirm,
-
+  showFilterButton = true,
+  isFilterDrawerOpen,
+  onFilterDrawerClose,
+  onFilterIconClick,
 }) => {
   const [page, setPage] = useState(1);
   const [editIndex, setEditIndex] = useState<number | null>(null);
@@ -55,7 +60,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   const [detailData, setDetailData] = useState<Record<string, any>>({});
   const [bulkMode, setBulkMode] = useState<"edit" | null>(null);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [showFilters, setShowFilters] = useState<boolean>(false);
   const [editRowData, setEditRowData] = useState<Record<string, any> | null>(
     null
   );
@@ -114,20 +118,22 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     setDetailOpen(true);
   };
 
-  function getNestedValue(obj: any, path: string ) {
-     return path.split(".").reduce((acc, key) => acc && acc[key], obj);
- 
-
-    
+  function getNestedValue(obj: any, path: string) {
+    return path.split(".").reduce((acc, key) => acc && acc[key], obj);
   }
 
-
-
-
-  const flattenObject = (obj: Record<string, any>, parentKey = ""): Record<string, any> => {
+  const flattenObject = (
+    obj: Record<string, any>,
+    parentKey = ""
+  ): Record<string, any> => {
     return Object.entries(obj).reduce((acc, [key, value]) => {
       const newKey = parentKey ? `${parentKey} ${key}` : key;
-      if (value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+      if (
+        value &&
+        typeof value === "object" &&
+        !Array.isArray(value) &&
+        !(value instanceof Date)
+      ) {
         Object.assign(acc, flattenObject(value, newKey));
       } else {
         acc[newKey] = value;
@@ -135,9 +141,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
       return acc;
     }, {} as Record<string, any>);
   };
-  
-
-
 
   // هنگام تغییر صفحه، انتخاب‌های ردیف‌ها را ریست کنیم
   useEffect(() => {
@@ -149,9 +152,14 @@ export const DataTable: React.FC<DynamicTableProps> = ({
       {/* Top Bar */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 p-4">
         <div className="flex items-center gap-2">
+          {showFilterButton && (
+            <Button variant="outline" size="sm" onClick={onFilterIconClick}>
+              <FiFilter />
+            </Button>
+          )}
           <TableFilterDrawer
-            open={showFilters}
-            onClose={() => setShowFilters(!showFilters)}
+            open={isFilterDrawerOpen ?? false}
+            onClose={onFilterDrawerClose ?? (() => {})}
             tableFilters={tableFilters}
             filterData={filterData}
             setFilterData={setFilterData}

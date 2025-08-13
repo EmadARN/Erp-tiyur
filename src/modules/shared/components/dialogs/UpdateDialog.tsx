@@ -61,21 +61,20 @@ export function UpdateDialog({
   data,
 }: UpdateDialogProps) {
   const [formData, setFormData] = React.useState<Record<string, any>>({});
-  const { data: detailData} = useGetBuyProductDetailsQuery(
+  const { data: detailData } = useGetBuyProductDetailsQuery(
     { id: data.id },
     {
-      skip: !data?.id, 
+      skip: !data?.id,
     }
   );
 
   React.useEffect(() => {
-    console.log("detao;",detailData)
+    console.log("detao;", detailData);
     if (detailData) {
       const flat = flattenObject(detailData);
       setFormData(flat);
     }
   }, [detailData]);
-  
 
   function handleChange(
     name: string,
@@ -117,13 +116,17 @@ export function UpdateDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="space-y-6 max-w-lg w-full px-4 sm:px-6">
+      <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Edit Information</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {configs.map((cfg) => {
+            const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
             const options: OptionType[] = (cfg.options ?? []).map((opt) =>
               typeof opt === "string" ? { value: opt, label: opt } : opt
             );
@@ -135,7 +138,12 @@ export function UpdateDialog({
               case "int-input":
               case "float-input":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label className="block text-sm font-medium text-gray-700">
                       {formatKey(cfg.label || cfg.name)}
                       {cfg.required && (
@@ -160,7 +168,12 @@ export function UpdateDialog({
 
               case "select-box":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label
                       htmlFor={cfg.name}
                       className="block text-sm font-medium text-gray-700"
@@ -183,7 +196,9 @@ export function UpdateDialog({
                 return (
                   <div
                     key={cfg.name}
-                    className="flex items-center justify-between space-x-2"
+                    className={`flex items-center justify-between space-x-2 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
                   >
                     <span className="text-sm font-medium text-gray-700">
                       {formatKey(cfg.label || cfg.name)}
@@ -197,7 +212,12 @@ export function UpdateDialog({
 
               case "multi-select":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label
                       htmlFor={cfg.name}
                       className="block text-sm font-medium text-gray-700"
@@ -222,7 +242,7 @@ export function UpdateDialog({
             }
           })}
 
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-3 pt-4 md:col-span-2">
             <Button type="button" variant="ghost" onClick={onClose}>
               Cancel
             </Button>

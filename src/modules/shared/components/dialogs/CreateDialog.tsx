@@ -10,7 +10,7 @@ import SelectBox from "@/modules/shared/components/ui/Selecbox";
 import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
-import type { ConfigItem, InputTypes, OptionType } from "../../types";
+import type { ConfigItem, InputTypes } from "../../types";
 
 export function CreateDialog({
   open,
@@ -84,16 +84,17 @@ export function CreateDialog({
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="space-y-6 max-w-lg w-full px-4 sm:px-6">
+      <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Information</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {configs.map((cfg) => {
-            // const options: OptionType[] = (cfg.options ?? []).map((opt) =>
-            //   typeof opt === "string" ? { value: opt, label: opt } : opt
-            // );
+            const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
             const options = cfg.options;
 
             switch (cfg.type) {
@@ -101,7 +102,12 @@ export function CreateDialog({
               case "int-input":
               case "float-input":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label className="block text-sm font-medium text-gray-700">
                       {cfg.label}
                       {cfg.required && (
@@ -126,7 +132,12 @@ export function CreateDialog({
 
               case "select-box":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label
                       htmlFor={cfg.name}
                       className="block text-sm font-medium text-gray-700"
@@ -150,7 +161,9 @@ export function CreateDialog({
                 return (
                   <div
                     key={cfg.name}
-                    className="flex items-center justify-between space-x-2"
+                    className={`flex items-center justify-between space-x-2 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
                   >
                     <span className="text-sm font-medium text-gray-700">
                       {cfg.label}
@@ -165,7 +178,12 @@ export function CreateDialog({
 
               case "multi-select":
                 return (
-                  <div key={cfg.name} className="space-y-1">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label
                       htmlFor={cfg.name}
                       className="block text-sm font-medium text-gray-700"
@@ -192,12 +210,12 @@ export function CreateDialog({
           })}
 
           {customMessage && (
-            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md md:col-span-2">
               {customMessage}
             </div>
           )}
 
-          <div className="flex justify-end gap-3 pt-4">
+          <div className="flex justify-end gap-3 pt-4 md:col-span-2">
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>

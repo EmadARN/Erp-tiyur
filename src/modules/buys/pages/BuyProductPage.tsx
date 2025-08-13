@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
@@ -12,7 +13,8 @@ import {
 } from "../model";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
-import { FiBox } from "react-icons/fi";
+import { FiBox, FiFilter } from "react-icons/fi";
+import { Button } from "@/modules/shared/components/ui/Button";
 
 // Custom Hooks
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
@@ -21,6 +23,7 @@ import { useBuyProductActions } from "../hooks/useBuyProductActions";
 
 const BuyProductPage = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
+  const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   const {
     kernelData,
@@ -77,13 +80,24 @@ const BuyProductPage = () => {
           onCreate={() => OnCreate(1)}
           createLabel="Add Buy Product"
         />
-        <div className="mb-4 w-full md:w-1/3">
-          <SearchInput
-            value={
-              typeof filterData.search === "string" ? filterData.search : ""
-            }
-            onSearch={handleSearch}
-          />
+        <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+          <div className="w-full md:w-1/3">
+            <SearchInput
+              value={
+                typeof filterData.search === "string" ? filterData.search : ""
+              }
+              onSearch={handleSearch}
+            />
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setFilterDrawerOpen(true)}
+            className="w-full md:w-auto"
+          >
+            <FiFilter className="mr-2" />
+            Filters
+          </Button>
         </div>
         <NoData
           title="No products found"
@@ -109,11 +123,24 @@ const BuyProductPage = () => {
         isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
       />
 
-      <div className="mb-4 w-full md:w-1/3">
-        <SearchInput
-          value={typeof filterData.search === "string" ? filterData.search : ""}
-          onSearch={handleSearch}
-        />
+      <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
+        <div className="w-full md:w-1/3">
+          <SearchInput
+            value={
+              typeof filterData.search === "string" ? filterData.search : ""
+            }
+            onSearch={handleSearch}
+          />
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setFilterDrawerOpen(true)}
+          className="w-full md:w-auto"
+        >
+          <FiFilter className="mr-2" />
+          Filters
+        </Button>
       </div>
 
       <DataTable
@@ -128,6 +155,10 @@ const BuyProductPage = () => {
         applyFilter={handleFilterOnChange}
         updateDialogConfigs={getUpdateDialogConfigs(kernelData)}
         onUpdateConfirm={handleUpdateConfirm}
+        showFilterButton={false}
+        isFilterDrawerOpen={isFilterDrawerOpen}
+        onFilterDrawerClose={() => setFilterDrawerOpen(false)}
+        onFilterIconClick={() => setFilterDrawerOpen(true)}
       />
 
       <CreateDialog
