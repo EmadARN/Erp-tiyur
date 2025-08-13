@@ -124,27 +124,27 @@ const BuyProductPage = () => {
     () => ({
       products:
         Product?.map((item: ProductType) => ({
-          value: item.id,
+          value: String(item.id),
           label: item.name,
         })) || [],
       owners:
         owners?.map((item: OwnerType) => ({
-          value: item.id,
+          value:  String(item.id),
           label: item.contact.name,
         })) || [],
       cars:
         cars?.map((item: CarType) => ({
-          value: item.id,
+          value:  String(item.id),
           label: item.car_number,
         })) || [],
       drivers:
         drivers?.map((item: DriverType) => ({
-          value: item.id,
+          value:  String(item.id),
           label: item.contact.name,
         })) || [],
       agriculture:
         agriculture?.map((item: AgricultureType) => ({
-          value: item.id,
+          value:  String(item.id),
           label: item.name,
         })) || [],
     }),
@@ -302,7 +302,10 @@ const BuyProductPage = () => {
 
   async function handleUpdateConfirm(data: Record<string, any>) {
     let formattedData = formatData(data);
+     console.log("formattedData1", formattedData);
     formattedData = mergeDataWithDefault(formattedData, updateDialogDocs);
+    console.log("formattedData2", formattedData);
+        console.log("data", data);
 
     try {
       await patchBuyProduct({

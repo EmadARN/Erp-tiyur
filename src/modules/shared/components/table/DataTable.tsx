@@ -26,9 +26,11 @@ type DynamicTableProps = {
   onCreate?: () => void;
   showSearch?: boolean;
   handleSearch?: (query: string) => void;
-  deleteHandler?: (index: number | null) => void;
-  bulkDeleteHandler?: (index: number | null) => void;
-  onUpdateConfirm?: () => void;
+  // deleteHandler?: (index: number | null) => void;
+  deleteHandler?:(id: string) => Promise<void>
+  // bulkDeleteHandler?: (index: number | null) => void;
+  bulkDeleteHandler?:(arrayIndex: string[]) => Promise<void>
+  onUpdateConfirm?: (data: Record<string, any>) => Promise<void>;
   applyFilter?: () => void;
   useGetBuyProductDetailsQuery:any
 };
