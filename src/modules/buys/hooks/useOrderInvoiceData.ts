@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useGetBankAccountsQuery } from "../api/bankAccountApi";
-import type { BankAccount, FiltersRecord, BankAccountsResponse } from "../model/bankAccount";
-import { tableHead } from "../model/bankAccountIndex.ts";
+import { useGetOrderInvoicesQuery } from "../api/orderInvoiceApi";
+import type { OrderInvoice, FiltersRecord, OrderInvoicesResponse } from "../model/orderInvoice";
+import { tableHead } from "../model/orderInvoiceIndex.ts";
 
-function getValueByPath(obj: BankAccount, path: string): unknown {
+function getValueByPath(obj: OrderInvoice, path: string): unknown {
     if (!obj || !path) return "";
     return path.split(".").reduce<unknown>((acc, key) => {
         if (acc && typeof acc === "object" && acc !== null && key in acc) {
@@ -13,19 +13,19 @@ function getValueByPath(obj: BankAccount, path: string): unknown {
     }, obj);
 }
 
-export const useBankAccountData = () => {
+export const useOrderInvoiceData = () => {
     const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>({});
     const [filterData, setFilterData] = useState<FiltersRecord>({});
-    const { data: accounts, isLoading } = useGetBankAccountsQuery(paramsFilterData, {
+    const { data: invoices, isLoading } = useGetOrderInvoicesQuery(paramsFilterData, {
         refetchOnMountOrArgChange: true,
     });
-    const [displayData, setDisplayData] = useState<BankAccountsResponse | null>(null);
+    const [displayData, setDisplayData] = useState<OrderInvoicesResponse | null>(null);
 
     useEffect(() => {
-        if (accounts) {
-            setDisplayData(accounts);
+        if (invoices) {
+            setDisplayData(invoices);
         }
-    }, [accounts]);
+    }, [invoices]);
 
     const handleFilterOnChange = () => {
         const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -49,13 +49,13 @@ export const useBankAccountData = () => {
     };
 
     const handleSearch = (searchTerm: string) => {
-        if (searchTerm === "" && accounts) {
-            setDisplayData(accounts);
+        if (searchTerm === "" && invoices) {
+            setDisplayData(invoices);
             return;
         }
         const lowerSearch = searchTerm.toLowerCase();
-        if (accounts) {
-            const result = accounts.data.filter((row) =>
+        if (invoices) {
+            const result = invoices.data.filter((row) =>
                 tableHead.some(({ row_id }) => {
                     const value = getValueByPath(row, row_id);
                     return String(value ?? "").toLowerCase().includes(lowerSearch);
@@ -66,7 +66,7 @@ export const useBankAccountData = () => {
     };
 
     return {
-        accounts: displayData,
+        invoices: displayData,
         isLoading,
         filterData,
         setFilterData,

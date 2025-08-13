@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-    usePostBankAccountMutation,
-    usePatchBankAccountMutation,
-    useDeleteBankAccountMutation,
-    useDeleteBulkBankAccountMutation,
-} from "../api/bankAccountApi";
+    usePostOrderPaymentMutation,
+    usePatchOrderPaymentMutation,
+    useDeleteOrderPaymentMutation,
+    useDeleteBulkOrderPaymentMutation,
+} from "../api/orderPaymentApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
-import type { CreateBankAccountDto } from "../model/bankAccount";
-import { updateDialogDocs } from "../model/bankAccountIndex.ts";
+import type { CreateOrderPaymentDto } from "../model/orderPayment";
+import { updateDialogDocs } from "../model/index.ts";
 
-// Helper function to format dot.notation keys into nested objects
 function formatData(data: Record<string, any>): Record<string, any> {
     const result: Record<string, any> = {};
     Object.entries(data).forEach(([key, value]) => {
@@ -40,16 +39,16 @@ const mergeDataWithDefault = (data: any, defaultData: any): any => {
     return result;
 };
 
-export const useBankAccountActions = () => {
+export const useOrderPaymentActions = () => {
     const navigate = useNavigate();
-    const [postBankAccount] = usePostBankAccountMutation();
-    const [patchBankAccount] = usePatchBankAccountMutation();
-    const [deleteBankAccount] = useDeleteBankAccountMutation();
-    const [deleteBulkBankAccount] = useDeleteBulkBankAccountMutation();
+    const [postOrderPayment] = usePostOrderPaymentMutation();
+    const [patchOrderPayment] = usePatchOrderPaymentMutation();
+    const [deleteOrderPayment] = useDeleteOrderPaymentMutation();
+    const [deleteBulkOrderPayment] = useDeleteBulkOrderPaymentMutation();
 
     const deleteHandler = async (id: string) => {
         try {
-            await deleteBankAccount({ id }).unwrap();
+            await deleteOrderPayment({ id }).unwrap();
             toast.success("Data deleted successfully!");
         } catch (err) {
             handleApiError(err, navigate, "Failed to delete data.");
@@ -58,7 +57,7 @@ export const useBankAccountActions = () => {
 
     const bulkDeleteHandler = async (ids: string[]) => {
         try {
-            await deleteBulkBankAccount({ data: { data: ids } }).unwrap();
+            await deleteBulkOrderPayment({ data: { data: ids } }).unwrap();
             toast.success("Data deleted successfully!");
         } catch (err) {
             handleApiError(err, navigate, "Failed to delete data.");
@@ -66,12 +65,9 @@ export const useBankAccountActions = () => {
     };
 
     const handleCreateConfirm = async (data: Record<string, any>) => {
-        const formattedData: Partial<CreateBankAccountDto> = {
-            owner_name: data["owner_name"],
-            account_number: data["account_number"],
-        };
+        const formattedData: Partial<CreateOrderPaymentDto> = formatData(data);
         try {
-            await postBankAccount(formattedData).unwrap();
+            await postOrderPayment(formattedData).unwrap();
             toast.success("Data sent successfully!");
         } catch (err) {
             handleApiError(err, navigate, "Failed to send data.");
@@ -82,7 +78,7 @@ export const useBankAccountActions = () => {
         let formattedData = formatData(data);
         formattedData = mergeDataWithDefault(formattedData, updateDialogDocs);
         try {
-            await patchBankAccount({ id: formattedData.id, data: formattedData }).unwrap();
+            await patchOrderPayment({ id: formattedData.id, data: formattedData }).unwrap();
             toast.success("Data updated successfully!");
         } catch (err) {
             handleApiError(err, navigate, "Failed to update data.");

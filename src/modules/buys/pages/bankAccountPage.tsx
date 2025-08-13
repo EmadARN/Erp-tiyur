@@ -4,7 +4,7 @@ import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import { useGetBankAccountDetailsQuery } from "../api/bankAccountApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
-import { getCreateDialogConfigs, getUpdateDialogConfigs, tableFilter, tableHead } from "../model";
+import { getCreateDialogConfigs, getUpdateDialogConfigs, tableFilter, tableHead } from "../model/bankAccountIndex.ts";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiFilter, FiCreditCard } from "react-icons/fi";
