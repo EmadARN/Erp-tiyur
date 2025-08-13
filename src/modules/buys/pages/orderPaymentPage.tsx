@@ -55,7 +55,7 @@ const OrderPaymentPage = () => {
 
   if (!payments?.data || payments.data.length === 0) {
     return (
-      <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+      <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
         <PageHeader
           title="Order Payments"
           breadcrumbItems={breadcrumbItems}
@@ -91,7 +91,7 @@ const OrderPaymentPage = () => {
           onConfirm={handleCreateConfirm}
           configs={getCreateDialogConfigs({
             invoice:
-              invoices?.data?.map((item) => ({
+              invoices?.data?.map((item:{id:number,title:string}) => ({
                 value: item.id,
                 label: item.title,
               })) ?? [],
@@ -102,7 +102,7 @@ const OrderPaymentPage = () => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+    <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
         title="Order Payments"
         breadcrumbItems={breadcrumbItems}
@@ -110,7 +110,7 @@ const OrderPaymentPage = () => {
         createLabel="Add Order Payment"
       />
 
-      <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-between my-4 md:my-8 gap-4">
         <div className="w-full md:w-1/3">
           <SearchInput
             value={
@@ -141,7 +141,7 @@ const OrderPaymentPage = () => {
         applyFilter={handleFilterOnChange}
         updateDialogConfigs={getUpdateDialogConfigs({
           invoice:
-            invoices?.data?.map((item) => ({
+            invoices?.data?.map((item:{id:number,title:string}) => ({
               value: item.id,
               label: item.title,
             })) ?? [],
@@ -159,7 +159,7 @@ const OrderPaymentPage = () => {
         onConfirm={handleCreateConfirm}
         configs={getCreateDialogConfigs({
           invoice:
-            invoices?.data?.map((item) => ({
+            invoices?.data?.map((item:{id:number,title:string}) => ({
               value: item.id,
               label: item.title,
             })) ?? [],

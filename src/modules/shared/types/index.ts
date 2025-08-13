@@ -19,6 +19,7 @@ type ColumnType =
   | "autocomplete"
   | "select-box"
   | "switch"
+  | "number"
   | "range-box";
 
 export type TableFilter = {
