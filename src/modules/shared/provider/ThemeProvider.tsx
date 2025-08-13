@@ -1,6 +1,5 @@
 import { useEffect, type PropsWithChildren } from "react";
 import { useThemeSettings } from "../hooks/useThemeSettings";
-
 import { type PresetColor } from "../store/slice/themeSlice";
 
 const presetColorMap: Record<PresetColor, string> = {
