@@ -13,7 +13,7 @@ import type {
   DriverType,
   AgricultureType,
   KernelData,
-} from "@/modules/buys/model/buysTypes";
+} from "@/modules/buys/model/buysProduct";
 
 export const useKernelData = () => {
   const {
@@ -84,13 +84,7 @@ export const useKernelData = () => {
           label: item.name,
         })) || [],
     };
-  }, [
-    productsData,
-    ownersData,
-    carsData,
-    driversData,
-    agricultureData,
-  ]);
+  }, [productsData, ownersData, carsData, driversData, agricultureData]);
 
   return { kernelData, isLoading, isError };
 };
