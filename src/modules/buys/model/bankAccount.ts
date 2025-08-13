@@ -1,27 +1,54 @@
 export interface CreateBankAccountDto {
     owner_name: string;
     account_number: string;
-}
-
-export interface BankAccount extends CreateBankAccountDto {
+  }
+  
+  export interface BankAccount extends CreateBankAccountDto {
     id: string;
-}
-
-export interface BankAccountsResponse {
+  }
+  
+  export interface BankAccountsResponse {
     data: BankAccount[];
-}
-
-export type FilterValue =
-    | [number, number]
-    | string
-    | number
-    | boolean
-    | (string | number)[];
-
-export interface Filter {
-    type: "range" | "range-box" | "switch" | "select-box" | "autocomplete" | "multi-select";
+  }
+  
+  // فیلترها با value مشخص
+  export interface RangeFilter {
+    type: "range" | "range-box";
     name: string;
-    value: FilterValue;
-}
-
-export type FiltersRecord = Record<string, Filter>;
+    value: [number, number];
+  }
+  
+  export interface SwitchFilter {
+    type: "switch";
+    name: string;
+    value: boolean;
+  }
+  
+  export interface SelectBoxFilter {
+    type: "select-box";
+    name: string;
+    value: string | number;
+  }
+  
+  export interface AutocompleteFilter {
+    type: "autocomplete";
+    name: string;
+    value: string;
+  }
+  
+  export interface MultiSelectFilter {
+    type: "multi-select";
+    name: string;
+    value: (string | number)[];
+  }
+  
+  // اتحاد همه فیلترها
+  export type Filter =
+    | RangeFilter
+    | SwitchFilter
+    | SelectBoxFilter
+    | AutocompleteFilter
+    | MultiSelectFilter;
+  
+  export type FiltersRecord = Record<string, Filter>;
+  
