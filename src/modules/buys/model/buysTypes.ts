@@ -45,7 +45,7 @@ export interface AgricultureType {
 /**
  * Represents an option for a select input.
  */
-import { OptionType } from "@/modules/shared/types/common";
+import {type OptionType } from "@/modules/shared/types/common"; 
 
 /**
  * Represents the kernel data required for the buy product forms.

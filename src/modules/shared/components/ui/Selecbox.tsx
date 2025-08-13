@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Option = {
-  value: string;
+  value: string | number;
   label: string;
 };
 
@@ -83,11 +83,11 @@ const MotionSelectBox: React.FC<SelectProps> = ({
               <li
                 key={option.value}
                 onClick={() => {
-                  onChange(option.value);
+                  onChange(String(option.value));
                   setIsOpen(false);
                 }}
                 className={`px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 ${
-                  option.value === value ? "bg-slate-100" : ""
+                  option.value.toString() === value ? "bg-slate-100" : ""
                 }`}
               >
                 {option.label}

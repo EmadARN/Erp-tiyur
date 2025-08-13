@@ -11,7 +11,7 @@ import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
 import type { ConfigItem, InputTypes } from "../../types";
-import { OptionType } from "../../types/common";
+import { type OptionType } from "../../types/common"; 
 
 interface CreateDialogProps {
   open: boolean;

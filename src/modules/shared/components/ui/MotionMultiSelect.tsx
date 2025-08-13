@@ -4,7 +4,7 @@ import CustomCheckbox from "./Checkbox";
 import { Button } from "./Button";
 
 type Option = {
-  value: string;
+  value: string | number;
   label: string;
 };
 
@@ -37,7 +37,7 @@ const MotionMultiSelect: React.FC<MultiSelectProps> = ({
   };
 
   const selectedLabels = options
-    .filter((o) => value.includes(o.value))
+    .filter((o) => value.includes(String(o.value)))
     .map((o) => o.label)
     .join(", ");
 
@@ -98,11 +98,11 @@ const MotionMultiSelect: React.FC<MultiSelectProps> = ({
               <li
                 key={option.value}
                 className="px-3 py-2 text-sm cursor-pointer hover:bg-slate-100 flex items-center gap-2"
-                onClick={() => toggleOption(option.value)}
+                onClick={() => toggleOption(String(option.value))} // تبدیل به string
               >
                 <CustomCheckbox
-                  checked={value.includes(option.value)}
-                  onChange={() => toggleOption(option.value)}
+                  checked={value.includes(String(option.value))} // تبدیل به string
+                  onChange={() => toggleOption(String(option.value))} // تبدیل به string
                   size="md"
                   color="slate"
                 />

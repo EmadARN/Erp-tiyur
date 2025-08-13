@@ -8,12 +8,12 @@ import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import type { ConfigItem, TableColumn, TableFilter } from "../../types";
 import { TableFilterDrawer } from "./TableFilterDrawer";
 import { MdRemoveRedEye } from "react-icons/md";
-import { BuyProduct, FiltersRecord } from "@/modules/buys/model/buysTypes";
-import { UseQueryResult } from "@tanstack/react-query";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { DetailDialog } from "../dialogs/DetailDialog";
+import SelectBox from "@/modules/shared/components/ui/Selecbox";
 import { FiFilter } from "react-icons/fi";
+import type { BuyProduct, FiltersRecord } from "@/modules/buys/model/buysTypes";
 
 interface DataTableProps {
   tableHead: TableColumn[];
@@ -29,7 +29,12 @@ interface DataTableProps {
   useGetBuyProductDetailsQuery: (
     params: { id: string },
     options: { skip?: boolean }
-  ) => UseQueryResult<BuyProduct>;
+  ) => {
+    data?: BuyProduct;
+    isLoading: boolean;
+    isFetching: boolean;
+    error?: any;
+  };
   showFilterButton?: boolean;
   isFilterDrawerOpen?: boolean;
   onFilterDrawerClose?: () => void;
@@ -55,7 +60,7 @@ export const DataTable: React.FC<DataTableProps> = ({
 }) => {
   const [page, setPage] = useState(1);
   const [editIndex, setEditIndex] = useState<number | null>(null);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [deleteIndex, setDeleteIndex] = useState<number | null | string>(null);
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailData, setDetailData] = useState<BuyProduct | null>(null);
   const [bulkMode, setBulkMode] = useState<"edit" | null>(null);
@@ -264,17 +269,32 @@ export const DataTable: React.FC<DataTableProps> = ({
                                 />
                               );
                             case "select":
+                              // آماده‌سازی گزینه‌ها برای SelectBox
+                              const optionsForSelect = (col.options ?? []).map(
+                                (opt) =>
+                                  typeof opt === "string"
+                                    ? { value: opt, label: opt }
+                                    : {
+                                        value: String(opt.value),
+                                        label: opt.label,
+                                      }
+                              );
+
                               return (
-                                <select
-                                  className="border rounded p-1 text-sm w-full"
-                                  defaultValue={value}
-                                >
-                                  {col.options?.map((opt) => (
-                                    <option key={opt} value={opt}>
-                                      {opt}
-                                    </option>
-                                  ))}
-                                </select>
+                                <SelectBox
+                                  id={col.row_id}
+                                  options={optionsForSelect}
+                                  value={String(value ?? "")}
+                                  onChange={(val) => {
+                                    // اگر نیاز داری مقدار انتخاب‌شده رو به editRowData ذخیره کنی
+                                    if (editRowData) {
+                                      setEditRowData({
+                                        ...editRowData,
+                                        [col.row_id]: val,
+                                      });
+                                    }
+                                  }}
+                                />
                               );
                             default:
                               return <span>{value}</span>;

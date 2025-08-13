@@ -3,7 +3,8 @@ import { Button } from "../ui/Button";
 import { Drawer } from "../ui/Drawer";
 import { DynamicFilters } from "./DataTableFilters";
 import type { TableFilter } from "../../types";
-import { FiltersRecord } from "@/modules/buys/model/buysTypes";
+import { type FiltersRecord } from "@/modules/buys/model/buysTypes";
+import type { OptionType } from "../../types/common";
 
 type TableFilterDrawerProps = {
   open: boolean;
@@ -12,6 +13,24 @@ type TableFilterDrawerProps = {
   filterData: FiltersRecord;
   setFilterData: (data: FiltersRecord) => void;
   onApply?: () => void;
+};
+
+type FilterItem = {
+  label: string;
+  type:
+    | "range"
+    | "autocomplete"
+    | "select-box"
+    | "switch"
+    | "multi-select"
+    | "range-box";
+  name: string;
+  options?: OptionType[];
+  placeholder?: string;
+  defaultValue?: any;
+  min?: number;
+  max?: number;
+  step?: number;
 };
 
 export const TableFilterDrawer: React.FC<TableFilterDrawerProps> = ({
@@ -35,9 +54,23 @@ export const TableFilterDrawer: React.FC<TableFilterDrawerProps> = ({
 
           <div className="space-y-4 mb-6">
             <DynamicFilters
-              filtersConfig={tableFilters}
+              filtersConfig={tableFilters.map((f) => ({
+                label: f.label,
+                name: f.name,
+                type: f.type as FilterItem["type"], // assertion
+                options: f.options,
+                placeholder: f.placeholder,
+                defaultValue: f.defaultValue,
+                min: f.min,
+                max: f.max,
+                step: f.step,
+              }))}
               data={filterData}
-              setData={setFilterData}
+              setData={(updater) =>
+                setFilterData(
+                  typeof updater === "function" ? updater(filterData) : updater
+                )
+              }
             />
           </div>
 

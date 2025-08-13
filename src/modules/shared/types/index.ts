@@ -1,5 +1,5 @@
 import type { store } from "../store/store";
-import { OptionType } from "./common";
+import { type OptionType } from "./common"; 
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
@@ -32,6 +32,8 @@ export type TableFilter = {
   type: ColumnType;
   options?: OptionType[];
 };
+
+
 
 
 export type TableColumn = {

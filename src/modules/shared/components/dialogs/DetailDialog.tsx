@@ -6,17 +6,15 @@ import {
   DialogTitle,
 } from "@/modules/shared/components/ui/Dialog";
 import TextInput from "../ui/TextInput";
-import { BuyProduct } from "@/modules/buys/model/buysTypes";
-import { ConfigItem } from "../../types";
-
+import { type BuyProduct } from "@/modules/buys/model/buysTypes";
+import { type ConfigItem } from "../../types";
+import { flattenObject, formatKey } from "../../helpers/dialogUtils";
 interface DetailDialogProps {
   open: boolean;
   onClose: () => void;
   data: BuyProduct | null;
   configs: ConfigItem[];
 }
-
-import { flattenObject, formatKey } from "../../helpers/dialogUtils";
 
 export function DetailDialog({
   open,
