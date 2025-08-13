@@ -14,7 +14,7 @@ interface OpenNodes {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [openNodes, setOpenNodes] = useState<OpenNodes>({});
-  const { sidebarColor, rtl } = useThemeSettings();
+  const { rtl } = useThemeSettings();
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
@@ -35,20 +35,17 @@ const Sidebar = () => {
     collapsed: { opacity: 0, display: "none" },
   };
 
-  // رنگ و متن بر اساس حالت
-  const sidebarBgClass =
-    sidebarColor === "white"
-      ? "bg-white text-gray-900"
-      : "bg-[rgb(16,24,40)] text-white";
-
   return (
     <motion.aside
       className={cn(
         "relative top-0 h-screen flex flex-col transition-colors duration-300",
-        sidebarBgClass,
         rtl ? "right-0 text-right" : "left-0 text-left",
         { "items-center": isCollapsed }
       )}
+      style={{
+        backgroundColor: "var(--sidebar-bg)",
+        color: "var(--sidebar-text)",
+      }}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3 }}

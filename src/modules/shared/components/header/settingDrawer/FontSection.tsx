@@ -12,7 +12,9 @@ export function FontSection() {
   return (
     <div className="mt-8">
       <p
-        className={`text-xs text-gray-600 mb-2 text-left `}
+        className={`text-xs text-gray-600 mb-2 ${
+          rtl ? "text-right" : "text-left"
+        }`}
       >
         Font
       </p>

@@ -5,19 +5,23 @@ import Badge from "../ui/Badge";
 import { AccountDrawer } from "./AccountDrawer";
 import { openSettingsDrawer } from "../../store/slice/settingsSlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-
+import { useThemeSettings } from "../../hooks/useThemeSettings";
 
 const Header = () => {
   const dispatch = useAppDispatch();
-  
+  const { rtl } = useThemeSettings();
 
   return (
     <header
-      className={`flex flex-col sm:flex-row justify-between items-center p-4 bg-white `}
+      className={`flex flex-col sm:flex-row justify-between items-center p-4 bg-white ${
+        rtl ? "flex-row-reverse" : "flex-row"
+      }`}
     >
       {/* سمت چپ: لوگو و متن */}
       <div
-        className={`flex items-center mb-2 sm:mb-0 space-x-2 `}
+        className={`flex items-center mb-2 sm:mb-0 ${
+          rtl ? "space-x-reverse space-x-2" : "space-x-2"
+        }`}
       >
         <div className="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center flex-shrink-0">
           <span className="text-white font-bold text-sm sm:text-base">T1</span>
@@ -45,7 +49,9 @@ const Header = () => {
 
       {/* سمت راست: آیکون‌ها */}
       <div
-        className={`flex items-center space-x-4 `}
+        className={`flex items-center ${
+          rtl ? "flex-row-reverse space-x-4 space-x-reverse" : "space-x-4"
+        }`}
       >
         <Badge content={4} color="bg-orange-600">
           <FiBell className="text-xl text-gray-700 cursor-pointer" />

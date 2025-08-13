@@ -6,21 +6,26 @@ import { cn } from "@/modules/shared/helpers"; // اگه تابع cn داری
 
 export function ColorSection() {
   const dispatch = useDispatch();
-  const { sidebarColor } = useThemeSettings();
+  const { sidebarColor, rtl } = useThemeSettings();
 
   return (
     <div className="mt-8">
       <p
-        className={`text-xs text-gray-600 mb-2 text-left`}
+        className={`text-xs text-gray-600 mb-2 ${
+          rtl ? "text-right" : "text-left"
+        }`}
       >
         Color
       </p>
       <div
-        className={cn("flex gap-3 flex-row-reverse", )}
+        className={cn("flex gap-3", {
+          "flex-row": !rtl,
+          "flex-row-reverse": rtl,
+        })}
       >
         <Button
           onClick={() => dispatch(setSidebarColor("white"))}
-          variant={sidebarColor}
+          variant={sidebarColor === "white" ? "default" : "outline"}
           className={
             sidebarColor === "white"
               ? "bg-green-500 hover:bg-green-600"
@@ -33,7 +38,7 @@ export function ColorSection() {
 
         <Button
           onClick={() => dispatch(setSidebarColor("rgb(16,24,40)"))}
-          variant={sidebarColor}
+          variant={sidebarColor === "rgb(16,24,40)" ? "default" : "outline"}
           className={
             sidebarColor === "rgb(16,24,40)"
               ? "bg-gray-500 hover:bg-gray-600"
