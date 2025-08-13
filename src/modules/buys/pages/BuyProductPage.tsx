@@ -69,6 +69,10 @@ const BuyProductPage = () => {
       />
     );
   }
+    const isKernelDataEmpty =
+    !kernelData.cars.length ||
+    !kernelData.drivers.length ||
+    !kernelData.products.length;
 
   if (!buyProducts?.data || buyProducts.data.length === 0) {
     return (
@@ -105,6 +109,7 @@ const BuyProductPage = () => {
         />
 
 
+
         <CreateDialog
             open={createIndex !== null}
             onClose={() => setCreateIndex(null)}
@@ -122,10 +127,7 @@ const BuyProductPage = () => {
     );
   }
 
-  const isKernelDataEmpty =
-    !kernelData.cars.length ||
-    !kernelData.drivers.length ||
-    !kernelData.products.length;
+
 
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
