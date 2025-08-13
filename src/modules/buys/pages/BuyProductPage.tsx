@@ -77,6 +77,14 @@ const BuyProductPage = () => {
           onCreate={() => OnCreate(1)}
           createLabel="Add Buy Product"
         />
+        <div className="mb-4 w-full md:w-1/3">
+          <SearchInput
+            value={
+              typeof filterData.search === "string" ? filterData.search : ""
+            }
+            onSearch={handleSearch}
+          />
+        </div>
         <NoData
           title="No products found"
           description="Try adjusting your filters or creating a new product."
@@ -103,7 +111,7 @@ const BuyProductPage = () => {
 
       <div className="mb-4 w-full md:w-1/3">
         <SearchInput
-          value={filterData.search || ""}
+          value={typeof filterData.search === "string" ? filterData.search : ""}
           onSearch={handleSearch}
         />
       </div>
