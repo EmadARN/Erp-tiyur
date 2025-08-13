@@ -11,6 +11,7 @@ import { orderPaymentApi } from "@/modules/buys/api/orderPaymentApi.ts";
 import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
 import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
+import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -21,6 +22,7 @@ export const rootReducer = combineReducers({
 
   //saleApi: 
   [salesApi.reducerPath]: salesApi.reducer,
+  [loadedProductItemsApi.reducerPath]: loadedProductItemsApi.reducer,
 
   //buysApi: 
   [buyProductApi.reducerPath]: buyProductApi.reducer,
