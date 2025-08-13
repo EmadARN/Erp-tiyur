@@ -50,18 +50,23 @@ const Sidebar = () => {
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3 }}
     >
-      {/* دکمه باز/بستن در سمت مخالف */}
+      {/* دکمه باز/بستن */}
       <div className={cn("absolute top-5", rtl ? "-left-8.5" : "-right-8.5")}>
         <ToggleButton isCollapsed={isCollapsed} onToggle={toggleSidebar} />
       </div>
 
-      <div className="mt-20">
+      {/* بخش بالایی ثابت */}
+      <div className="mt-20 shrink-0">
         <NavSection
           isCollapsed={isCollapsed}
           navItems={navItems}
           textVariants={textVariants}
           title="OVERWIEW"
         />
+      </div>
+
+      {/* بخش وسط که اسکرول می‌خوره */}
+      <div className="flex-1 overflow-y-auto scrollbar-ghost">
         <TreeNode
           isCollapsed={isCollapsed}
           nodes={treeData}

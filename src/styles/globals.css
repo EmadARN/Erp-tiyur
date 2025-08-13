@@ -60,6 +60,52 @@ body {
   }
 }
 
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+  }
+  .scrollbar-ghost {
+    position: relative; /* برای pseudo-element خط */
+    -ms-overflow-style: none; /* IE/Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-ghost::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  /* خط نازک کناری (سمت inline-end که با RTL/LTR هماهنگه) */
+  .scrollbar-ghost::after {
+    content: "";
+    position: absolute;
+    inset-block: 0; /* بالا تا پایین */
+    inset-inline-end: 0; /* راست در LTR، چپ در RTL */
+    width: 3px;
+    background: currentColor; /* همرنگ متن؛ می‌تونی تغییر بدی */
+    opacity: 0.15;
+    pointer-events: none; /* کلیک‌گیر نباشه */
+  }
+
+  /* کمی پررنگ‌تر روی هاور (اختیاری) */
+  .scrollbar-ghost:hover::after {
+    opacity: 0.3;
+  }
+}
+
 @layer base {
   *,
   ::after,
