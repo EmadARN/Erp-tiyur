@@ -10,6 +10,7 @@ import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
 import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
+import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
 
@@ -19,6 +20,7 @@ export const middlewares: Middleware[] = [
   //saleApi:
   salesApi.middleware,
   loadedProductItemsApi.middleware,
+  loadedProductApi.middleware,
 
   //buysApi:
   buyProductApi.middleware,
