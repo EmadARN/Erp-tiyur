@@ -46,7 +46,7 @@ const BankAccountPage = () => {
 
   if (!accounts?.data || accounts.data.length === 0) {
     return (
-      <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+      <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
         <PageHeader
           title="Bank Accounts"
           breadcrumbItems={breadcrumbItems}
@@ -87,7 +87,7 @@ const BankAccountPage = () => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+    <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
         title="Bank Accounts"
         breadcrumbItems={breadcrumbItems}
@@ -95,7 +95,7 @@ const BankAccountPage = () => {
         createLabel="Add Bank Account"
       />
 
-      <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-between my-4 md:my-8 gap-4">
         <div className="w-full md:w-1/3">
           <SearchInput
             value={

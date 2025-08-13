@@ -158,8 +158,8 @@ export const DataTable: React.FC<DataTableProps> = ({
       </div>
 
       {/* Table Wrapper with horizontal scroll */}
-      <div className="w-full overflow-x-auto px-6">
-        <table className="min-w-max w-full text-left border-collapse">
+      <div className="w-full overflow-x-auto px-2 sm:px-4 md:px-6">
+        <table className="min-w-[700px] w-full text-left border-collapse">
           <thead>
             {selectedRows.length > 0 ? (
               <tr className="bg-blue-100 border-y border-blue-200">
