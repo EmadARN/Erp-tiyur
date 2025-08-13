@@ -32,6 +32,45 @@ export const treeData = [
   },
   {
     id: "2",
+    label: "Buy and Orders",
+    icon: <FaFolder />,
+    path: "/dashboard/buy/product",
+    children: [
+      {
+        id: "2.1",
+        label: "Bank Account",
+        icon: <FaFile />,
+        path: "/dashboard/buy/bank-account",
+      },
+      {
+        id: "2.2",
+        label: "Product Order",
+        icon: <FaFile />,
+        path: "/dashboard/buy/product",
+      },
+      {
+        id: "2.3",
+        label: "Invoice",
+        icon: <FaFile />,
+        path: "/dashboard/buy/invoice",
+      },
+      {
+        id: "2.4",
+        label: "Payments",
+        icon: <FaFile />,
+        path: "/dashboard/buy/payment",
+      },
+      {
+        id: "2.5",
+        label: "Purchase Order",
+        icon: <FaFile />,
+        path: "/dashboard/buy/purchase-order",
+      },
+
+    ],
+  },
+  {
+    id: "2",
     label: "Documents",
     icon: <FaFolder />,
     children: [
