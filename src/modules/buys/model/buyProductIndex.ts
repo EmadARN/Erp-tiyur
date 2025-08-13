@@ -1,5 +1,9 @@
-import type { ConfigItem, TableColumn, TableFilter } from "@/modules/shared/types";
-import type { BuyProduct, KernelData } from "./buysTypes";
+import type {
+  ConfigItem,
+  TableColumn,
+  TableFilter,
+} from "@/modules/shared/types";
+import type { BuyProduct, KernelData } from "./buysProduct";
 
 // A utility type to make all properties of an object, including nested ones, optional.
 type DeepPartial<T> = {
@@ -89,7 +93,10 @@ export function getCreateDialogConfigs({
       label: "Order Type",
       type: "select-box",
       options: [
-        { label: "Purchase commission by the product owner", value: "Purchase commission by the product owner" },
+        {
+          label: "Purchase commission by the product owner",
+          value: "Purchase commission by the product owner",
+        },
         { label: "Other order type 1", value: "Other order type 1" },
         { label: "Other order type 2", value: "Other order type 2" },
       ],
@@ -436,14 +443,14 @@ export const updateDialogDocs: DeepPartial<BuyProduct> = {
   id: "1761",
   car: {
     car: "string",
-    driver: "string"
+    driver: "string",
   },
   order_information: {
     agriculture: "string",
     product_owner: "string",
     slaughter_type: "Slaughterhouse delivery",
     order_type: "Purchase commission by the product owner",
-    product: "string"
+    product: "string",
   },
   required_weight: 0,
   required_number: 0,
@@ -452,53 +459,53 @@ export const updateDialogDocs: DeepPartial<BuyProduct> = {
   status: "pending for verified",
   create: {
     date: "2025-08-12 12:44",
-    user: "string"
+    user: "string",
   },
   verified: {
     user_date: {
       date: "2025-08-12 12:44",
-      user: "string"
+      user: "string",
     },
     status: false,
-    description: ""
+    description: "",
   },
   received: {
     user_date: {
       date: "2025-08-12 12:44",
-      user: "string"
+      user: "string",
     },
     status: false,
-    description: ""
+    description: "",
   },
   finished: {
     user_date: {
       date: "2025-08-12 12:44",
-      user: "string"
+      user: "string",
     },
     status: false,
-    description: ""
+    description: "",
   },
   done: {
     user_date: {
       date: "2025-08-12 12:44",
-      user: "string"
+      user: "string",
     },
     status: false,
-    description: ""
+    description: "",
   },
   cancelled: {
     user_date: {
       date: "2025-08-12 12:44",
-      user: "string"
+      user: "string",
     },
     status: false,
-    description: ""
+    description: "",
   },
   price: {
     purchase_price_per_unit: 0,
     cost_price: 0,
-    transportation_price: 0
-  }
+    transportation_price: 0,
+  },
 };
 
 export const tableFilter: TableFilter[] = [
@@ -544,7 +551,10 @@ export const tableFilter: TableFilter[] = [
     label: "Order Type",
     type: "select-box",
     options: [
-      { label: "Purchase commission by the product owner", value: "Purchase commission by the product owner" },
+      {
+        label: "Purchase commission by the product owner",
+        value: "Purchase commission by the product owner",
+      },
       { label: "Direct purchase", value: "Direct purchase" },
     ],
     defaultValue: "Purchase commission by the product owner",
