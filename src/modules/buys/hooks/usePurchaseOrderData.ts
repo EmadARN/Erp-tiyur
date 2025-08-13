@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import { useGetPurchaseOrdersQuery } from "../api/orderPurchaseOrderApi";
-import type { PurchaseOrder, FiltersRecord, PurchaseOrdersResponse } from "../model/purchaseOrderTypes";
-import { tableHead } from "../model/index";
+import type {
+  PurchaseOrder,
+  FiltersRecord,
+  PurchaseOrdersResponse,
+} from "../model/purchaseOrderTypes";
+import { tableHead } from "../model/purchaseOrderIndex";
 
 function getValueByPath(obj: PurchaseOrder, path: string): unknown {
   if (!obj || !path) return "";
@@ -14,12 +18,19 @@ function getValueByPath(obj: PurchaseOrder, path: string): unknown {
 }
 
 export const usePurchaseOrderData = () => {
-  const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>({});
+  const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
+    {}
+  );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: purchaseOrders, isLoading } = useGetPurchaseOrdersQuery(paramsFilterData, {
-    refetchOnMountOrArgChange: true,
-  });
-  const [displayData, setDisplayData] = useState<PurchaseOrdersResponse | null>(null);
+  const { data: purchaseOrders, isLoading } = useGetPurchaseOrdersQuery(
+    paramsFilterData,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+  const [displayData, setDisplayData] = useState<PurchaseOrdersResponse | null>(
+    null
+  );
 
   useEffect(() => {
     if (purchaseOrders) {
@@ -56,7 +67,11 @@ export const usePurchaseOrderData = () => {
     const lower = searchTerm.toLowerCase();
     if (purchaseOrders) {
       const result = purchaseOrders.data.filter((row) =>
-        tableHead.some(({ row_id }) => String(getValueByPath(row, row_id) ?? "").toLowerCase().includes(lower))
+        tableHead.some(({ row_id }) =>
+          String(getValueByPath(row, row_id) ?? "")
+            .toLowerCase()
+            .includes(lower)
+        )
       );
       setDisplayData({ data: result });
     }

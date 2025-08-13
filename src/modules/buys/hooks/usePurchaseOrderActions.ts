@@ -8,7 +8,7 @@ import {
 } from "../api/orderPurchaseOrderApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
 import type { CreatePurchaseOrderDto } from "../model/purchaseOrderTypes";
-import { updateDialogDocs } from "../model/index";
+import { updateDialogDocs } from "../model/purchaseOrderIndex";
 
 export const usePurchaseOrderActions = () => {
   const navigate = useNavigate();
@@ -16,7 +16,6 @@ export const usePurchaseOrderActions = () => {
   const [patchPurchaseOrder] = usePatchPurchaseOrderMutation();
   const [deletePurchaseOrder] = useDeletePurchaseOrderMutation();
   const [deleteBulkPurchaseOrder] = useDeleteBulkPurchaseOrderMutation();
-
 
   function formatData(data: Record<string, any>): Record<string, any> {
     const result: Record<string, any> = {};
@@ -32,7 +31,6 @@ export const usePurchaseOrderActions = () => {
     });
     return result;
   }
-
 
   const mergeDataWithDefault = (data: any, defaultData: any): any => {
     const result = { ...defaultData };
@@ -51,7 +49,6 @@ export const usePurchaseOrderActions = () => {
     }
     return result;
   };
-  
 
   const deleteHandler = async (id: string) => {
     try {
