@@ -30,9 +30,9 @@ import type {
   AgricultureType,
   BuyProduct,
   CarType,
+  CreateBuyProductDto,
   DriverType,
   FiltersRecord,
-  GetProduct,
   KernelData,
   OrdersResponse,
   OwnerType,
@@ -68,8 +68,9 @@ const BuyProductPage = () => {
     }
   );
 
-  // تابع کمکی برای گرفتن مقدار بر اساس مسیر "car.driver.contact.name"
-  function getValueByPath(obj: GetProduct, path: string): any {
+  // Helper function to get a value by a nested path.
+  // Note: The return type is `any` as it's a dynamic lookup.
+  function getValueByPath(obj: BuyProduct, path: string): any {
     if (!obj || !path) return "";
 
     return path.split(".").reduce<any>((acc, key) => {
@@ -80,9 +81,9 @@ const BuyProductPage = () => {
     }, obj);
   }
 
-  // تابع جستجو
+  // Search function
   function handleSearch(
-    rows: GetProduct[],
+    rows: BuyProduct[],
     tableHead: { row_id: string }[],
     searchTerm: string
   ) {
@@ -112,38 +113,38 @@ const BuyProductPage = () => {
   const { data: agriculture } = useGetAgricultureQuery(paramsfilterData || {});
   const { data: cities } = useGetCityQuery(paramsfilterData || {});
 
-  // هوک‌های mutation برای POST, PATCH, DELETE
+  // Mutation hooks for POST, PATCH, DELETE
   const [postBuyProduct] = usePostBuyProductMutation();
   const [patchBuyProduct] = usePatchBuyProductMutation();
   const [deleteBuyProduct] = useDeleteBuyProductMutation();
   const [deleteBulkBuyProduct] = useDeleteBulkBuyProductMutation();
 
-  // هر بار که داده‌ها تغییر کرد، kernelData را آپدیت کن
+  // Update kernelData whenever the source data changes
   const memoedKernelData = React.useMemo(
     () => ({
       products:
         Product?.map((item: ProductType) => ({
-          value: JSON.stringify(item.id),
+          value: item.id,
           label: item.name,
         })) || [],
       owners:
         owners?.map((item: OwnerType) => ({
-          value: JSON.stringify(item.id),
+          value: item.id,
           label: item.contact.name,
         })) || [],
       cars:
         cars?.map((item: CarType) => ({
-          value: JSON.stringify(item.id),
+          value: item.id,
           label: item.car_number,
         })) || [],
       drivers:
         drivers?.map((item: DriverType) => ({
-          value: JSON.stringify(item.id),
+          value: item.id,
           label: item.contact.name,
         })) || [],
       agriculture:
         agriculture?.map((item: AgricultureType) => ({
-          value: JSON.stringify(item.id),
+          value: item.id,
           label: item.name,
         })) || [],
     }),
@@ -155,7 +156,9 @@ const BuyProductPage = () => {
   }, [memoedKernelData]);
 
   useEffect(() => {
-    setTableData(tableDatas);
+    if (tableDatas) {
+      setTableData(tableDatas);
+    }
   }, [tableDatas]);
 
   const breadcrumbItems = [
@@ -189,13 +192,16 @@ const BuyProductPage = () => {
     setCreateIndex(index);
   };
 
-  const deleteHandler = async (index: string) => {
+  const deleteHandler = async (id: string) => {
     try {
-      await deleteBuyProduct({ id: index }).unwrap();
-      toast.success("Data delete successfully!");
-    } catch (err: any) {
-      if (err.response?.status === 500) {
-        navigate("/500");
+      await deleteBuyProduct({ id }).unwrap();
+      toast.success("Data deleted successfully!");
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "response" in err) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 500) {
+          navigate("/500");
+        }
       }
       toast.error("Failed to delete data.");
     }
@@ -206,7 +212,7 @@ const BuyProductPage = () => {
       await deleteBulkBuyProduct({
         data: { data: arrayIndex },
       }).unwrap();
-      toast.success("Data delete successfully!");
+      toast.success("Data deleted successfully!");
     } catch (err: unknown) {
       if (err && typeof err === "object" && "response" in err) {
         const error = err as { response?: { status?: number } };
@@ -219,7 +225,7 @@ const BuyProductPage = () => {
   };
 
   async function handCreateleConfirm(data: Record<string, any>) {
-    const formattedData: Partial<BuyProduct> = {
+    const formattedData: Partial<CreateBuyProductDto> = {
       car: {
         car: data["car.car"],
         driver: data["car.driver"],
@@ -249,37 +255,32 @@ const BuyProductPage = () => {
     }
   }
 
-  function formatData(data: Record<string, any>) {
+  function formatData(data: Record<string, any>): Record<string, any> {
     const result: Record<string, any> = {};
 
     Object.entries(data).forEach(([key, value]) => {
       if (value === null) {
-        // اگر مقدار null بود، این فیلد رو وارد نکن
         return;
       }
 
-      if (key.includes(".")) {
-        const parts = key.split(".");
-        let current = result;
+      const parts = key.split(".");
+      let current = result;
 
-        // حلقه روی بخش‌های کلید به جز آخرین
-        for (let i = 0; i < parts.length - 1; i++) {
-          const part = parts[i];
-          if (!current[part]) current[part] = {};
-          current = current[part];
+      for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        if (!current[part]) {
+          current[part] = {};
         }
-
-        // آخرین بخش کلید
-        current[parts[parts.length - 1]] = value;
-      } else {
-        result[key] = value;
+        current = current[part];
       }
+
+      current[parts[parts.length - 1]] = value;
     });
 
     return result;
   }
 
-  const mergeDataWithDefault = (data: any, defaultData: any) => {
+  const mergeDataWithDefault = (data: any, defaultData: any): any => {
     const result = { ...defaultData };
 
     for (const key in data) {
@@ -298,6 +299,7 @@ const BuyProductPage = () => {
 
     return result;
   };
+
   async function handleUpdateConfirm(data: Record<string, any>) {
     let formattedData = formatData(data);
     formattedData = mergeDataWithDefault(formattedData, updateDialogDocs);
@@ -307,8 +309,8 @@ const BuyProductPage = () => {
         id: formattedData.id,
         data: formattedData,
       }).unwrap();
-      toast.success("Data update successfully!");
-    } catch (err) {
+      toast.success("Data updated successfully!");
+    } catch (err: unknown) {
       if (err && typeof err === "object" && "response" in err) {
         const error = err as { response?: { status?: number } };
         if (error.response?.status === 500) {
@@ -318,6 +320,7 @@ const BuyProductPage = () => {
       toast.error("Failed to update data.");
     }
   }
+
   if (isLoading) {
     return <Loading />;
   }

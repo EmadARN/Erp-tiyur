@@ -1,56 +1,57 @@
 import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
+import type { BuyProduct, CreateBuyProductDto, OrdersResponse } from "../model/buysTypes";
 
 export const buyProductApi = createApi({
   reducerPath: "buysApi",
   baseQuery: axiosBaseQuery(http.buyApi),
-  tagTypes: ["BuyProduct"], // تعریف تگ برای مدیریت کش
+  tagTypes: ["BuyProduct"], // Tag for cache management
   endpoints: (builder) => ({
-    getBuyProduct: builder.query<any, any>({
+    getBuyProduct: builder.query<OrdersResponse, Record<string, any>>({
       query: (filters = {}) => ({
         url: "/buy-product/",
         method: "get",
-        params: filters, // پشتیبانی از پارامترهای فیلتر و جستجو
+        params: filters, // Support for filter and search parameters
       }),
-      providesTags: ["BuyProduct"], // این query تگ BuyProduct را فراهم می‌کند
+      providesTags: ["BuyProduct"], // This query provides the BuyProduct tag
     }),
-    getBuyProductDetails: builder.query<any, { id: number | string }>({
+    getBuyProductDetails: builder.query<BuyProduct, { id: string }>({
       query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "get",
       }),
     }),
-    postBuyProduct: builder.mutation<any, any>({
+    postBuyProduct: builder.mutation<BuyProduct, Partial<CreateBuyProductDto>>({
       query: (body) => ({
         url: "/buy-product/create/",
         method: "post",
         data: body,
       }),
-      invalidatesTags: ["BuyProduct"], // بعد از POST، تگ BuyProduct را invalidate می‌کند
+      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after POST
     }),
-    patchBuyProduct: builder.mutation<any, { id: number | string; data: any }>({
+    patchBuyProduct: builder.mutation<BuyProduct, { id: string; data: Partial<BuyProduct> }>({
       query: ({ id, data }) => ({
         url: `/buy-product/c/${id}/`,
         method: "patch",
         data,
       }),
-      invalidatesTags: ["BuyProduct"], // بعد از PATCH، تگ BuyProduct را invalidate می‌کند
+      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after PATCH
     }),
-    deleteBulkBuyProduct: builder.mutation<any, { data: any }>({
+    deleteBulkBuyProduct: builder.mutation<void, { data: { data: string[] } }>({
       query: ({ data }) => ({
         url: '/buy-product/',
         method: "delete",
         data,
       }),
-      invalidatesTags: ["BuyProduct"], // بعد از PATCH، تگ BuyProduct را invalidate می‌کند
+      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after DELETE
     }),
-    deleteBuyProduct: builder.mutation<any, { id: number | string }>({
+    deleteBuyProduct: builder.mutation<void, { id: string }>({
       query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "delete",
       }),
-      invalidatesTags: ["BuyProduct"], // بعد از DELETE، تگ BuyProduct را invalidate می‌کند
+      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after DELETE
     }),
   }),
 });

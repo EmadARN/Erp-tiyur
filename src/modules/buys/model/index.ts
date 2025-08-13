@@ -1,11 +1,16 @@
-
 import type { ConfigItem, TableColumn, TableFilter } from "@/modules/shared/types";
-import type { KernelData } from "./buysTypes";
+import type { BuyProduct, KernelData } from "./buysTypes";
+
+// A utility type to make all properties of an object, including nested ones, optional.
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
 
 export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
 
   // car info
+  // Note: row_id uses a dot notation path. A robust solution would involve a type-safe path generator.
   { columnName: "Car", row_id: "car.car.car_number", type: "string" },
   { columnName: "Driver", row_id: "car.driver.contact.name", type: "string" },
 
@@ -25,9 +30,7 @@ export const tableHead: TableColumn[] = [
     row_id: "order_information.slaughter_type",
     type: "string",
   },
-
 ];
-
 
 export function getCreateDialogConfigs({
   cars,
@@ -272,7 +275,7 @@ export function getUpdateDialogConfigs({
     {
       name: "verified.status",
       label: "Verified Status",
-      type: "switch", // فرض کردم نوع switch برای بولی مناسب است
+      type: "switch",
       defaultValue: false,
       required: false,
     },
@@ -429,75 +432,74 @@ export function getUpdateDialogConfigs({
   ];
 }
 
-export const updateDialogDocs = {
-  "id": "1761",
-  "car": {
-    "car": "string",
-    "driver": "string"
+export const updateDialogDocs: DeepPartial<BuyProduct> = {
+  id: "1761",
+  car: {
+    car: "string",
+    driver: "string"
   },
-  "order_information": {
-    "agriculture": "string",
-    "product_owner": "string",
-    "slaughter_type": "Slaughterhouse delivery",
-    "order_type": "Purchase commission by the product owner",
-    "product": "string"
+  order_information: {
+    agriculture: "string",
+    product_owner: "string",
+    slaughter_type: "Slaughterhouse delivery",
+    order_type: "Purchase commission by the product owner",
+    product: "string"
   },
-  "required_weight": 0,
-  "required_number": 0,
-  "weight": 0,
-  "quality": "string",
-  "status": "pending for verified",
-  "create": {
-    "date": "2025-08-12 12:44",
-    "user": "string"
+  required_weight: 0,
+  required_number: 0,
+  weight: 0,
+  quality: "string",
+  status: "pending for verified",
+  create: {
+    date: "2025-08-12 12:44",
+    user: "string"
   },
-  "verified": {
-    "user_date": {
-      "date": "2025-08-12 12:44",
-      "user": "string"
+  verified: {
+    user_date: {
+      date: "2025-08-12 12:44",
+      user: "string"
     },
-    "status": false,
-    "description": ""
+    status: false,
+    description: ""
   },
-  "received": {
-    "user_date": {
-      "date": "2025-08-12 12:44",
-      "user": "string"
+  received: {
+    user_date: {
+      date: "2025-08-12 12:44",
+      user: "string"
     },
-    "status": false,
-    "description": ""
+    status: false,
+    description: ""
   },
-  "finished": {
-    "user_date": {
-      "date": "2025-08-12 12:44",
-      "user": "string"
+  finished: {
+    user_date: {
+      date: "2025-08-12 12:44",
+      user: "string"
     },
-    "status": false,
-    "description": ""
+    status: false,
+    description: ""
   },
-  "done": {
-    "user_date": {
-      "date": "2025-08-12 12:44",
-      "user": "string"
+  done: {
+    user_date: {
+      date: "2025-08-12 12:44",
+      user: "string"
     },
-    "status": false,
-    "description": ""
+    status: false,
+    description: ""
   },
-  "cancelled": {
-    "user_date": {
-      "date": "2025-08-12 12:44",
-      "user": "string"
+  cancelled: {
+    user_date: {
+      date: "2025-08-12 12:44",
+      user: "string"
     },
-    "status": false,
-    "description": ""
+    status: false,
+    description: ""
   },
-  "price": {
-    "purchase_price_per_unit": 0,
-    "cost_price": 0,
-    "transportation_price": 0
+  price: {
+    purchase_price_per_unit: 0,
+    cost_price: 0,
+    transportation_price: 0
   }
-} as const;
-
+};
 
 export const tableFilter: TableFilter[] = [
   {
@@ -515,7 +517,7 @@ export const tableFilter: TableFilter[] = [
     type: "select-box",
     options: [
       "Slaughterhouse delivery",
-      // بقیه گزینه‌ها
+      // Other options
     ],
     defaultValue: "Slaughterhouse delivery",
   },
@@ -525,7 +527,7 @@ export const tableFilter: TableFilter[] = [
     type: "select-box",
     options: [
       "Purchase commission by the product owner",
-      // گزینه‌های دیگر
+      // Other options
     ],
     defaultValue: "Purchase commission by the product owner",
   },
@@ -547,7 +549,7 @@ export const tableFilter: TableFilter[] = [
     name: "car__car",
     label: "Car",
     type: "autocomplete",
-    options: [], // لیست ماشین‌ها
+    options: [], // Car list
     placeholder: "Search car",
     defaultValue: "",
   },
@@ -555,7 +557,7 @@ export const tableFilter: TableFilter[] = [
     name: "car__driver",
     label: "Driver",
     type: "autocomplete",
-    options: [], // لیست راننده‌ها
+    options: [], // Driver list
     placeholder: "Search driver",
     defaultValue: "",
   },
@@ -578,7 +580,7 @@ export const tableFilter: TableFilter[] = [
     name: "quality",
     label: "Quality",
     type: "autocomplete",
-    options: [], // مقادیر کیفیت
+    options: [], // Quality values
     placeholder: "Search quality",
     defaultValue: "",
   },
@@ -592,4 +594,3 @@ export const tableFilter: TableFilter[] = [
     defaultValue: [0, 3000],
   },
 ];
-
