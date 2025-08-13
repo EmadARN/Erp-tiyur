@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
-import { NavigateFunction } from "react-router-dom";
+import type { NavigateFunction } from "react-router-dom"; 
+
 
 interface ApiError {
   response?: {
