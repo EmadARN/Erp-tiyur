@@ -17,11 +17,15 @@ export function CreateDialog({
   onClose,
   onConfirm,
   configs,
+  customMessage,
+  isConfirmDisabled = false,
 }: {
   open: boolean;
   onClose: () => void;
   onConfirm: (data: Record<string, any>) => void;
   configs: ConfigItem[];
+  customMessage?: string;
+  isConfirmDisabled?: boolean;
 }) {
   const initialState = React.useMemo(() => {
     const obj: Record<string, any> = {};
@@ -187,11 +191,19 @@ export function CreateDialog({
             }
           })}
 
+          {customMessage && (
+            <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+              {customMessage}
+            </div>
+          )}
+
           <div className="flex justify-end gap-3 pt-4">
             <Button variant="ghost" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Save</Button>
+            <Button type="submit" disabled={isConfirmDisabled}>
+              Save
+            </Button>
           </div>
         </form>
       </DialogContent>

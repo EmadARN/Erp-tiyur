@@ -7,6 +7,7 @@ interface PageHeaderProps {
   breadcrumbItems: any[];
   onCreate?: () => void;
   createLabel?: string;
+  isCreatingDisabled?: boolean;
 }
 
 export default function PageHeader({
@@ -14,6 +15,7 @@ export default function PageHeader({
   breadcrumbItems,
   onCreate,
   createLabel = "Add",
+  isCreatingDisabled = false,
 }: PageHeaderProps) {
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -25,6 +27,7 @@ export default function PageHeader({
       {onCreate && (
         <Button
           onClick={onCreate}
+          disabled={isCreatingDisabled}
           className="flex items-center justify-center gap-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors w-full sm:w-auto"
         >
           <GoPlus className="w-5 h-5" />
