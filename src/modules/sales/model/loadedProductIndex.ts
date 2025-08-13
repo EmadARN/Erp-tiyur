@@ -1,0 +1,45 @@
+import type { TableColumn, TableFilter } from "@/modules/shared/types";
+import type { LoadedProduct } from "./loadedProductTypes";
+
+type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
+};
+
+export const tableHead: TableColumn[] = [
+  { columnName: "ID", row_id: "id", type: "string" },
+  { columnName: "Product", row_id: "product.product", type: "string" },
+  { columnName: "Product Owner", row_id: "product.product_owner", type: "string" },
+  { columnName: "Price", row_id: "price", type: "number" },
+];
+
+export const getCreateDialogConfigs = (): any[] => [
+  { name: "product.product", label: "Product", type: "string-input", defaultValue: "", required: true },
+  { name: "product.product_owner", label: "Product Owner", type: "string-input", defaultValue: "", required: true },
+  { name: "price", label: "Price", type: "int-input", defaultValue: 0, required: true },
+];
+
+export const getUpdateDialogConfigs = (): any[] => [...getCreateDialogConfigs()];
+
+export const updateDialogDocs: DeepPartial<LoadedProduct> = {
+  id: "",
+  product: { product: "", product_owner: "" },
+  created: { date: "", user: "" },
+  price: 0,
+  car: {
+    car: { driver: "", car: "" },
+    create_at: { date: "", user: "" },
+    level: "",
+    first_weight: { weight: 0, date: { date: "", user: "" } },
+    last_weight: { weight: 0, date: { date: "", user: "" } },
+    buyer: "",
+    entrance_date: { date: "", user: "" },
+    exit_date: { date: "", user: "" },
+    is_cancelled: { status: false, user_date: { date: "", user: "" } },
+  },
+  is_weight_base: false,
+};
+
+export const tableFilter: TableFilter[] = [
+  { name: "product__product", label: "Product", type: "autocomplete", options: [], defaultValue: "" },
+  { name: "product__product_owner", label: "Product Owner", type: "autocomplete", options: [], defaultValue: "" },
+];
