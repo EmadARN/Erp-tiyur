@@ -28,13 +28,17 @@ export function DetailDialog({
   const flatData = flattenObject(data);
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => !v && onClose()}
+      maxWidthClass="max-w-xl"
+    >
       <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Details View</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {Object.entries(flatData).map(([key, value]) => (
             <div key={key} className="space-y-1">
               <label className="block text-sm font-medium text-gray-700">

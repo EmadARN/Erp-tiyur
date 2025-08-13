@@ -6,7 +6,7 @@ import CustomCheckbox from "../ui/Checkbox";
 import Tooltip from "../ui/Tooltip";
 import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import type { ConfigItem, TableColumn, TableFilter } from "../../types";
-import { TableFilterDrawer } from "./TableFilterDrawer";
+import { TableFilterDrawer } from "./tableFilter/TableFilterDrawer";
 import { MdRemoveRedEye } from "react-icons/md";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
