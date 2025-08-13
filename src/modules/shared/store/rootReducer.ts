@@ -5,9 +5,10 @@ import themeReducer from "./slice/themeSlice";
 import { LoginApi } from "@/modules/auth/api/Login";
 import { buyProductApi } from "@/modules/buys/api/buyProductApi";
 import { shareApi } from "../api/shareApi";
-import {bankAccountApi} from "@/modules/buys/api/bankAccountApi.ts";
-import {orderInvoiceApi} from "@/modules/buys/api/orderInvoiceApi.ts";
-import {orderPaymentApi} from "@/modules/buys/api/orderPaymentApi.ts";
+import { bankAccountApi } from "@/modules/buys/api/bankAccountApi.ts";
+import { orderInvoiceApi } from "@/modules/buys/api/orderInvoiceApi.ts";
+import { orderPaymentApi } from "@/modules/buys/api/orderPaymentApi.ts";
+import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
 
 export const rootReducer = combineReducers({
   [salesApi.reducerPath]: salesApi.reducer,
@@ -15,6 +16,7 @@ export const rootReducer = combineReducers({
   [bankAccountApi.reducerPath]: bankAccountApi.reducer,
   [orderInvoiceApi.reducerPath]: orderInvoiceApi.reducer,
   [orderPaymentApi.reducerPath]: orderPaymentApi.reducer,
+  [purchaseOrderApi.reducerPath]: purchaseOrderApi.reducer,
   [LoginApi.reducerPath]: LoginApi.reducer,
   [shareApi.reducerPath]: shareApi.reducer,
 

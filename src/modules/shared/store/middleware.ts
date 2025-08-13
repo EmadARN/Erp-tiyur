@@ -6,6 +6,7 @@ import { shareApi } from '../api/shareApi'
 import {bankAccountApi} from "@/modules/buys/api/bankAccountApi.ts";
 import {orderInvoiceApi} from "@/modules/buys/api/orderInvoiceApi.ts";
 import {orderPaymentApi} from "@/modules/buys/api/orderPaymentApi.ts";
+import { purchaseOrderApi } from '@/modules/buys/api/orderPurchaseOrderApi'
 export const middlewares: Middleware[] = [
     salesApi.middleware,
     LoginApi.middleware,
@@ -14,6 +15,7 @@ export const middlewares: Middleware[] = [
     bankAccountApi.middleware,
     orderInvoiceApi.middleware,
     orderPaymentApi.middleware,
+    purchaseOrderApi.middleware,
 
     // inventoryApi.middleware,  // اگر API دیگه‌ای اضافه کردی
 ]
