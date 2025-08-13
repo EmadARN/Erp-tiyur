@@ -39,32 +39,7 @@ export const useBuyProductData = () => {
     }
   }, [buyProducts]);
 
-  // const handleFilterOnChange = () => {
-  //   const processFilterData = (
-  //     dataObj: FiltersRecord
-  //   ): Record<string, any> => {
-  //     return Object.values(dataObj).reduce<Record<string, any>>((acc, data) => {
-  //       if (data.type === "range-box" || data.type === "range") {
-  //         acc[`${data.name}__gte`] = data.value[0];
-  //         acc[`${data.name}__lte`] = data.value[1];
-  //       } else if (
-  //         ["switch", ].includes(data.type)
-  //       ) {
-  //         acc[data.name] = data.value;
-  //       } else if (data.type === "multi-select") {
-  //         acc[`${data.name}__in`] = data.value;
-  //       } else if (data.type === "autocomplete" || data.type === "select-box" ) {
-  //         acc[`${data.name}__contains`] = data.value;
-  //       }
-  //
-  //       return acc;
-  //     }, {});
-  //   };
-  //
-  //   const result = processFilterData(filterData);
-  //   console.log('filter data : ', result)
-  //   setParamsFilterData(result);
-  // };
+
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
       return Object.values(dataObj).reduce<Record<string, any>>((acc, data) => {
