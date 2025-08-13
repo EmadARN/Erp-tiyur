@@ -12,13 +12,13 @@ export function FontSection() {
   return (
     <div className="mt-8">
       <p
-        className={`text-xs text-gray-600 mb-2 ${
+        className={`text-gray-600 mb-2 ${
           rtl ? "text-right" : "text-left"
         }`}
       >
         Font
       </p>
-      <p className="text-xs text-gray-600 mb-2 mt-4">Family</p>
+      <p className="text-gray-600 mb-2 mt-4">Family</p>
       <div className="grid grid-cols-2 gap-4">
         {fonts.map((f) => (
           <button
@@ -30,8 +30,8 @@ export function FontSection() {
                 : "border-gray-200"
             }`}
           >
-            <div className={`text-xl mb-1 ${f.fontClass}`}>Aa</div>
-            <div className="text-sm text-gray-700">{f.name}</div>
+            <div className={`mb-1 ${f.fontClass}`}>Aa</div>
+            <div className="text-gray-700">{f.name}</div>
           </button>
         ))}
       </div>

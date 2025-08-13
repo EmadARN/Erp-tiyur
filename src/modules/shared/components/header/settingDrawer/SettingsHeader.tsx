@@ -35,7 +35,7 @@ export function SettingsHeader({
         rtl ? "flex-row-reverse" : "flex-row"
       }`}
     >
-      <h2 className="text-xl font-semibold">Settings</h2>
+      <h2 className="font-semibold">Settings</h2>
 
       <div className={`flex items-center ${rtl ? "flex-row-reverse" : ""}`}>
         <Button

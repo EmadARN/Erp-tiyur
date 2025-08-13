@@ -9,7 +9,7 @@ export function FontSizeSection() {
   return (
     <div className="mt-8">
       <p
-        className={`text-xs text-gray-600 mb-2 ${
+        className={`text-gray-600 mb-2 ${
           isRtl ? "text-right" : "text-left"
         }`}
       >
@@ -32,7 +32,7 @@ export function FontSizeSection() {
           style={{ direction: isRtl ? "rtl" : "ltr" }}
         />
         <div
-          className="absolute -top-8 bg-gray-900 text-white text-xs px-2 py-1 rounded shadow"
+          className="absolute -top-8 bg-gray-900 text-white px-2 py-1 rounded shadow"
           style={{
             [isRtl ? "left" : "left"]: `${
               isRtl

@@ -24,7 +24,7 @@ export function ToggleCard({ icon, label, value, onToggle }: Props) {
           isRtl ? "flex-row-reverse" : ""
         }`}
       >
-        <span className="text-xl">{icon}</span>
+        <span>{icon}</span>
         <Switch
           checked={value}
           onChange={onToggle}
@@ -32,7 +32,7 @@ export function ToggleCard({ icon, label, value, onToggle }: Props) {
         />
       </div>
       <div className={`pt-4 ${isRtl ? "text-right" : ""}`}>
-        <span className="text-xs font-bold">{label}</span>
+        <span className="font-bold">{label}</span>
       </div>
     </div>
   );
