@@ -5,6 +5,7 @@ import BuyPage from "./pages/BuyProductPage";
 import BankAccount from "./pages/bankAccountPage.tsx";
 import OrderInvoice from "@/modules/buys/pages/orderInvoicePage.tsx";
 import OrderPayment from "@/modules/buys/pages/orderPaymentPage.tsx";
+import PurchaseOrderPage from "./pages/PurchaseOrderPage.tsx";
 
 export const buysRoutes: RouteObject[] = [
   {
@@ -26,6 +27,10 @@ export const buysRoutes: RouteObject[] = [
       {
         path: "buy/payment",
         element: React.createElement(OrderPayment),
+      },
+      {
+        path: "buy/purchase-order",
+        element: React.createElement(PurchaseOrderPage),
       },
     ],
   },
