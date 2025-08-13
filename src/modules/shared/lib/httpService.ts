@@ -15,6 +15,16 @@ const buyApi = axios.create({
   withCredentials: true,
 });
 
+const productionApi = axios.create({
+  baseURL: import.meta.env.VITE_API_BUY_URL,
+  withCredentials: true,
+});
+const wareHouseApi = axios.create({
+  baseURL: import.meta.env.VITE_API_BUY_URL,
+  withCredentials: true,
+});
+
+
 function setupInterceptors(apiInstance: AxiosInstance) {
   apiInstance.interceptors.request.use(
     (res) => res,

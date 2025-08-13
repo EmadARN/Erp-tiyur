@@ -9,16 +9,28 @@ import { bankAccountApi } from "@/modules/buys/api/bankAccountApi.ts";
 import { orderInvoiceApi } from "@/modules/buys/api/orderInvoiceApi.ts";
 import { orderPaymentApi } from "@/modules/buys/api/orderPaymentApi.ts";
 import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
+import { productionApi } from "@/modules/production/api/productionApi";
+import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 
 export const rootReducer = combineReducers({
+  [LoginApi.reducerPath]: LoginApi.reducer,
+  [shareApi.reducerPath]: shareApi.reducer,
+
+  //productionApi: 
+  [productionApi.reducerPath]: productionApi.reducer,
+
+  //saleApi: 
   [salesApi.reducerPath]: salesApi.reducer,
+
+  //buysApi: 
   [buyProductApi.reducerPath]: buyProductApi.reducer,
   [bankAccountApi.reducerPath]: bankAccountApi.reducer,
   [orderInvoiceApi.reducerPath]: orderInvoiceApi.reducer,
   [orderPaymentApi.reducerPath]: orderPaymentApi.reducer,
   [purchaseOrderApi.reducerPath]: purchaseOrderApi.reducer,
-  [LoginApi.reducerPath]: LoginApi.reducer,
-  [shareApi.reducerPath]: shareApi.reducer,
+
+  //wareHouseApi:
+  [wareHouseApi.reducerPath]: wareHouseApi.reducer,
 
   uiSetting: uiSettingsReducer,
   theme: themeReducer,
