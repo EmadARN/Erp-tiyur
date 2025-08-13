@@ -13,14 +13,7 @@ const presets: { value: PresetColor; color: string }[] = [
 ];
 
 export function PresetSection() {
-  const {
-    preset,
-    mode,
-    rtl: isRtl,
-    font,
-    fontSize,
-    direction,
-  } = useThemeSettings();
+  const { preset, mode, rtl: isRtl, direction } = useThemeSettings();
   const dispatch = useDispatch();
 
   const isDark = mode === "dark";
@@ -30,7 +23,7 @@ export function PresetSection() {
       {/* Title */}
 
       <p
-        className={`text-xs text-gray-600 mb-2 ${
+        className={`text-gray-600 mb-2 ${
           isRtl ? "text-right" : "text-left"
         }`}
       >
@@ -59,11 +52,6 @@ export function PresetSection() {
                 }
                 ${isRtl ? "flex-row-reverse" : "flex-row"}
               `}
-              style={{
-                fontFamily: font,
-                fontSize: `${fontSize / 16}rem`,
-                direction,
-              }}
             >
               <div className={`w-6 h-6 rounded-sm ${color}`} />
             </button>

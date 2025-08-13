@@ -20,7 +20,7 @@ export default function PageHeader({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
+        <h1 className="font-semibold text-gray-900">{title}</h1>
         <Breadcrumb items={breadcrumbItems} />
       </div>
 
@@ -31,7 +31,7 @@ export default function PageHeader({
           className="flex items-center justify-center gap-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors w-full sm:w-auto"
         >
           <GoPlus className="w-5 h-5" />
-          <span className="text-sm">{createLabel}</span>
+          <span>{createLabel}</span>
         </Button>
       )}
     </div>
