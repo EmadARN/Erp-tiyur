@@ -3,6 +3,7 @@ import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
 import { useGetBuyProductDetailsQuery } from "../api/buyProductApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
+import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
   getCreateDialogConfigs,
   getUpdateDialogConfigs,
@@ -100,10 +101,16 @@ const BuyProductPage = () => {
         isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
       />
 
+      <div className="mb-4 w-full md:w-1/3">
+        <SearchInput
+          value={filterData.search || ""}
+          onSearch={handleSearch}
+        />
+      </div>
+
       <DataTable
         tableHead={tableHead}
         data={buyProducts.data ?? []}
-        handleSearch={handleSearch}
         deleteHandler={deleteHandler}
         bulkDeleteHandler={bulkDeleteHandler}
         useGetBuyProductDetailsQuery={useGetBuyProductDetailsQuery}

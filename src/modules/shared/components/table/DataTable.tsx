@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { Button } from "../ui/Button";
-import { SearchInput } from "../ui/SearchInput";
 import { Pagination } from "../ui/Pagination";
 import { DeleteDialog } from "../dialogs/DeleteDialog";
 import CustomCheckbox from "../ui/Checkbox";
@@ -24,8 +23,6 @@ type DynamicTableProps = {
   onDelete?: (index: number) => void;
   onEdit?: (index: number) => void;
   onCreate?: () => void;
-  showSearch?: boolean;
-  handleSearch?: (query: string) => void;
   // deleteHandler?: (index: number | null) => void;
   deleteHandler?:(id: string) => Promise<void>
   // bulkDeleteHandler?: (index: number | null) => void;
@@ -47,8 +44,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   onEdit,
   deleteHandler,
   bulkDeleteHandler,
-  showSearch = true,
-  handleSearch,
   updateDialogConfigs,
   onUpdateConfirm,
 
@@ -153,15 +148,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     <div className="relative flex flex-col w-full h-full text-gray-700 bg-white shadow-md rounded-xl bg-clip-border">
       {/* Top Bar */}
       <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 p-4">
-        {showSearch && handleSearch && (
-          <div className="w-full md:w-auto">
-            <SearchInput
-              value={filterData.search || ""}
-              onSearch={handleSearch}
-            />
-          </div>
-        )}
-
         <div className="flex items-center gap-2">
           <TableFilterDrawer
             open={showFilters}
