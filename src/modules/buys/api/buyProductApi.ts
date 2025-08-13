@@ -1,7 +1,11 @@
 import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { BuyProduct, CreateBuyProductDto, OrdersResponse } from "../model/buysTypes";
+import type {
+  BuyProduct,
+  CreateBuyProductDto,
+  OrdersResponse,
+} from "../model/buysProduct";
 
 export const buyProductApi = createApi({
   reducerPath: "buysApi",
@@ -30,7 +34,10 @@ export const buyProductApi = createApi({
       }),
       invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after POST
     }),
-    patchBuyProduct: builder.mutation<BuyProduct, { id: string; data: Partial<BuyProduct> }>({
+    patchBuyProduct: builder.mutation<
+      BuyProduct,
+      { id: string; data: Partial<BuyProduct> }
+    >({
       query: ({ id, data }) => ({
         url: `/buy-product/c/${id}/`,
         method: "patch",
@@ -40,7 +47,7 @@ export const buyProductApi = createApi({
     }),
     deleteBulkBuyProduct: builder.mutation<void, { data: { data: string[] } }>({
       query: ({ data }) => ({
-        url: '/buy-product/',
+        url: "/buy-product/",
         method: "delete",
         data,
       }),
