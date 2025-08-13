@@ -6,9 +6,15 @@ interface DialogProps {
   open: boolean;
   onOpenChange: (value: boolean) => void;
   children: React.ReactNode;
+  maxWidthClass?: string; // کلاس تغییر عرض
 }
 
-export function Dialog({ open, onOpenChange, children }: DialogProps) {
+export function Dialog({
+  open,
+  onOpenChange,
+  children,
+  maxWidthClass = "max-w-md", // پیش‌فرض
+}: DialogProps) {
   React.useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -31,10 +37,10 @@ export function Dialog({ open, onOpenChange, children }: DialogProps) {
           />
           {/* Content */}
           <motion.div
-            className="fixed z-50 top-1/2 left-1/2 w-full max-w-md 
-                       -translate-x-1/2 -translate-y-1/2 
+            className={`fixed z-50 top-1/2 left-1/2 w-full ${maxWidthClass}
+                       -translate-x-1/2 -translate-y-1/2
                        bg-white rounded-xl shadow-lg p-6
-                       max-h-[90vh] overflow-y-auto"
+                       max-h-[90vh] overflow-y-auto`}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -67,7 +73,7 @@ export function DialogTitle({ children }: { children: React.ReactNode }) {
   return <h2 className="text-lg font-semibold">{children}</h2>;
 }
 
-// استفاده:
+// استفاده
 Dialog.Content = DialogContent;
 Dialog.Header = DialogHeader;
 Dialog.Title = DialogTitle;
