@@ -22,7 +22,7 @@ export function FontSizeSection() {
         <input
           type="range"
           min={12}
-          max={21}
+          max={19}
           step={1}
           value={fontSize}
           onChange={(e) => dispatch(setFontSize(parseInt(e.target.value)))}
