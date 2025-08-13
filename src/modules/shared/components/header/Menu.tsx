@@ -4,13 +4,12 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { navItems, treeData } from "../../constants/sidebarData";
 import { RiMenu2Fill } from "react-icons/ri";
-import { useThemeSettings } from "../../hooks/useThemeSettings";
 import { cn } from "../../helpers";
 
 const Menu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [openNodes, setOpenNodes] = useState<{ [key: string]: boolean }>({});
-  const { rtl } = useThemeSettings();
+
 
   const toggleNode = (id: string) => {
     setOpenNodes((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -22,8 +21,8 @@ const Menu = () => {
       {!isOpen && (
         <button
           className={cn(
-            "fixed top-4 z-50 text-2xl text-gray-800 cursor-pointer",
-            rtl ? "right-4 rotate-180" : "left-4"
+            "fixed top-4 z-50 text-2xl text-gray-800 cursor-pointer left-4",
+           
           )}
           onClick={() => setIsOpen(true)}
         >
@@ -37,13 +36,13 @@ const Menu = () => {
           <>
             {/* منوی کشویی */}
             <motion.div
-              initial={{ x: rtl ? "100%" : "-100%" }}
+              initial={{ x:  "-100%" }}
               animate={{ x: 0 }}
-              exit={{ x: rtl ? "100%" : "-100%" }}
+              exit={{ x:  "-100%" }}
               transition={{ duration: 0.3 }}
               className={cn(
-                "fixed top-0 h-full bg-white shadow-lg z-40 p-4 w-64",
-                rtl ? "right-0" : "left-0"
+                "fixed top-0 h-full bg-white shadow-lg z-40 p-4 w-64 left-0",
+               
               )}
             >
               {/* لینک‌های ساده */}
@@ -53,10 +52,8 @@ const Menu = () => {
                     <Link
                       to={item.path}
                       className={cn(
-                        "flex items-center text-gray-800 hover:text-blue-500",
-                        rtl
-                          ? "flex-row-reverse space-x-reverse space-x-2"
-                          : "flex-row space-x-2"
+                        "flex flex-row space-x-2 items-center text-gray-800 hover:text-blue-500",
+                        
                       )}
                     >
                       <span className="text-xl">{item.icon}</span>
@@ -73,16 +70,14 @@ const Menu = () => {
                     <div
                       className={cn(
                         "flex items-center justify-between cursor-pointer text-gray-800 hover:text-blue-500",
-                        rtl && "flex-row-reverse"
+                  
                       )}
                       onClick={() => toggleNode(node.id)}
                     >
                       <div
                         className={cn(
-                          "flex items-center",
-                          rtl
-                            ? "flex-row-reverse space-x-reverse space-x-2"
-                            : "flex-row space-x-2"
+                          "flex items-center flex-row space-x-2",
+                         
                         )}
                       >
                         <span className="text-xl">{node.icon}</span>
@@ -105,8 +100,8 @@ const Menu = () => {
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.2 }}
                           className={cn(
-                            "mt-2 space-y-1 overflow-hidden",
-                            rtl ? "mr-6" : "ml-6"
+                            "mt-2 space-y-1 overflow-hidden ml-6",
+                          
                           )}
                         >
                           {node.children.map((child) => (
@@ -114,10 +109,8 @@ const Menu = () => {
                               <Link
                                 to={child.path}
                                 className={cn(
-                                  "flex items-center text-sm text-gray-600 hover:text-blue-500",
-                                  rtl
-                                    ? "flex-row-reverse space-x-reverse space-x-2"
-                                    : "flex-row space-x-2"
+                                  "flex flex-row space-x-2 items-center text-sm text-gray-600 hover:text-blue-500",
+                                  
                                 )}
                               >
                                 <span className="text-lg">{child.icon}</span>
