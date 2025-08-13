@@ -4,10 +4,16 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/Dialog";
 interface DeleteDialogProps {
   open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: (id: string | number) => void;
+  deleteIndex: string | number | null;
 }
 
-export function DeleteDialog({ open, onClose, onConfirm }: DeleteDialogProps) {
+export function DeleteDialog({
+  open,
+  onClose,
+  onConfirm,
+  deleteIndex,
+}: DeleteDialogProps) {
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="flex flex-col gap-4">
@@ -27,7 +33,9 @@ export function DeleteDialog({ open, onClose, onConfirm }: DeleteDialogProps) {
           <Button
             variant="destructive"
             onClick={() => {
-              onConfirm();
+              if (deleteIndex !== null) {
+                onConfirm(deleteIndex);
+              }
               onClose();
             }}
           >

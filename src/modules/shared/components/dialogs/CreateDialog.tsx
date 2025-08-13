@@ -11,6 +11,16 @@ import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
 import type { ConfigItem, InputTypes } from "../../types";
+import { OptionType } from "../../types/common";
+
+interface CreateDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onConfirm: (data: Record<string, any>) => void;
+  configs: ConfigItem[];
+  customMessage?: string;
+  isConfirmDisabled?: boolean;
+}
 
 export function CreateDialog({
   open,
@@ -19,14 +29,7 @@ export function CreateDialog({
   configs,
   customMessage,
   isConfirmDisabled = false,
-}: {
-  open: boolean;
-  onClose: () => void;
-  onConfirm: (data: Record<string, any>) => void;
-  configs: ConfigItem[];
-  customMessage?: string;
-  isConfirmDisabled?: boolean;
-}) {
+}: CreateDialogProps) {
   const initialState = React.useMemo(() => {
     const obj: Record<string, any> = {};
     configs.forEach((cfg) => {
@@ -95,7 +98,9 @@ export function CreateDialog({
         >
           {configs.map((cfg) => {
             const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
-            const options = cfg.options;
+            const options: OptionType[] = (cfg.options ?? []).map((opt) =>
+              typeof opt === "string" ? { value: opt, label: opt } : opt
+            );
 
             switch (cfg.type) {
               case "string-input":

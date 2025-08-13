@@ -3,13 +3,14 @@ import { Button } from "../ui/Button";
 import { Drawer } from "../ui/Drawer";
 import { DynamicFilters } from "./DataTableFilters";
 import type { TableFilter } from "../../types";
+import { FiltersRecord } from "@/modules/buys/model/buysTypes";
 
 type TableFilterDrawerProps = {
   open: boolean;
   onClose: () => void;
   tableFilters: TableFilter[];
-  filterData: any;
-  setFilterData: (data: any) => void;
+  filterData: FiltersRecord;
+  setFilterData: (data: FiltersRecord) => void;
   onApply?: () => void;
 };
 

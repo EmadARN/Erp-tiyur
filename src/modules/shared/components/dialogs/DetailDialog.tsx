@@ -6,51 +6,27 @@ import {
   DialogTitle,
 } from "@/modules/shared/components/ui/Dialog";
 import TextInput from "../ui/TextInput";
+import { BuyProduct } from "@/modules/buys/model/buysTypes";
+import { ConfigItem } from "../../types";
 
 interface DetailDialogProps {
   open: boolean;
   onClose: () => void;
-  data: Record<string, any>;
+  data: BuyProduct | null;
+  configs: ConfigItem[];
 }
 
-// تابع بازگشتی برای فلت کردن آبجکت
-const flattenObject = (
-  obj: Record<string, any>,
-  parentKey = ""
-): Record<string, any> => {
-  return Object.entries(obj).reduce((acc, [key, value]) => {
-    const newKey = parentKey ? `${parentKey} ${key}` : key;
-    if (
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      !(value instanceof Date)
-    ) {
-      Object.assign(acc, flattenObject(value, newKey));
-    } else {
-      acc[newKey] = value;
-    }
-    return acc;
-  }, {} as Record<string, any>);
-};
+import { flattenObject, formatKey } from "../../helpers/dialogUtils";
 
-// تابع قشنگ‌کردن متن لیبل + حذف تکراری‌ها
-const formatKey = (key: string) => {
-  // آندرلاین به فاصله
-  const words = key.replace(/_/g, " ").split(" ");
-
-  // حذف کلمات تکراری پشت سر هم
-  const uniqueWords = words.filter(
-    (word, index, arr) => word && word !== arr[index - 1]
-  );
-
-  // حروف اول بزرگ
-  return uniqueWords
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
-
-export function DetailDialog({ open, onClose, data }: DetailDialogProps) {
+export function DetailDialog({
+  open,
+  onClose,
+  data,
+  configs,
+}: DetailDialogProps) {
+  if (!data) {
+    return null;
+  }
   const flatData = flattenObject(data);
 
   return (

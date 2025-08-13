@@ -5,36 +5,38 @@ import { DeleteDialog } from "../dialogs/DeleteDialog";
 import CustomCheckbox from "../ui/Checkbox";
 import Tooltip from "../ui/Tooltip";
 import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
-import type { TableColumn, TableFilter } from "../../types";
+import type { ConfigItem, TableColumn, TableFilter } from "../../types";
 import { TableFilterDrawer } from "./TableFilterDrawer";
 import { MdRemoveRedEye } from "react-icons/md";
+import { BuyProduct, FiltersRecord } from "@/modules/buys/model/buysTypes";
+import { UseQueryResult } from "@tanstack/react-query";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
 import { DetailDialog } from "../dialogs/DetailDialog";
 import { FiFilter } from "react-icons/fi";
 
-type DynamicTableProps = {
+interface DataTableProps {
   tableHead: TableColumn[];
   tableFilters: TableFilter[];
-  data: Record<string, any>[];
-  filterData?: any;
-  setFilterData?: React.Dispatch<React.SetStateAction<any>>;
-  updateDialogConfigs?: any;
-  onDelete?: (index: number) => void;
-  onEdit?: (index: number) => void;
-  onCreate?: () => void;
-  deleteHandler?: (id: string) => Promise<void>;
-  bulkDeleteHandler?: (arrayIndex: string[]) => Promise<void>;
-  onUpdateConfirm?: (data: Record<string, any>) => Promise<void>;
-  applyFilter?: () => void;
-  useGetBuyProductDetailsQuery: any;
+  data: BuyProduct[];
+  filterData: FiltersRecord;
+  setFilterData: React.Dispatch<React.SetStateAction<FiltersRecord>>;
+  updateDialogConfigs: ConfigItem[];
+  deleteHandler: (id: string) => Promise<void>;
+  bulkDeleteHandler: (arrayIndex: string[]) => Promise<void>;
+  onUpdateConfirm: (data: Record<string, any>) => Promise<void>;
+  applyFilter: () => void;
+  useGetBuyProductDetailsQuery: (
+    params: { id: string },
+    options: { skip?: boolean }
+  ) => UseQueryResult<BuyProduct>;
   showFilterButton?: boolean;
   isFilterDrawerOpen?: boolean;
   onFilterDrawerClose?: () => void;
   onFilterIconClick?: () => void;
-};
+}
 
-export const DataTable: React.FC<DynamicTableProps> = ({
+export const DataTable: React.FC<DataTableProps> = ({
   tableHead,
   tableFilters,
   filterData,
@@ -42,8 +44,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   useGetBuyProductDetailsQuery,
   applyFilter,
   data,
-  onDelete,
-  onEdit,
   deleteHandler,
   bulkDeleteHandler,
   updateDialogConfigs,
@@ -57,12 +57,10 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   const [editIndex, setEditIndex] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detailData, setDetailData] = useState<Record<string, any>>({});
+  const [detailData, setDetailData] = useState<BuyProduct | null>(null);
   const [bulkMode, setBulkMode] = useState<"edit" | null>(null);
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  const [editRowData, setEditRowData] = useState<Record<string, any> | null>(
-    null
-  );
+  const [editRowData, setEditRowData] = useState<BuyProduct | null>(null);
 
   // تعداد آیتم‌های هر صفحه
   const itemsPerPage = 10;
@@ -90,11 +88,8 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   };
 
   const handleBulkDelete = () => {
-    selectedRows.forEach((i) => onDelete?.(i));
-    const delete_list = selectedRows.map((index) => data[index].id);
-    console.log(delete_list, "jjjjjj");
+    const delete_list: string[] = selectedRows.map((index) => data[index].id);
     bulkDeleteHandler(delete_list);
-
     setSelectedRows([]);
     setBulkMode(null);
   };
@@ -113,7 +108,7 @@ export const DataTable: React.FC<DynamicTableProps> = ({
     };
   });
 
-  const openDetailDialog = (row: Record<string, any>) => {
+  const openDetailDialog = (row: BuyProduct) => {
     setDetailData(row);
     setDetailOpen(true);
   };
@@ -121,26 +116,6 @@ export const DataTable: React.FC<DynamicTableProps> = ({
   function getNestedValue(obj: any, path: string) {
     return path.split(".").reduce((acc, key) => acc && acc[key], obj);
   }
-
-  const flattenObject = (
-    obj: Record<string, any>,
-    parentKey = ""
-  ): Record<string, any> => {
-    return Object.entries(obj).reduce((acc, [key, value]) => {
-      const newKey = parentKey ? `${parentKey} ${key}` : key;
-      if (
-        value &&
-        typeof value === "object" &&
-        !Array.isArray(value) &&
-        !(value instanceof Date)
-      ) {
-        Object.assign(acc, flattenObject(value, newKey));
-      } else {
-        acc[newKey] = value;
-      }
-      return acc;
-    }, {} as Record<string, any>);
-  };
 
   // هنگام تغییر صفحه، انتخاب‌های ردیف‌ها را ریست کنیم
   useEffect(() => {
@@ -368,13 +343,14 @@ export const DataTable: React.FC<DynamicTableProps> = ({
         }}
         onConfirm={onUpdateConfirm}
         configs={updateDialogConfigs}
-        data={editRowData ?? {}}
+        data={editRowData}
       />
 
       <DeleteDialog
         open={deleteIndex !== null}
         onClose={() => setDeleteIndex(null)}
-        onConfirm={() => deleteHandler && deleteHandler(deleteIndex)}
+        onConfirm={() => deleteHandler && deleteHandler(String(deleteIndex))}
+        deleteIndex={deleteIndex}
       />
 
       <DetailDialog

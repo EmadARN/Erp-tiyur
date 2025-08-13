@@ -1,20 +1,12 @@
 import type { store } from "../store/store";
+import { OptionType } from "./common";
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
-//Update Dialogs:
 export type InputTypes = "string-input" | "int-input" | "float-input";
 
-export type OptionType = { value: string; label: string };
-export interface ConfigItem {
-  name: string;
-  label: string;
-  type: "string-input" | "select-box" | "switch" | "multi-select" | InputTypes;
-  defaultValue?: any;
-  options?: OptionType[] | string[];
-  required?: boolean;
-}
+export type ConfigItem = import("./common").ConfigItem;
 
 type ColumnType =
   | "string"
@@ -29,18 +21,16 @@ type ColumnType =
   | "switch"
   | "range-box";
 
-
-
 export type TableFilter = {
-  label?: string;
-  name?: string;
+  label: string;
+  name: string;
   max?: number;
   min?: number;
   step?: number;
   placeholder?: string;
   defaultValue?: any;
   type: ColumnType;
-  options?: string[]
+  options?: OptionType[];
 };
 
 
@@ -49,5 +39,5 @@ export type TableColumn = {
   row_id: string;
   type: ColumnType;
   onClick?: (row: any) => void;
-  options?: string[];
+  options?: OptionType[];
 };

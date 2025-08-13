@@ -280,6 +280,8 @@ import Switch from "../ui/Switch";
 import AutoComplete from "../ui/Autocomplete";
 import { InputRangeBox } from "../ui/InputRangeBox";
 import MotionMultiSelect from "../ui/MotionMultiSelect";
+import { FiltersRecord } from "@/modules/buys/model/buysTypes";
+import { OptionType } from "../../types/common";
 
 type FilterItem = {
   label: string;
@@ -291,9 +293,9 @@ type FilterItem = {
     | "multi-select"
     | "range-box";
   name: string;
-  options?: any[];
+  options?: OptionType[];
   placeholder?: string;
-  defaultValue?: any; // مقدار پیش‌فرض جدید
+  defaultValue?: any;
   min?: number;
   max?: number;
   step?: number;
@@ -301,8 +303,8 @@ type FilterItem = {
 
 interface DynamicFiltersProps {
   filtersConfig: FilterItem[];
-  data: Record<string, any>;
-  setData: React.Dispatch<React.SetStateAction<Record<string, any>>>;
+  data: FiltersRecord;
+  setData: React.Dispatch<React.SetStateAction<FiltersRecord>>;
 }
 
 export const DynamicFilters = ({

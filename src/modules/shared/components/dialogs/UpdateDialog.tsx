@@ -11,46 +11,22 @@ import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
 import type { ConfigItem, InputTypes, OptionType } from "../../types";
+import { BuyProduct } from "@/modules/buys/model/buysTypes";
+import { UseQueryResult } from "@tanstack/react-query";
 
 interface UpdateDialogProps {
   open: boolean;
   onClose: () => void;
   onConfirm: (data: Record<string, any>) => void;
   configs: ConfigItem[];
-  data: Record<string, any>;
+  data: BuyProduct | null;
+  useGetBuyProductDetailsQuery: (
+    params: { id: string },
+    options: { skip?: boolean }
+  ) => UseQueryResult<BuyProduct>;
 }
 
-// همون تابع flattenObject از DetailDialog
-const flattenObject = (
-  obj: Record<string, any>,
-  parentKey = ""
-): Record<string, any> => {
-  return Object.entries(obj).reduce((acc, [key, value]) => {
-    const newKey = parentKey ? `${parentKey}.${key}` : key;
-    if (
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      !(value instanceof Date)
-    ) {
-      Object.assign(acc, flattenObject(value, newKey));
-    } else {
-      acc[newKey] = value;
-    }
-    return acc;
-  }, {} as Record<string, any>);
-};
-
-// تابع قشنگ کردن متن لیبل مثل DetailDialog
-const formatKey = (key: string) => {
-  const words = key.replace(/_/g, " ").split(" ");
-  const uniqueWords = words.filter(
-    (word, index, arr) => word && word !== arr[index - 1]
-  );
-  return uniqueWords
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
+import { flattenObject, formatKey } from "../../helpers/dialogUtils";
 
 export function UpdateDialog({
   open,
@@ -62,19 +38,21 @@ export function UpdateDialog({
 }: UpdateDialogProps) {
   const [formData, setFormData] = React.useState<Record<string, any>>({});
   const { data: detailData } = useGetBuyProductDetailsQuery(
-    { id: data.id },
+    { id: data?.id || "" },
     {
       skip: !data?.id,
     }
   );
 
   React.useEffect(() => {
-    console.log("detao;", detailData);
     if (detailData) {
       const flat = flattenObject(detailData);
       setFormData(flat);
+    } else if (data) {
+      const flat = flattenObject(data);
+      setFormData(flat);
     }
-  }, [detailData]);
+  }, [detailData, data]);
 
   function handleChange(
     name: string,
