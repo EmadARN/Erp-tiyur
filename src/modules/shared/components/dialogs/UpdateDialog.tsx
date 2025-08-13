@@ -1,3 +1,4 @@
+
 import { Button } from "@/modules/shared/components/ui/Button";
 import {
   Dialog,
@@ -81,8 +82,138 @@ export function UpdateDialog({
     onClose();
   };
 
+  // پیشوندهایی که باید گروه‌بندی شوند
+  const groupPrefixes = [
+    "verified",
+    "Received",
+    "Finished",
+    "Done",
+    "Cancelled",
+  ];
+
+  // دسته‌بندی configs بر اساس پیشوند
+  const grouped = configs.reduce((acc, cfg) => {
+    const prefix = groupPrefixes.find((p) =>
+      cfg.name.toLowerCase().startsWith(p.toLowerCase())
+    );
+    if (prefix) {
+      if (!acc[prefix]) acc[prefix] = [];
+      acc[prefix].push(cfg);
+    } else {
+      if (!acc._others) acc._others = [];
+      acc._others.push(cfg);
+    }
+    return acc;
+  }, {} as Record<string, ConfigItem[]>);
+
+  // تابع رندر هر آیتم
+  function renderConfigItem(cfg: ConfigItem) {
+    const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
+
+    const options: { value: string; label: string }[] = (cfg.options ?? []).map(
+      (opt) =>
+        typeof opt === "string"
+          ? { value: opt, label: opt }
+          : { value: String(opt.value), label: opt.label }
+    );
+
+    const value = formData[cfg.name];
+
+    switch (cfg.type) {
+      case "string-input":
+      case "int-input":
+      case "float-input":
+        return (
+          <div
+            key={cfg.name}
+            className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}
+          >
+            <label className="block text-sm font-medium text-gray-700">
+              {formatKey(cfg.label || cfg.name)}
+              {cfg.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
+            <TextInput
+              id={cfg.name}
+              placeholder={cfg.label}
+              inputType={cfg.type === "string-input" ? "text" : "number"}
+              isFloat={cfg.type === "float-input"}
+              value={String(value ?? "")}
+              onChange={(val) =>
+                handleChange(cfg.name, val, cfg.type as InputTypes)
+              }
+              className="w-full"
+            />
+          </div>
+        );
+
+      case "select-box":
+        return (
+          <div
+            key={cfg.name}
+            className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}
+          >
+            <label className="block text-sm font-medium text-gray-700">
+              {formatKey(cfg.label || cfg.name)}
+              {cfg.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
+            <SelectBox
+              id={cfg.name}
+              options={options}
+              value={String(value ?? "")}
+              onChange={(val) => handleChange(cfg.name, val)}
+            />
+          </div>
+        );
+
+      case "switch":
+        return (
+          <div
+            key={cfg.name}
+            className={`flex items-center justify-between space-x-2 ${
+              isFullWidth ? "md:col-span-2" : ""
+            }`}
+          >
+            <span className="text-sm font-medium text-gray-700">
+              {formatKey(cfg.label || cfg.name)}
+            </span>
+            <Switch
+              checked={Boolean(value)}
+              onChange={(val) => handleChange(cfg.name, val)}
+            />
+          </div>
+        );
+
+      case "multi-select":
+        return (
+          <div
+            key={cfg.name}
+            className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}
+          >
+            <label className="block text-sm font-medium text-gray-700">
+              {formatKey(cfg.label || cfg.name)}
+              {cfg.required && <span className="text-red-500 ml-1">*</span>}
+            </label>
+            <MotionMultiSelect
+              id={cfg.name}
+              options={options}
+              value={value ?? []}
+              onChange={(val) => handleChange(cfg.name, val)}
+              placeholder=""
+            />
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  }
+
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => !v && onClose()}
+      maxWidthClass="max-w-xl"
+    >
       <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Edit Information</DialogTitle>
@@ -92,127 +223,23 @@ export function UpdateDialog({
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          {configs.map((cfg) => {
-            const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
+          {/* رندر فیلدهای معمولی */}
+          {grouped._others?.map((cfg) => renderConfigItem(cfg))}
 
-            // تبدیل همه valueها به string برای سازگاری با SelectBox
-            const options: { value: string; label: string }[] = (
-              cfg.options ?? []
-            ).map((opt) =>
-              typeof opt === "string"
-                ? { value: opt, label: opt }
-                : { value: String(opt.value), label: opt.label }
+          {/* رندر گروه‌های خاص */}
+          {Object.entries(grouped).map(([prefix, items]) => {
+            if (prefix === "_others") return null;
+            return (
+              <div
+                key={prefix}
+                className="md:col-span-2 border border-gray-200 rounded-lg p-4 space-y-4"
+              >
+                <h3 className="font-semibold text-gray-700">{prefix} Fields</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {items.map((cfg) => renderConfigItem(cfg))}
+                </div>
+              </div>
             );
-
-            const value = formData[cfg.name];
-
-            switch (cfg.type) {
-              case "string-input":
-              case "int-input":
-              case "float-input":
-                return (
-                  <div
-                    key={cfg.name}
-                    className={`space-y-1 ${
-                      isFullWidth ? "md:col-span-2" : ""
-                    }`}
-                  >
-                    <label className="block text-sm font-medium text-gray-700">
-                      {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </label>
-                    <TextInput
-                      id={cfg.name}
-                      placeholder={cfg.label}
-                      inputType={
-                        cfg.type === "string-input" ? "text" : "number"
-                      }
-                      isFloat={cfg.type === "float-input"}
-                      value={String(value ?? "")}
-                      onChange={(val) =>
-                        handleChange(cfg.name, val, cfg.type as InputTypes)
-                      }
-                      className="w-full"
-                    />
-                  </div>
-                );
-
-              case "select-box":
-                return (
-                  <div
-                    key={cfg.name}
-                    className={`space-y-1 ${
-                      isFullWidth ? "md:col-span-2" : ""
-                    }`}
-                  >
-                    <label
-                      htmlFor={cfg.name}
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </label>
-                    <SelectBox
-                      id={cfg.name}
-                      options={options}
-                      value={String(value ?? "")}
-                      onChange={(val) => handleChange(cfg.name, val)}
-                    />
-                  </div>
-                );
-
-              case "switch":
-                return (
-                  <div
-                    key={cfg.name}
-                    className={`flex items-center justify-between space-x-2 ${
-                      isFullWidth ? "md:col-span-2" : ""
-                    }`}
-                  >
-                    <span className="text-sm font-medium text-gray-700">
-                      {formatKey(cfg.label || cfg.name)}
-                    </span>
-                    <Switch
-                      checked={Boolean(value)}
-                      onChange={(val) => handleChange(cfg.name, val)}
-                    />
-                  </div>
-                );
-
-              case "multi-select":
-                return (
-                  <div
-                    key={cfg.name}
-                    className={`space-y-1 ${
-                      isFullWidth ? "md:col-span-2" : ""
-                    }`}
-                  >
-                    <label
-                      htmlFor={cfg.name}
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && (
-                        <span className="text-red-500 ml-1">*</span>
-                      )}
-                    </label>
-                    <MotionMultiSelect
-                      id={cfg.name}
-                      options={options}
-                      value={value ?? []}
-                      onChange={(val) => handleChange(cfg.name, val)}
-                      placeholder=""
-                    />
-                  </div>
-                );
-
-              default:
-                return null;
-            }
           })}
 
           <div className="flex justify-end gap-3 pt-4 md:col-span-2">
