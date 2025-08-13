@@ -4,7 +4,7 @@ import type {
   BuyProduct,
   FiltersRecord,
   OrdersResponse,
-} from "../model/buysTypes";
+} from "../model/buysProduct.ts";
 import { tableHead } from "../model/buyProductIndex.ts";
 
 // Helper function to get a value by a nested path.
@@ -71,18 +71,14 @@ export const useBuyProductData = () => {
         if (data.type === "range-box" || data.type === "range") {
           acc[`${data.name}__gte`] = data.value[0];
           acc[`${data.name}__lte`] = data.value[1];
-        }
-        else if (data.type === "switch") {
+        } else if (data.type === "switch") {
           acc[data.name] = data.value;
-        }
-        else if (data.type === "multi-select") {
+        } else if (data.type === "multi-select") {
           acc[`${data.name}__in`] = data.value;
-        }
-        else if (data.type === "autocomplete") {
+        } else if (data.type === "autocomplete") {
           // برای autocomplete معمولا __icontains مناسب تره
           acc[`${data.name}__icontains`] = data.value;
-        }
-        else if (data.type === "select-box") {
+        } else if (data.type === "select-box") {
           // برای select-box که گزینه ثابت داره، بهتره exact باشه
           acc[`${data.name}__exact`] = data.value;
         }
@@ -92,7 +88,7 @@ export const useBuyProductData = () => {
     };
 
     const result = processFilterData(filterData);
-    console.log('filter data : ', result)
+    console.log("filter data : ", result);
     setParamsFilterData(result);
     // اینجا میفرستی به API
   };
@@ -127,4 +123,3 @@ export const useBuyProductData = () => {
     handleSearch,
   };
 };
-

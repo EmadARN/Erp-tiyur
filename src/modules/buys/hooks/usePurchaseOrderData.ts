@@ -1,42 +1,31 @@
 import { useState, useEffect } from "react";
-import { useGetOrderPaymentsQuery } from "../api/orderPaymentApi";
-import type {
-  OrderPayment,
-  FiltersRecord,
-  OrderPaymentsResponse,
-} from "../model/orderPayment";
-import { tableHead } from "../model/paymentIndex.ts";
+import { useGetPurchaseOrdersQuery } from "../api/orderPurchaseOrderApi";
+import type { PurchaseOrder, FiltersRecord, PurchaseOrdersResponse } from "../model/purchaseOrderTypes";
+import { tableHead } from "../model/index";
 
-function getValueByPath(obj: OrderPayment, path: string): unknown {
+function getValueByPath(obj: PurchaseOrder, path: string): unknown {
   if (!obj || !path) return "";
   return path.split(".").reduce<unknown>((acc, key) => {
-    if (acc && typeof acc === "object" && acc !== null && key in acc) {
+    if (acc && typeof acc === "object" && key in acc) {
       return (acc as Record<string, unknown>)[key];
     }
     return undefined;
   }, obj);
 }
 
-export const useOrderPaymentData = () => {
-  const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
-    {}
-  );
+export const usePurchaseOrderData = () => {
+  const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>({});
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: payments, isLoading } = useGetOrderPaymentsQuery(
-    paramsFilterData,
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
-  const [displayData, setDisplayData] = useState<OrderPaymentsResponse | null>(
-    null
-  );
+  const { data: purchaseOrders, isLoading } = useGetPurchaseOrdersQuery(paramsFilterData, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [displayData, setDisplayData] = useState<PurchaseOrdersResponse | null>(null);
 
   useEffect(() => {
-    if (payments) {
-      setDisplayData(payments);
+    if (purchaseOrders) {
+      setDisplayData(purchaseOrders);
     }
-  }, [payments]);
+  }, [purchaseOrders]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -60,26 +49,21 @@ export const useOrderPaymentData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && payments) {
-      setDisplayData(payments);
+    if (!searchTerm && purchaseOrders) {
+      setDisplayData(purchaseOrders);
       return;
     }
-    const lowerSearch = searchTerm.toLowerCase();
-    if (payments) {
-      const result = payments.data.filter((row) =>
-        tableHead.some(({ row_id }) => {
-          const value = getValueByPath(row, row_id);
-          return String(value ?? "")
-            .toLowerCase()
-            .includes(lowerSearch);
-        })
+    const lower = searchTerm.toLowerCase();
+    if (purchaseOrders) {
+      const result = purchaseOrders.data.filter((row) =>
+        tableHead.some(({ row_id }) => String(getValueByPath(row, row_id) ?? "").toLowerCase().includes(lower))
       );
       setDisplayData({ data: result });
     }
   };
 
   return {
-    payments: displayData,
+    purchaseOrders: displayData,
     isLoading,
     filterData,
     setFilterData,

@@ -7,7 +7,7 @@ import {
   useDeleteBulkBuyProductMutation,
 } from "../api/buyProductApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
-import type { CreateBuyProductDto } from "../model/buysTypes";
+import type { CreateBuyProductDto } from "../model/buysProduct.ts";
 import { updateDialogDocs } from "../model/buyProductIndex.ts";
 
 // Helper function to format nested data structures.
@@ -38,25 +38,24 @@ function formatData(data: Record<string, any>): Record<string, any> {
 
 // Helper function to merge data with a default structure.
 const mergeDataWithDefault = (data: any, defaultData: any): any => {
-    const result = { ...defaultData };
+  const result = { ...defaultData };
 
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key) && key in result) {
-        if (
-          typeof data[key] === "object" &&
-          data[key] !== null &&
-          !Array.isArray(data[key])
-        ) {
-          result[key] = mergeDataWithDefault(data[key], result[key]);
-        } else {
-          result[key] = data[key];
-        }
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key) && key in result) {
+      if (
+        typeof data[key] === "object" &&
+        data[key] !== null &&
+        !Array.isArray(data[key])
+      ) {
+        result[key] = mergeDataWithDefault(data[key], result[key]);
+      } else {
+        result[key] = data[key];
       }
     }
+  }
 
-    return result;
-  };
-
+  return result;
+};
 
 export const useBuyProductActions = () => {
   const navigate = useNavigate();
