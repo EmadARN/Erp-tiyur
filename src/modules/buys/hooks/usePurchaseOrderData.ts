@@ -66,7 +66,7 @@ export const usePurchaseOrderData = () => {
     }
     const lower = searchTerm.toLowerCase();
     if (purchaseOrders) {
-      const result = purchaseOrders.data.filter((row) =>
+      const result = purchaseOrders.data.filter((row: PurchaseOrder) =>
         tableHead.some(({ row_id }) =>
           String(getValueByPath(row, row_id) ?? "")
             .toLowerCase()

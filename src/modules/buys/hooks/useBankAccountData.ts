@@ -13,6 +13,7 @@ function getValueByPath(obj: BankAccount, path: string): unknown {
     }, obj);
 }
 
+
 export const useBankAccountData = () => {
     const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>({});
     const [filterData, setFilterData] = useState<FiltersRecord>({});
