@@ -69,12 +69,13 @@ body {
     border-color: rgb(var(--border));
   }
   html {
-    font-size: var(--app-font-size);
+    font-size: 16px;
     box-sizing: border-box;
   }
   body {
     background-color: rgb(var(--background));
     color: rgb(var(--foreground));
+    font-size: var(--app-font-size);
   }
 }
 
