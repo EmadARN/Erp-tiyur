@@ -11,9 +11,8 @@ import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
 import type { ConfigItem, InputTypes } from "../../types";
-import { type BuyProduct } from "@/modules/buys/model/buysTypes";
+import { type BuyProduct } from "@/modules/buys/model/buysProduct";
 import { flattenObject, formatKey } from "../../helpers/dialogUtils";
-
 
 interface UpdateDialogProps {
   open: boolean;
@@ -66,7 +65,8 @@ export function UpdateDialog({
       parsedValue = value === "" ? "" : parseInt(value, 10);
       if (isNaN(parsedValue as number)) parsedValue = "";
     } else if (type === "float-input" && typeof value === "string") {
-      parsedValue = value !== "" && !isNaN(Number(value)) ? parseFloat(value) : value;
+      parsedValue =
+        value !== "" && !isNaN(Number(value)) ? parseFloat(value) : value;
     }
 
     setFormData((prev) => ({
@@ -88,16 +88,20 @@ export function UpdateDialog({
           <DialogTitle>Edit Information</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
           {configs.map((cfg) => {
             const isFullWidth = cfg.type === "multi-select" || cfg.fullWidth;
 
             // تبدیل همه valueها به string برای سازگاری با SelectBox
-            const options: { value: string; label: string }[] = (cfg.options ?? []).map(
-              (opt) =>
-                typeof opt === "string"
-                  ? { value: opt, label: opt }
-                  : { value: String(opt.value), label: opt.label }
+            const options: { value: string; label: string }[] = (
+              cfg.options ?? []
+            ).map((opt) =>
+              typeof opt === "string"
+                ? { value: opt, label: opt }
+                : { value: String(opt.value), label: opt.label }
             );
 
             const value = formData[cfg.name];
@@ -107,18 +111,29 @@ export function UpdateDialog({
               case "int-input":
               case "float-input":
                 return (
-                  <div key={cfg.name} className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}>
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
                     <label className="block text-sm font-medium text-gray-700">
                       {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && <span className="text-red-500 ml-1">*</span>}
+                      {cfg.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
                     </label>
                     <TextInput
                       id={cfg.name}
                       placeholder={cfg.label}
-                      inputType={cfg.type === "string-input" ? "text" : "number"}
+                      inputType={
+                        cfg.type === "string-input" ? "text" : "number"
+                      }
                       isFloat={cfg.type === "float-input"}
                       value={String(value ?? "")}
-                      onChange={(val) => handleChange(cfg.name, val, cfg.type as InputTypes)}
+                      onChange={(val) =>
+                        handleChange(cfg.name, val, cfg.type as InputTypes)
+                      }
                       className="w-full"
                     />
                   </div>
@@ -126,31 +141,72 @@ export function UpdateDialog({
 
               case "select-box":
                 return (
-                  <div key={cfg.name} className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}>
-                    <label htmlFor={cfg.name} className="block text-sm font-medium text-gray-700">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
+                    <label
+                      htmlFor={cfg.name}
+                      className="block text-sm font-medium text-gray-700"
+                    >
                       {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && <span className="text-red-500 ml-1">*</span>}
+                      {cfg.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
                     </label>
-                    <SelectBox id={cfg.name} options={options} value={String(value ?? "")} onChange={(val) => handleChange(cfg.name, val)} />
+                    <SelectBox
+                      id={cfg.name}
+                      options={options}
+                      value={String(value ?? "")}
+                      onChange={(val) => handleChange(cfg.name, val)}
+                    />
                   </div>
                 );
 
               case "switch":
                 return (
-                  <div key={cfg.name} className={`flex items-center justify-between space-x-2 ${isFullWidth ? "md:col-span-2" : ""}`}>
-                    <span className="text-sm font-medium text-gray-700">{formatKey(cfg.label || cfg.name)}</span>
-                    <Switch checked={Boolean(value)} onChange={(val) => handleChange(cfg.name, val)} />
+                  <div
+                    key={cfg.name}
+                    className={`flex items-center justify-between space-x-2 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
+                    <span className="text-sm font-medium text-gray-700">
+                      {formatKey(cfg.label || cfg.name)}
+                    </span>
+                    <Switch
+                      checked={Boolean(value)}
+                      onChange={(val) => handleChange(cfg.name, val)}
+                    />
                   </div>
                 );
 
               case "multi-select":
                 return (
-                  <div key={cfg.name} className={`space-y-1 ${isFullWidth ? "md:col-span-2" : ""}`}>
-                    <label htmlFor={cfg.name} className="block text-sm font-medium text-gray-700">
+                  <div
+                    key={cfg.name}
+                    className={`space-y-1 ${
+                      isFullWidth ? "md:col-span-2" : ""
+                    }`}
+                  >
+                    <label
+                      htmlFor={cfg.name}
+                      className="block text-sm font-medium text-gray-700"
+                    >
                       {formatKey(cfg.label || cfg.name)}
-                      {cfg.required && <span className="text-red-500 ml-1">*</span>}
+                      {cfg.required && (
+                        <span className="text-red-500 ml-1">*</span>
+                      )}
                     </label>
-                    <MotionMultiSelect id={cfg.name} options={options} value={value ?? []} onChange={(val) => handleChange(cfg.name, val)} placeholder="" />
+                    <MotionMultiSelect
+                      id={cfg.name}
+                      options={options}
+                      value={value ?? []}
+                      onChange={(val) => handleChange(cfg.name, val)}
+                      placeholder=""
+                    />
                   </div>
                 );
 

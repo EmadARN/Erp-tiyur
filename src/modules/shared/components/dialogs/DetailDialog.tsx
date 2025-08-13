@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@/modules/shared/components/ui/Dialog";
 import TextInput from "../ui/TextInput";
-import { type BuyProduct } from "@/modules/buys/model/buysTypes";
+import { type BuyProduct } from "@/modules/buys/model/buysProduct";
 import { type ConfigItem } from "../../types";
 import { flattenObject, formatKey } from "../../helpers/dialogUtils";
 interface DetailDialogProps {
