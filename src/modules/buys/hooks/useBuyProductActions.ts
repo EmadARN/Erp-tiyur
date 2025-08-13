@@ -8,7 +8,7 @@ import {
 } from "../api/buyProductApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
 import type { CreateBuyProductDto } from "../model/buysTypes";
-import { updateDialogDocs } from "../model";
+import { updateDialogDocs } from "../model/buyProductIndex.ts";
 
 // Helper function to format nested data structures.
 function formatData(data: Record<string, any>): Record<string, any> {

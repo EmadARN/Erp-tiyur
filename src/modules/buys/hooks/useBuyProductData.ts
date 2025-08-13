@@ -5,7 +5,7 @@ import type {
   FiltersRecord,
   OrdersResponse,
 } from "../model/buysTypes";
-import { tableHead } from "../model";
+import { tableHead } from "../model/buyProductIndex.ts";
 
 // Helper function to get a value by a nested path.
 // Using `unknown` is safer than `any` for dynamic lookups.
@@ -39,27 +39,62 @@ export const useBuyProductData = () => {
     }
   }, [buyProducts]);
 
+  // const handleFilterOnChange = () => {
+  //   const processFilterData = (
+  //     dataObj: FiltersRecord
+  //   ): Record<string, any> => {
+  //     return Object.values(dataObj).reduce<Record<string, any>>((acc, data) => {
+  //       if (data.type === "range-box" || data.type === "range") {
+  //         acc[`${data.name}__gte`] = data.value[0];
+  //         acc[`${data.name}__lte`] = data.value[1];
+  //       } else if (
+  //         ["switch", ].includes(data.type)
+  //       ) {
+  //         acc[data.name] = data.value;
+  //       } else if (data.type === "multi-select") {
+  //         acc[`${data.name}__in`] = data.value;
+  //       } else if (data.type === "autocomplete" || data.type === "select-box" ) {
+  //         acc[`${data.name}__contains`] = data.value;
+  //       }
+  //
+  //       return acc;
+  //     }, {});
+  //   };
+  //
+  //   const result = processFilterData(filterData);
+  //   console.log('filter data : ', result)
+  //   setParamsFilterData(result);
+  // };
   const handleFilterOnChange = () => {
-    const processFilterData = (
-      dataObj: FiltersRecord
-    ): Record<string, any> => {
+    const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
       return Object.values(dataObj).reduce<Record<string, any>>((acc, data) => {
         if (data.type === "range-box" || data.type === "range") {
           acc[`${data.name}__gte`] = data.value[0];
           acc[`${data.name}__lte`] = data.value[1];
-        } else if (
-          ["switch", "select-box", "autocomplete"].includes(data.type)
-        ) {
+        }
+        else if (data.type === "switch") {
           acc[data.name] = data.value;
-        } else if (data.type === "multi-select") {
+        }
+        else if (data.type === "multi-select") {
           acc[`${data.name}__in`] = data.value;
         }
+        else if (data.type === "autocomplete") {
+          // برای autocomplete معمولا __icontains مناسب تره
+          acc[`${data.name}__icontains`] = data.value;
+        }
+        else if (data.type === "select-box") {
+          // برای select-box که گزینه ثابت داره، بهتره exact باشه
+          acc[`${data.name}__exact`] = data.value;
+        }
+
         return acc;
       }, {});
     };
 
     const result = processFilterData(filterData);
+    console.log('filter data : ', result)
     setParamsFilterData(result);
+    // اینجا میفرستی به API
   };
 
   const handleSearch = (searchTerm: string) => {
@@ -92,3 +127,4 @@ export const useBuyProductData = () => {
     handleSearch,
   };
 };
+
