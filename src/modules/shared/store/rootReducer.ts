@@ -10,7 +10,7 @@ import { orderInvoiceApi } from "@/modules/buys/api/orderInvoiceApi.ts";
 import { orderPaymentApi } from "@/modules/buys/api/orderPaymentApi.ts";
 import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
 import { productionApi } from "@/modules/production/api/productionApi";
-import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
+import { warehouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
 import { inventoryApi } from "@/modules/wareHouse/api/inventoryApi";
@@ -36,7 +36,7 @@ export const rootReducer = combineReducers({
   [purchaseOrderApi.reducerPath]: purchaseOrderApi.reducer,
 
   //wareHouseApi:
-  [wareHouseApi.reducerPath]: wareHouseApi.reducer,
+  [warehouseApi.reducerPath]: warehouseApi.reducer,
   [inventoryApi.reducerPath]: inventoryApi.reducer,
   [transactionApi.reducerPath]: transactionApi.reducer,
 
