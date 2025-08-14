@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
-import { useGetLoadedProductItemDetailsQuery } from "../api/loadedProductItemsApi";
+import { useGetOrderDetailsQuery } from "../api/orderApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
@@ -9,7 +9,7 @@ import {
     getUpdateDialogConfigs,
     tableFilter,
     tableHead,
-} from "../model/loadedProductItemsIndex.ts";
+} from "../model/orderIndex.ts";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";
@@ -17,10 +17,10 @@ import { Button } from "@/modules/shared/components/ui/Button";
 
 // Custom Hooks
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
-import { useLoadedProductItemsData } from "../hooks/useLoadedProductItemsData";
-import { useLoadedProductItemsActions } from "../hooks/useLoadedProductItemsActions";
+import { useOrderData } from "../hooks/useOrderData";
+import { useOrderActions } from "../hooks/useOrderActions";
 
-const LoadedProductItemsPage = () => {
+const OrderPage = () => {
     const [createIndex, setCreateIndex] = useState<number | null>(null);
     const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -30,31 +30,31 @@ const LoadedProductItemsPage = () => {
         isError: isErrorKernel,
     } = useKernelData();
     const {
-        loadedProductItems,
-        isLoading: isLoadingLoadedProductItems,
+        orders,
+        isLoading: isLoadingOrders,
         filterData,
         setFilterData,
         handleFilterOnChange,
         handleSearch,
-    } = useLoadedProductItemsData();
+    } = useOrderData();
     const {
         deleteHandler,
         bulkDeleteHandler,
         handleCreateConfirm,
         handleUpdateConfirm,
-    } = useLoadedProductItemsActions();
+    } = useOrderActions();
 
     const breadcrumbItems = [
         { label: "Dashboard", href: "/dashboard" },
-        { label: "Loaded Product Items", href: "/dashboard/loaded-product-items" },
-        { label: "Loaded Product Item" },
+        { label: "Orders", href: "/dashboard/orders" },
+        { label: "Order" },
     ];
 
     const OnCreate = (index: number | null) => {
         setCreateIndex(index);
     };
 
-    const isLoading = isLoadingLoadedProductItems || isLoadingKernel;
+    const isLoading = isLoadingOrders || isLoadingKernel;
 
     if (isLoading) {
         return <Loading />;
@@ -64,20 +64,20 @@ const LoadedProductItemsPage = () => {
         return (
             <NoData
                 title="Error loading essential data"
-                description="Could not load products, product owners, cars, or drivers. Please try again later."
+                description="Could not load customers, cars, or drivers. Please try again later."
                 icon={<FiBox className="w-12 h-12 text-red-500" />}
             />
         );
     }
 
-    if (!loadedProductItems?.data || loadedProductItems.data.length === 0) {
+    if (!orders?.data || orders.data.length === 0) {
         return (
             <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
                 <PageHeader
-                    title="Loaded Product Item"
+                    title="Order"
                     breadcrumbItems={breadcrumbItems}
                     onCreate={() => OnCreate(1)}
-                    createLabel="Add Loaded Product Item"
+                    createLabel="Add Order"
                 />
                 <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
                     <div className="w-full md:w-1/3">
@@ -99,8 +99,8 @@ const LoadedProductItemsPage = () => {
                     </Button>
                 </div>
                 <NoData
-                    title="No loaded product items found"
-                    description="Try adjusting your filters or creating a new loaded product item."
+                    title="No orders found"
+                    description="Try adjusting your filters or creating a new order."
                     icon={<FiBox className="w-12 h-12 text-blue-500" />}
                 />
                 <CreateDialog
@@ -115,18 +115,16 @@ const LoadedProductItemsPage = () => {
     }
 
     const isKernelDataEmpty =
-        !kernelData.products.length ||
-        !kernelData.owners.length ||
         !kernelData.cars.length ||
         !kernelData.drivers.length;
 
     return (
         <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
             <PageHeader
-                title="Loaded Product Item"
+                title="Order"
                 breadcrumbItems={breadcrumbItems}
                 onCreate={() => OnCreate(1)}
-                createLabel="Add Loaded Product Item"
+                createLabel="Add Order"
                 isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
             />
 
@@ -152,10 +150,10 @@ const LoadedProductItemsPage = () => {
 
             <DataTable
                 tableHead={tableHead}
-                data={loadedProductItems.data ?? []}
+                data={orders.data ?? []}
                 deleteHandler={deleteHandler}
                 bulkDeleteHandler={bulkDeleteHandler}
-                useGetBuyProductDetailsQuery={useGetLoadedProductItemDetailsQuery}
+                useGetBuyProductDetailsQuery={useGetOrderDetailsQuery}
                 tableFilters={tableFilter}
                 filterData={filterData}
                 setFilterData={setFilterData}
@@ -179,4 +177,4 @@ const LoadedProductItemsPage = () => {
     );
 };
 
-export default LoadedProductItemsPage;
+export default OrderPage;

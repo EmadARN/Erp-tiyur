@@ -113,12 +113,7 @@ const InventoryPage = () => {
           onClose={() => setCreateIndex(null)}
           onConfirm={handleCreateConfirm}
           configs={getCreateDialogConfigs(kernelData)}
-          customMessage={
-            isKernelDataEmpty
-              ? "Cannot create a new entry because essential data (like products or warehouses) is missing."
-              : undefined
-          }
-          isConfirmDisabled={isKernelDataEmpty}
+
         />
       </div>
     );
@@ -177,12 +172,7 @@ const InventoryPage = () => {
         onClose={() => setCreateIndex(null)}
         onConfirm={handleCreateConfirm}
         configs={getCreateDialogConfigs(kernelData)}
-        customMessage={
-          isKernelDataEmpty
-            ? "Cannot create a new entry because essential data (like products or warehouses) is missing."
-            : undefined
-        }
-        isConfirmDisabled={isKernelDataEmpty}
+
       />
     </div>
   );
