@@ -1,7 +1,7 @@
 import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { TruckLoading, CreateTruckLoadingDto, TruckLoadingsResponse } from "../model/truckLoadingTypes";
+import type { TruckLoading, CreateTruckLoadingDto, TruckLoadingsResponse } from "../model/truckLoadingType";
 
 export const truckLoadingApi = createApi({
     reducerPath: "truckLoadingsApi",

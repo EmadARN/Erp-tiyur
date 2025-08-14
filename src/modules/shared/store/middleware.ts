@@ -11,7 +11,10 @@ import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
-import {inventoryApi} from "@/modules/wareHouse/api/inventoryApi.ts";
+import { inventoryApi } from "@/modules/wareHouse/api/inventoryApi.ts";
+import { orderApi } from "@/modules/sales/api/orderApi";
+import { orderItemsApi } from "@/modules/sales/api/orderItemsApi";
+import { truckLoadingApi } from "@/modules/sales/api/truckLoadingApi";
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
 
@@ -20,6 +23,9 @@ export const middlewares: Middleware[] = [
 
   //saleApi:
   salesApi.middleware,
+  orderApi.middleware,
+  orderItemsApi.middleware,
+  truckLoadingApi.middleware,
   loadedProductItemsApi.middleware,
   loadedProductApi.middleware,
 

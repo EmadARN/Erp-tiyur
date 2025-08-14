@@ -39,15 +39,33 @@ export const treeData = [
     children: [
       {
         id: "2.1",
-        label: "sales A",
+        label: "sale loaded product item",
         icon: <FaFile />,
-        path: "/dashboard/sale/a",
+        path: "/dashboard/sale/loaded-product-item",
       },
       {
         id: "2.2",
-        label: "sales B",
+        label: "sale loaded-product",
         icon: <FaFile />,
-        path: "/dashboard/sale/b",
+        path: "/dashboard/sale/loaded-product",
+      },
+      {
+        id: "2.3",
+        label: "sale order",
+        icon: <FaFile />,
+        path: "/dashboard/sale/order",
+      },
+      {
+        id: "2.4",
+        label: "sale order items",
+        icon: <FaFile />,
+        path: "/dashboard/sale/order-items",
+      },
+      {
+        id: "2.5",
+        label: "sale truck loading",
+        icon: <FaFile />,
+        path: "/dashboard/sale/truck-loading",
       },
     ],
   },

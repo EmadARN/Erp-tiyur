@@ -1,5 +1,5 @@
-import type { TableColumn, TableFilter } from "@/modules/shared/types";
-import type { LoadedProductItem } from "./loadedProductItemsTypes";
+import type { ConfigItem, TableColumn, TableFilter } from "@/modules/shared/types";
+import type { KernelData, LoadedProductItem } from "./loadedProductItemsTypes";
 
 type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
@@ -9,20 +9,55 @@ export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
   { columnName: "Weight", row_id: "weight", type: "number" },
   { columnName: "Number", row_id: "number", type: "number" },
-  { columnName: "Product", row_id: "loaded_product.product.product", type: "string" },
-  { columnName: "Product Owner", row_id: "loaded_product.product.product_owner", type: "string" },
+  { columnName: "Product", row_id: "loaded_product.product.product.name", type: "string" },
+  { columnName: "Product Owner", row_id: "loaded_product.product.product_owner.contact.name", type: "string" },
 ];
 
 export const getCreateDialogConfigs = (): any[] => [
   { name: "weight", label: "Weight", type: "int-input", defaultValue: 0, required: true },
   { name: "number", label: "Number", type: "int-input", defaultValue: 0, required: true },
 ];
+export function getUpdateDialogConfigs({
+  products,
+  owners,
 
-export const getUpdateDialogConfigs = (): any[] => [
-  ...getCreateDialogConfigs(),
-  { name: "loaded_product.product.product", label: "Product", type: "string-input", defaultValue: "", required: true },
-  { name: "loaded_product.product.product_owner", label: "Product Owner", type: "string-input", defaultValue: "", required: true },
-];
+}: KernelData): ConfigItem[] {
+  return [
+
+    {
+      name: "product.product",
+      label: "Product",
+      type: "select-box",
+      options: products,
+      defaultValue: products?.[0]?.value,
+      required: true,
+    },
+    {
+      name: "product.product_owner",
+      label: "Product Owner",
+      type: "select-box",
+      options: owners,
+      defaultValue: owners?.[0]?.value,
+      required: true,
+    },
+    {
+      name: "weight",
+      label: "Weight",
+      type: "int-input",
+      defaultValue: 0,
+      required: true,
+    },
+    {
+      name: "number",
+      label: "Number",
+      type: "int-input",
+      defaultValue: 0,
+      required: true,
+    },
+  ];
+}
+
+
 
 export const updateDialogDocs: DeepPartial<LoadedProductItem> = {
   id: "",

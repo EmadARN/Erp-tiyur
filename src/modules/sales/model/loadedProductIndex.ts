@@ -9,7 +9,7 @@ type DeepPartial<T> = {
 export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
   { columnName: "Product", row_id: "product.product.name", type: "string" },
-  { columnName: "Product Owner", row_id: "product.product_owner.name", type: "string" },
+  { columnName: "Product Owner", row_id: "product.product_owner.contact.name", type: "string" },
   { columnName: "Price", row_id: "price", type: "number" },
   { columnName: "Car", row_id: "car.car.car.car_number", type: "string" },
   { columnName: "Driver", row_id: "car.car.driver.contact.name", type: "string" },
@@ -18,11 +18,11 @@ export const tableHead: TableColumn[] = [
 ];
 
 export function getCreateDialogConfigs({
-                                         products,
-                                         owners,
-                                         cars,
-                                         drivers,
-                                       }: KernelData): ConfigItem[] {
+  products,
+  owners,
+  cars,
+  drivers,
+}: KernelData): ConfigItem[] {
   return [
     {
       name: "product.product",
@@ -198,11 +198,11 @@ export function getCreateDialogConfigs({
 }
 
 export function getUpdateDialogConfigs({
-                                         products,
-                                         owners,
-                                         cars,
-                                         drivers,
-                                       }: KernelData): ConfigItem[] {
+  products,
+  owners,
+  cars,
+  drivers,
+}: KernelData): ConfigItem[] {
   return [
     {
       name: "id",
