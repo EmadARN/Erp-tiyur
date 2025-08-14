@@ -13,6 +13,7 @@ import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
+import { inventoryApi } from "@/modules/wareHouse/api/inventoryApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -30,13 +31,14 @@ export const rootReducer = combineReducers({
 
   //buysApi: 
   [buyProductApi.reducerPath]: buyProductApi.reducer,
-  [bankAccountApi.reducerPath]: bankAccountApi.reducer,
+  // [bankAccountApi.reducerPath]: bankAccountApi.reducer,
   [orderInvoiceApi.reducerPath]: orderInvoiceApi.reducer,
   [orderPaymentApi.reducerPath]: orderPaymentApi.reducer,
   [purchaseOrderApi.reducerPath]: purchaseOrderApi.reducer,
 
   //wareHouseApi:
-  [wareHouseApi.reducerPath]: wareHouseApi.reducer,
+   [wareHouseApi.reducerPath]: wareHouseApi.reducer,
+  [inventoryApi.reducerPath]: inventoryApi.reducer,
 
   uiSetting: uiSettingsReducer,
   theme: themeReducer,
