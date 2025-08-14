@@ -11,7 +11,7 @@ export const wareHouseRoutes: RouteObject[] = [
     element: React.createElement(DashboardLayout),
     children: [
       {
-        path: "warehouse/a",
+        path: "warehouse/warehouse",
         element: React.createElement(WareHousePage),
       },
       {
