@@ -2,14 +2,14 @@ import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
-  BuyProduct,
-  CreateBuyProductDto,
+  Inventory,
+  CreateInventoryDto,
   OrdersResponse,
-} from "../model/buysProduct";
+} from "../model/inventoryTypes";
 
 export const wareHouseApi = createApi({
   reducerPath: "buysApi",
-  baseQuery: axiosBaseQuery(http.buyApi),
+  baseQuery: axiosBaseQuery(http.wareHouseApi),
   tagTypes: ["BuyProduct"], // Tag for cache management
   endpoints: (builder) => ({
     getBuyProduct: builder.query<OrdersResponse, Record<string, any>>({
@@ -20,13 +20,13 @@ export const wareHouseApi = createApi({
       }),
       providesTags: ["BuyProduct"], // This query provides the BuyProduct tag
     }),
-    getBuyProductDetails: builder.query<BuyProduct, { id: string }>({
+    getBuyProductDetails: builder.query<Inventory, { id: string }>({
       query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "get",
       }),
     }),
-    postBuyProduct: builder.mutation<BuyProduct, Partial<CreateBuyProductDto>>({
+    postBuyProduct: builder.mutation<Inventory, Partial<CreateInventoryDto>>({
       query: (body) => ({
         url: "/buy-product/create/",
         method: "post",
@@ -35,8 +35,8 @@ export const wareHouseApi = createApi({
       invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after POST
     }),
     patchBuyProduct: builder.mutation<
-      BuyProduct,
-      { id: string; data: Partial<BuyProduct> }
+      Inventory,
+      { id: string; data: Partial<Inventory> }
     >({
       query: ({ id, data }) => ({
         url: `/buy-product/c/${id}/`,
@@ -71,4 +71,3 @@ export const {
   useDeleteBulkBuyProductMutation,
   useDeleteBuyProductMutation,
 } = wareHouseApi;
-

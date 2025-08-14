@@ -11,7 +11,7 @@ import Switch from "@/modules/shared/components/ui/Switch";
 import MotionMultiSelect from "@/modules/shared/components/ui/MotionMultiSelect";
 import TextInput from "../ui/TextInput";
 import type { ConfigItem, InputTypes } from "../../types";
-import { type OptionType } from "../../types/common"; 
+import { type OptionType } from "../../types/common";
 
 interface CreateDialogProps {
   open: boolean;
@@ -86,7 +86,11 @@ export function CreateDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => !v && onClose()}
+      maxWidthClass="max-w-xl"
+    >
       <DialogContent className="w-full max-w-lg">
         <DialogHeader>
           <DialogTitle>Create Information</DialogTitle>

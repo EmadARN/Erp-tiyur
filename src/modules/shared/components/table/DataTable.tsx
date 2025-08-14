@@ -6,7 +6,7 @@ import CustomCheckbox from "../ui/Checkbox";
 import Tooltip from "../ui/Tooltip";
 import { UpdateDialog } from "@/modules/shared/components/dialogs/UpdateDialog";
 import type { ConfigItem, TableColumn, TableFilter } from "../../types";
-import { TableFilterDrawer } from "./TableFilterDrawer";
+import { TableFilterDrawer } from "./tableFilter/TableFilterDrawer";
 import { MdRemoveRedEye } from "react-icons/md";
 import { HiOutlinePencil } from "react-icons/hi";
 import { LuTrash2 } from "react-icons/lu";
@@ -158,8 +158,8 @@ export const DataTable: React.FC<DataTableProps> = ({
       </div>
 
       {/* Table Wrapper with horizontal scroll */}
-      <div className="w-full overflow-x-auto px-6">
-        <table className="min-w-max w-full text-left border-collapse">
+      <div className="w-full overflow-x-auto px-2 sm:px-4 md:px-6">
+        <table className="min-w-[700px] w-full text-left border-collapse">
           <thead>
             {selectedRows.length > 0 ? (
               <tr className="bg-blue-100 border-y border-blue-200">

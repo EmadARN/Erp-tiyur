@@ -31,7 +31,7 @@ export default function PageHeader({
           className="flex items-center justify-center gap-1 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold transition-colors w-full sm:w-auto"
         >
           <GoPlus className="w-5 h-5" />
-          <span>{createLabel}</span>
+          <span className="truncate">{createLabel}</span>
         </Button>
       )}
     </div>

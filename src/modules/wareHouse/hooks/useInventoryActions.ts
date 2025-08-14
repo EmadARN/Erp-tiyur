@@ -3,12 +3,12 @@ import toast from "react-hot-toast";
 import {
   usePostInventoryMutation,
   usePatchInventoryMutation,
-  useDeleteBulkInventoryMutation,
   useDeleteInventoryMutation,
-} from '../api/inventoryApi.ts';
+  useDeleteBulkInventoryMutation,
+} from "../api/inventoryApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
-import type { CreateBuyProductDto } from "../model/wareHouseType.ts";
-import { updateDialogDocs } from "../model/wareHouseIndex.ts";
+import type { CreateInventoryDto } from "../model/inventoryTypes";
+import { updateDialogDocs } from "../model/inventoryIndex";
 
 // Helper function to format nested data structures.
 function formatData(data: Record<string, any>): Record<string, any> {
@@ -57,7 +57,7 @@ const mergeDataWithDefault = (data: any, defaultData: any): any => {
   return result;
 };
 
-export const useBuyProductActions = () => {
+export const useInventoryActions = () => {
   const navigate = useNavigate();
   const [postInventory] = usePostInventoryMutation();
   const [patchInventory] = usePatchInventoryMutation();
@@ -85,20 +85,26 @@ export const useBuyProductActions = () => {
   };
 
   const handleCreateConfirm = async (data: Record<string, any>) => {
-    const formattedData: Partial<CreateBuyProductDto> = {
-      car: {
-        car: data["car.car"],
-        driver: data["car.driver"],
+    const formattedData: Partial<CreateInventoryDto> = {
+      product: {
+        product: data["product.product"],
+        product_owner: data["product.product_owner"],
       },
-      order_information: {
-        agriculture: data["order_information.agriculture"],
-        product_owner: data["order_information.product_owner"],
-        slaughter_type: data["order_information.slaughter_type"],
-        order_type: data["order_information.order_type"],
-        product: data["order_information.product"],
+      shelf_life: {
+        production_date: data["shelf_life.production_date"],
+        expire_date: data["shelf_life.expire_date"],
+        is_perishable: data["shelf_life.is_perishable"],
       },
-      required_weight: data.required_weight,
-      required_number: data.required_number,
+      warehouse: {
+        name: data["warehouse.name"],
+        is_active: data["warehouse.is_active"],
+        description: data["warehouse.description"],
+        is_production_warehouse: data["warehouse.is_production_warehouse"],
+        create_date: {
+          date: data["warehouse.create_date.date"],
+          user: data["warehouse.create_date.user"],
+        },
+      },
     };
 
     try {

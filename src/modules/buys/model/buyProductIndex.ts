@@ -279,13 +279,7 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-    {
-      name: "verified.status",
-      label: "Verified Status",
-      type: "switch",
-      defaultValue: false,
-      required: false,
-    },
+
     {
       name: "verified.description",
       label: "Verified Description",
@@ -293,7 +287,13 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-
+    {
+      name: "verified.status",
+      label: "Verified Status",
+      type: "switch",
+      defaultValue: false,
+      required: false,
+    },
     // Received info
     {
       name: "received.user_date.date",
@@ -309,13 +309,7 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-    {
-      name: "received.status",
-      label: "Received Status",
-      type: "switch",
-      defaultValue: false,
-      required: false,
-    },
+
     {
       name: "received.description",
       label: "Received Description",
@@ -323,7 +317,13 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-
+    {
+      name: "received.status",
+      label: "Received Status",
+      type: "switch",
+      defaultValue: false,
+      required: false,
+    },
     // Finished info
     {
       name: "finished.user_date.date",
@@ -339,13 +339,7 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-    {
-      name: "finished.status",
-      label: "Finished Status",
-      type: "switch",
-      defaultValue: false,
-      required: false,
-    },
+
     {
       name: "finished.description",
       label: "Finished Description",
@@ -353,7 +347,13 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-
+    {
+      name: "finished.status",
+      label: "Finished Status",
+      type: "switch",
+      defaultValue: false,
+      required: false,
+    },
     // Done info
     {
       name: "done.user_date.date",
@@ -369,18 +369,19 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-    {
-      name: "done.status",
-      label: "Done Status",
-      type: "switch",
-      defaultValue: false,
-      required: false,
-    },
+
     {
       name: "done.description",
       label: "Done Description",
       type: "string-input",
       defaultValue: "",
+      required: false,
+    },
+    {
+      name: "done.status",
+      label: "Done Status",
+      type: "switch",
+      defaultValue: false,
       required: false,
     },
 
@@ -399,13 +400,7 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-    {
-      name: "cancelled.status",
-      label: "Cancelled Status",
-      type: "switch",
-      defaultValue: false,
-      required: false,
-    },
+
     {
       name: "cancelled.description",
       label: "Cancelled Description",
@@ -413,7 +408,13 @@ export function getUpdateDialogConfigs({
       defaultValue: "",
       required: false,
     },
-
+    {
+      name: "cancelled.status",
+      label: "Cancelled Status",
+      type: "switch",
+      defaultValue: false,
+      required: false,
+    },
     // Price fields
     {
       name: "price.purchase_price_per_unit",

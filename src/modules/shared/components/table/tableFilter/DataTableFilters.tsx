@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-import Slider from "../ui/Slider";
-import SelectBox from "../ui/Selecbox";
-import Switch from "../ui/Switch";
-import AutoComplete from "../ui/Autocomplete";
-import { InputRangeBox } from "../ui/InputRangeBox";
-import MotionMultiSelect from "../ui/MotionMultiSelect";
+import Slider from "../../ui/Slider";
+import SelectBox from "../../ui/Selecbox";
+import Switch from "../../ui/Switch";
+import AutoComplete from "../../ui/Autocomplete";
+import { InputRangeBox } from "../../ui/InputRangeBox";
+import MotionMultiSelect from "../../ui/MotionMultiSelect";
 import { type FiltersRecord } from "@/modules/buys/model/buysProduct";
-import { type OptionType } from "../../types/common";
+import { type OptionType } from "../../../types/common";
 
 type FilterItem = {
   label: string;

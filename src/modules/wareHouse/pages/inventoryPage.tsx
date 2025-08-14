@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
-import { useGetOrderPaymentDetailsQuery } from "../api/orderPaymentApi";
+import { useGetInventoryDetailsQuery } from "../api/inventoryApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
@@ -9,58 +9,80 @@ import {
   getUpdateDialogConfigs,
   tableFilter,
   tableHead,
-} from "../model/paymentIndex";
+} from "../model/inventoryIndex";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
-import { FiFilter, FiCreditCard } from "react-icons/fi";
+import { FiBox, FiFilter } from "react-icons/fi";
 import { Button } from "@/modules/shared/components/ui/Button";
-import { useOrderPaymentData } from "../hooks/useOrderPaymentData";
-import { useOrderPaymentActions } from "../hooks/useOrderPaymentActions";
-import { useGetOrderInvoicesQuery } from "@/modules/buys/api/orderInvoiceApi.ts";
 
-const OrderPaymentPage = () => {
+// Custom Hooks
+import { useKernelData } from "@/modules/shared/hooks/useKernelData";
+import { useInventoryData } from "../hooks/useInventoryData";
+import { useInventoryActions } from "../hooks/useInventoryActions";
+
+const InventoryPage = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
-  const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
-    {}
-  );
-
-  const { data: invoices, isLoading: invoiceIsLoading } =
-    useGetOrderInvoicesQuery(paramsFilterData, {
-      refetchOnMountOrArgChange: true,
-    });
 
   const {
-    payments,
-    isLoading,
+    kernelData,
+    isLoading: isLoadingKernel,
+    isError: isErrorKernel,
+  } = useKernelData();
+  const {
+    inventories,
+    isLoading: isLoadingInventories,
     filterData,
     setFilterData,
     handleFilterOnChange,
     handleSearch,
-  } = useOrderPaymentData();
+  } = useInventoryData();
   const {
     deleteHandler,
     bulkDeleteHandler,
     handleCreateConfirm,
     handleUpdateConfirm,
-  } = useOrderPaymentActions();
+  } = useInventoryActions();
+
+  console.log("inventories", inventories);
 
   const breadcrumbItems = [
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Orders", href: "/dashboard/orders" },
-    { label: "Order Payments" },
+    { label: "Inventory", href: "/dashboard/inventory" },
+    { label: "Inventory List" },
   ];
 
-  if (isLoading) return <Loading />;
+  const OnCreate = (index: number | null) => {
+    setCreateIndex(index);
+  };
 
-  if (!payments?.data || payments.data.length === 0) {
+  const isLoading = isLoadingInventories || isLoadingKernel;
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isErrorKernel) {
     return (
-      <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
+      <NoData
+        title="Error loading essential data"
+        description="Could not load products, owners, or other required data. Please try again later."
+        icon={<FiBox className="w-12 h-12 text-red-500" />}
+      />
+    );
+  }
+
+  const isKernelDataEmpty =
+    !kernelData.products.length || !kernelData.owners.length;
+
+  if (!inventories?.data || inventories.data.length === 0) {
+    return (
+      <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
         <PageHeader
-          title="Order Payments"
+          title="Inventory"
           breadcrumbItems={breadcrumbItems}
-          onCreate={() => setCreateIndex(1)}
-          createLabel="Add Order Payment"
+          onCreate={() => OnCreate(1)}
+          createLabel="Add Inventory"
         />
         <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
           <div className="w-full md:w-1/3">
@@ -77,40 +99,42 @@ const OrderPaymentPage = () => {
             onClick={() => setFilterDrawerOpen(true)}
             className="w-full md:w-auto"
           >
-            <FiFilter className="mr-2" /> Filters
+            <FiFilter className="mr-2" />
+            Filters
           </Button>
         </div>
         <NoData
-          title="No order payments found"
-          description="Try adjusting filters or create a new order payment."
-          icon={<FiCreditCard className="w-12 h-12 text-blue-500" />}
+          title="No inventory found"
+          description="Try adjusting your filters or creating a new inventory entry."
+          icon={<FiBox className="w-12 h-12 text-blue-500" />}
         />
         <CreateDialog
           open={createIndex !== null}
           onClose={() => setCreateIndex(null)}
           onConfirm={handleCreateConfirm}
-          configs={getCreateDialogConfigs({
-            invoice:
-              invoices?.data?.map((item:{id:number,title:string}) => ({
-                value: item.id,
-                label: item.title,
-              })) ?? [],
-          })}
-        />{" "}
+          configs={getCreateDialogConfigs(kernelData)}
+          customMessage={
+            isKernelDataEmpty
+              ? "Cannot create a new entry because essential data (like products or warehouses) is missing."
+              : undefined
+          }
+          isConfirmDisabled={isKernelDataEmpty}
+        />
       </div>
     );
   }
 
   return (
-    <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
+    <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
-        title="Order Payments"
+        title="Inventory"
         breadcrumbItems={breadcrumbItems}
-        onCreate={() => setCreateIndex(1)}
-        createLabel="Add Order Payment"
+        onCreate={() => OnCreate(1)}
+        createLabel="Add Inventory"
+        isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
       />
 
-      <div className="flex flex-col md:flex-row items-center justify-between my-4 md:my-8 gap-4">
+      <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
         <div className="w-full md:w-1/3">
           <SearchInput
             value={
@@ -125,27 +149,22 @@ const OrderPaymentPage = () => {
           onClick={() => setFilterDrawerOpen(true)}
           className="w-full md:w-auto"
         >
-          <FiFilter className="mr-2" /> Filters
+          <FiFilter className="mr-2" />
+          Filters
         </Button>
       </div>
 
       <DataTable
         tableHead={tableHead}
-        data={payments.data ?? []}
+        data={inventories.data ?? []}
         deleteHandler={deleteHandler}
         bulkDeleteHandler={bulkDeleteHandler}
-        useGetBuyProductDetailsQuery={useGetOrderPaymentDetailsQuery}
+        useGetBuyProductDetailsQuery={useGetInventoryDetailsQuery}
         tableFilters={tableFilter}
         filterData={filterData}
         setFilterData={setFilterData}
         applyFilter={handleFilterOnChange}
-        updateDialogConfigs={getUpdateDialogConfigs({
-          invoice:
-            invoices?.data?.map((item:{id:number,title:string}) => ({
-              value: item.id,
-              label: item.title,
-            })) ?? [],
-        })}
+        updateDialogConfigs={getUpdateDialogConfigs(kernelData)}
         onUpdateConfirm={handleUpdateConfirm}
         showFilterButton={false}
         isFilterDrawerOpen={isFilterDrawerOpen}
@@ -157,16 +176,16 @@ const OrderPaymentPage = () => {
         open={createIndex !== null}
         onClose={() => setCreateIndex(null)}
         onConfirm={handleCreateConfirm}
-        configs={getCreateDialogConfigs({
-          invoice:
-            invoices?.data?.map((item:{id:number,title:string}) => ({
-              value: item.id,
-              label: item.title,
-            })) ?? [],
-        })}
+        configs={getCreateDialogConfigs(kernelData)}
+        customMessage={
+          isKernelDataEmpty
+            ? "Cannot create a new entry because essential data (like products or warehouses) is missing."
+            : undefined
+        }
+        isConfirmDisabled={isKernelDataEmpty}
       />
     </div>
   );
 };
 
-export default OrderPaymentPage;
+export default InventoryPage;
