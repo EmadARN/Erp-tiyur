@@ -1,4 +1,8 @@
-import type { ConfigItem, TableColumn, TableFilter } from "@/modules/shared/types";
+import type {
+  ConfigItem,
+  TableColumn,
+  TableFilter,
+} from "@/modules/shared/types";
 import type { Inventory, KernelData } from "./inventoryTypes";
 
 // A utility type to make all properties of an object, including nested ones, optional.
@@ -9,16 +13,27 @@ type DeepPartial<T> = {
 export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
   { columnName: "Product", row_id: "product.product.name", type: "string" },
-  { columnName: "Product Owner", row_id: "product.product_owner.contact.name", type: "string" },
-  { columnName: "Production Date", row_id: "shelf_life.production_date", type: "string" },
-  { columnName: "Expire Date", row_id: "shelf_life.expire_date", type: "string" },
+  {
+    columnName: "Product Owner",
+    row_id: "product.product_owner.contact.name",
+    type: "string",
+  },
+  {
+    columnName: "Production Date",
+    row_id: "shelf_life.production_date",
+    type: "string",
+  },
+  {
+    columnName: "Expire Date",
+    row_id: "shelf_life.expire_date",
+    type: "string",
+  },
   { columnName: "Warehouse", row_id: "warehouse.name", type: "string" },
 ];
 
 export function getCreateDialogConfigs({
   products,
-  owners
- 
+  owners,
 }: KernelData): ConfigItem[] {
   return [
     {
@@ -61,7 +76,7 @@ export function getCreateDialogConfigs({
     {
       name: "warehouse.name",
       label: "Warehouse",
-     
+
       type: "string-input",
       defaultValue: "",
       required: true,
@@ -106,8 +121,7 @@ export function getCreateDialogConfigs({
 
 export function getUpdateDialogConfigs({
   products,
- owners,
- 
+  owners,
 }: KernelData): ConfigItem[] {
   return [
     {
@@ -214,31 +228,15 @@ export function getUpdateDialogConfigs({
 }
 
 export const updateDialogDocs: DeepPartial<Inventory> = {
-  id: "125",
-  product: {
-    product: "string",
-    product_owner: "string"
+  id: "136",
+  name: "string",
+  is_active: true,
+  description: "",
+  is_production_warehouse: true,
+  create_date: {
+    date: "2025-08-14 09:06",
+    user: "string",
   },
-  shelf_life: {
-    production_date: "string",
-    expire_date: "string",
-    is_perishable: true
-  },
-  quantity: {
-    weight: 0,
-    number: 0,
-    is_weight_base: true
-  },
-  warehouse: {
-    name: "string",
-    is_active: true,
-    description: "",
-    is_production_warehouse: true,
-    create_date: {
-      date: "2025-08-13 23:09",
-      user: "string"
-    }
-  }
 };
 
 export const tableFilter: TableFilter[] = [

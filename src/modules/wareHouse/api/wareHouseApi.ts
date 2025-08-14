@@ -1,74 +1,66 @@
 import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type {
-  Inventory,
-  CreateInventoryDto,
+import type { Warehouse, CreateWarehouseDto, WarehouseResponse } from "../model/warehouseTypes";
 
-} from "../model/inventoryTypes";
-import type { OrdersResponse } from "../model/wareHouseType";
-
-export const wareHouseApi = createApi({
-  reducerPath: "wareHouseApi",
+export const warehouseApi = createApi({
+  reducerPath: "warehouseApi",
   baseQuery: axiosBaseQuery(http.wareHouseApi),
-  tagTypes: ["wareHouse"], // Tag for cache management
+  tagTypes: ["Warehouse"],
   endpoints: (builder) => ({
-    getBuyProduct: builder.query<OrdersResponse, Record<string, any>>({
+    getWarehouses: builder.query<WarehouseResponse, Record<string, any>>({
       query: (filters = {}) => ({
-        url: "/buy-product/",
+        url: "/warehouse/",
         method: "get",
-        params: filters, // Support for filter and search parameters
+        params: filters,
       }),
-      providesTags: ["wareHouse"], // This query provides the BuyProduct tag
+      providesTags: ["Warehouse"],
     }),
-    getBuyProductDetails: builder.query<Inventory, { id: string }>({
+    getWarehouseDetails: builder.query<Warehouse, { id: string }>({
       query: ({ id }) => ({
-        url: `/buy-product/c/${id}/`,
+        url: `/warehouse/c/${id}/`,
         method: "get",
       }),
     }),
-    postBuyProduct: builder.mutation<Inventory, Partial<CreateInventoryDto>>({
+    postWarehouse: builder.mutation<Warehouse, Partial<CreateWarehouseDto>>({
       query: (body) => ({
-        url: "/buy-product/create/",
+        url: "/warehouse/create/",
         method: "post",
         data: body,
       }),
-      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after POST
+      invalidatesTags: ["Warehouse"],
     }),
-    patchBuyProduct: builder.mutation<
-      Inventory,
-      { id: string; data: Partial<Inventory> }
-    >({
+    patchWarehouse: builder.mutation<Warehouse, { id: string; data: Partial<Warehouse> }>({
       query: ({ id, data }) => ({
-        url: `/buy-product/c/${id}/`,
+        url: `/warehouse/c/${id}/`,
         method: "patch",
         data,
       }),
-      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after PATCH
+      invalidatesTags: ["Warehouse"],
     }),
-    deleteBulkBuyProduct: builder.mutation<void, { data: { data: string[] } }>({
+    deleteBulkWarehouse: builder.mutation<void, { data: { data: string[] } }>({
       query: ({ data }) => ({
-        url: "/buy-product/",
+        url: "/warehouse/",
         method: "delete",
         data,
       }),
-      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after DELETE
+      invalidatesTags: ["Warehouse"],
     }),
-    deleteBuyProduct: builder.mutation<void, { id: string }>({
+    deleteWarehouse: builder.mutation<void, { id: string }>({
       query: ({ id }) => ({
-        url: `/buy-product/c/${id}/`,
+        url: `/warehouse/c/${id}/`,
         method: "delete",
       }),
-      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after DELETE
+      invalidatesTags: ["Warehouse"],
     }),
   }),
 });
 
 export const {
-  useGetBuyProductQuery,
-  useGetBuyProductDetailsQuery,
-  usePostBuyProductMutation,
-  usePatchBuyProductMutation,
-  useDeleteBulkBuyProductMutation,
-  useDeleteBuyProductMutation,
-} = wareHouseApi;
+  useGetWarehousesQuery,
+  useGetWarehouseDetailsQuery,
+  usePostWarehouseMutation,
+  usePatchWarehouseMutation,
+  useDeleteBulkWarehouseMutation,
+  useDeleteWarehouseMutation,
+} = warehouseApi;

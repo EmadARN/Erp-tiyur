@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import {
-  usePostInventoryMutation,
-  usePatchInventoryMutation,
-  useDeleteBulkInventoryMutation,
-  useDeleteInventoryMutation,
-} from '../api/inventoryApi.ts';
+  usePostWarehouseMutation,
+  usePatchWarehouseMutation,
+  useDeleteWarehouseMutation,
+  useDeleteBulkWarehouseMutation,
+} from "../api/wareHouseApi";
 import { handleApiError } from "@/modules/shared/lib/handleApiError";
-import type { CreateBuyProductDto } from "../model/wareHouseType.ts";
-import { updateDialogDocs } from "../model/wareHouseIndex.ts";
+import type { CreateWarehouseDto } from "../model/wareHouseType";
+import { updateDialogDocs } from "../model/inventoryIndex";
 
 // Helper function to format nested data structures.
 function formatData(data: Record<string, any>): Record<string, any> {
@@ -57,55 +57,45 @@ const mergeDataWithDefault = (data: any, defaultData: any): any => {
   return result;
 };
 
-export const useBuyProductActions = () => {
+export const useWarehouseActions = () => {
   const navigate = useNavigate();
-  const [postInventory] = usePostInventoryMutation();
-  const [patchInventory] = usePatchInventoryMutation();
-  const [deleteInventory] = useDeleteInventoryMutation();
-  const [deleteBulkInventory] = useDeleteBulkInventoryMutation();
+  const [postWarehouse] = usePostWarehouseMutation();
+  const [patchWarehouse] = usePatchWarehouseMutation();
+  const [deleteWarehouse] = useDeleteWarehouseMutation();
+  const [deleteBulkWarehouse] = useDeleteBulkWarehouseMutation();
 
   const deleteHandler = async (id: string) => {
     try {
-      await deleteInventory({ id }).unwrap();
-      toast.success("Data deleted successfully!");
+      await deleteWarehouse({ id }).unwrap();
+      toast.success("Warehouse deleted successfully!");
     } catch (err) {
-      handleApiError(err, navigate, "Failed to delete data.");
+      handleApiError(err, navigate, "Failed to delete warehouse.");
     }
   };
 
   const bulkDeleteHandler = async (arrayIndex: string[]) => {
     try {
-      await deleteBulkInventory({
+      await deleteBulkWarehouse({
         data: { data: arrayIndex },
       }).unwrap();
-      toast.success("Data deleted successfully!");
+      toast.success("Warehouses deleted successfully!");
     } catch (err) {
-      handleApiError(err, navigate, "Failed to delete data.");
+      handleApiError(err, navigate, "Failed to delete warehouses.");
     }
   };
 
   const handleCreateConfirm = async (data: Record<string, any>) => {
-    const formattedData: Partial<CreateBuyProductDto> = {
-      car: {
-        car: data["car.car"],
-        driver: data["car.driver"],
-      },
-      order_information: {
-        agriculture: data["order_information.agriculture"],
-        product_owner: data["order_information.product_owner"],
-        slaughter_type: data["order_information.slaughter_type"],
-        order_type: data["order_information.order_type"],
-        product: data["order_information.product"],
-      },
-      required_weight: data.required_weight,
-      required_number: data.required_number,
+    const formattedData: Partial<CreateWarehouseDto> = {
+      name: data["name"],
+      description: data["description"],
+      is_production_warehouse: data["is_production_warehouse"],
     };
 
     try {
-      await postInventory(formattedData).unwrap();
-      toast.success("Data sent successfully!");
+      await postWarehouse(formattedData).unwrap();
+      toast.success("Warehouse created successfully!");
     } catch (err) {
-      handleApiError(err, navigate, "Failed to send data.");
+      handleApiError(err, navigate, "Failed to create warehouse.");
     }
   };
 
@@ -114,13 +104,13 @@ export const useBuyProductActions = () => {
     formattedData = mergeDataWithDefault(formattedData, updateDialogDocs);
 
     try {
-      await patchInventory({
+      await patchWarehouse({
         id: formattedData.id,
         data: formattedData,
       }).unwrap();
-      toast.success("Data updated successfully!");
+      toast.success("Warehouse updated successfully!");
     } catch (err) {
-      handleApiError(err, navigate, "Failed to update data.");
+      handleApiError(err, navigate, "Failed to update warehouse.");
     }
   };
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
-import { useGetWarehouseDetailsQuery } from "../api/wareHouseApi";
+import { useGetTransactionDetailsQuery } from "../api/transactionApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
@@ -9,7 +9,7 @@ import {
   getUpdateDialogConfigs,
   tableFilter,
   tableHead,
-} from "../model/wareHouseIndex";
+} from "../model/transactionIndex";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";
@@ -17,46 +17,49 @@ import { Button } from "@/modules/shared/components/ui/Button";
 
 // Custom Hooks
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
-import { useWarehouseData } from "../hooks/useWareHouseData";
-import { useWarehouseActions } from "../hooks/useWareHouseActions";
+import { useTransactionData } from "../hooks/useTransactionData";
+import { useTransactionActions } from "../hooks/useTransactionActions";
 
-const WarehousePage = () => {
+const TransactionPage = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
   const {
-  
+    kernelData,
     isLoading: isLoadingKernel,
     isError: isErrorKernel,
   } = useKernelData();
   const {
-    warehouses,
-    isLoading: isLoadingWarehouses,
+    transactions,
+    isLoading: isLoadingTransactions,
     filterData,
     setFilterData,
     handleFilterOnChange,
     handleSearch,
-  } = useWarehouseData();
+  } = useTransactionData();
   const {
     deleteHandler,
     bulkDeleteHandler,
     handleCreateConfirm,
     handleUpdateConfirm,
-  } = useWarehouseActions();
+  } = useTransactionActions();
 
   const breadcrumbItems = [
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Warehouse", href: "/dashboard/warehouse" },
-    { label: "Warehouse List" },
+    { label: "Transaction", href: "/dashboard/transaction" },
+    { label: "Transaction List" },
   ];
 
   const OnCreate = (index: number | null) => {
     setCreateIndex(index);
   };
 
-  const isLoading = isLoadingWarehouses || isLoadingKernel;
+  const isLoading = isLoadingTransactions || isLoadingKernel;
 
-  const isKernelDataEmpty = null;
+  const isKernelDataEmpty =
+    !kernelData.products.length ||
+    !kernelData.owners.length 
+
 
   if (isLoading) {
     return <Loading />;
@@ -64,22 +67,26 @@ const WarehousePage = () => {
 
   if (isErrorKernel) {
     return (
+        <>
       <NoData
         title="Error loading essential data"
-        description="Could not load users or other required data. Please try again later."
+        description="Could not load products, owners, or other required data. Please try again later."
         icon={<FiBox className="w-12 h-12 text-red-500" />}
       />
+
+     
+      </>
     );
   }
 
-  if (!warehouses?.data || warehouses.data.length === 0) {
+  if (!transactions?.data || transactions.data.length === 0) {
     return (
       <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
         <PageHeader
-          title="Warehouse"
+          title="Transaction"
           breadcrumbItems={breadcrumbItems}
           onCreate={() => OnCreate(1)}
-          createLabel="Add Warehouse"
+          createLabel="Add Transaction"
         />
         <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
           <div className="w-full md:w-1/3">
@@ -101,16 +108,16 @@ const WarehousePage = () => {
           </Button>
         </div>
         <NoData
-          title="No warehouses found"
-          description="Try adjusting your filters or creating a new warehouse."
+          title="No transactions found"
+          description="Try adjusting your filters or creating a new transaction."
           icon={<FiBox className="w-12 h-12 text-blue-500" />}
         />
         <CreateDialog
           open={createIndex !== null}
           onClose={() => setCreateIndex(null)}
           onConfirm={handleCreateConfirm}
-          configs={getCreateDialogConfigs()}
-          
+          configs={getCreateDialogConfigs(kernelData)}
+         
         />
       </div>
     );
@@ -119,10 +126,10 @@ const WarehousePage = () => {
   return (
     <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
-        title="Warehouse"
+        title="Transaction"
         breadcrumbItems={breadcrumbItems}
         onCreate={() => OnCreate(1)}
-        createLabel="Add Warehouse"
+        createLabel="Add Transaction"
         isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
       />
 
@@ -148,15 +155,15 @@ const WarehousePage = () => {
 
       <DataTable
         tableHead={tableHead}
-        data={warehouses.data ?? []}
+        data={transactions.data ?? []}
         deleteHandler={deleteHandler}
         bulkDeleteHandler={bulkDeleteHandler}
-        useGetBuyProductDetailsQuery={useGetWarehouseDetailsQuery}
+        useGetBuyProductDetailsQuery={useGetTransactionDetailsQuery}
         tableFilters={tableFilter}
         filterData={filterData}
         setFilterData={setFilterData}
         applyFilter={handleFilterOnChange}
-        updateDialogConfigs={getUpdateDialogConfigs()}
+        updateDialogConfigs={getUpdateDialogConfigs(kernelData)}
         onUpdateConfirm={handleUpdateConfirm}
         showFilterButton={false}
         isFilterDrawerOpen={isFilterDrawerOpen}
@@ -168,11 +175,11 @@ const WarehousePage = () => {
         open={createIndex !== null}
         onClose={() => setCreateIndex(null)}
         onConfirm={handleCreateConfirm}
-        configs={getCreateDialogConfigs()}
+        configs={getCreateDialogConfigs(kernelData)}
        
       />
     </div>
   );
 };
 
-export default WarehousePage;
+export default TransactionPage;

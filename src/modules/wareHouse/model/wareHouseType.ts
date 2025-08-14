@@ -1,123 +1,46 @@
 /**
- * Represents a generic product.
- */
-export interface ProductType {
-    id: string;
-    name: string;
-}
-
-/**
- * Represents a generic owner.
- */
-export interface OwnerType {
-    id: string;
-    contact: {
-        name: string;
-    };
-}
-
-/**
- * Represents a generic car.
- */
-export interface CarType {
-    id: string;
-    car_number: string;
-}
-
-/**
- * Represents a generic driver.
- */
-export interface DriverType {
-    id: string;
-    contact: {
-        name: string;
-    };
-}
-
-/**
- * Represents a generic agriculture entity.
- */
-export interface AgricultureType {
-    id: string;
-    name: string;
-}
-
-/**
  * Represents an option for a select input.
  */
-import {type OptionType } from "@/modules/shared/types/common"; 
+import { type OptionType } from "@/modules/shared/types/common"; 
 
 /**
- * Represents the kernel data required for the buy product forms.
+ * Represents the kernel data required for the warehouse forms.
  */
 export interface KernelData {
-    cars: OptionType[];
-    agriculture: OptionType[];
-    drivers: OptionType[];
-    owners: OptionType[];
-    products: OptionType[];
+  users: OptionType[];
 }
 
 /**
- * Represents the status of a step in a process.
+ * Represents a date block for creation.
  */
-export interface StatusBlock {
-    user_date: {
-        date: string;
-        user: string;
-    };
-    status: boolean;
-    description: string;
+export interface DateInfo {
+  date: string;
+  user: string;
 }
 
 /**
- * Data Transfer Object for creating a new buy product.
+ * Data Transfer Object for creating a new warehouse.
  */
-export interface CreateBuyProductDto {
-    car: {
-        car: string;
-        driver: string;
-    };
-    order_information: {
-        agriculture: string;
-        product_owner: string;
-        slaughter_type: string;
-        order_type: string;
-        product: string;
-    };
-    required_weight: number;
-    required_number: number;
+export interface CreateWarehouseDto {
+  name: string;
+  description: string;
+  is_production_warehouse: boolean;
 }
 
 /**
- * Represents a buy product entity as returned by the API.
+ * Represents a warehouse entity as returned by the API.
  */
-export interface BuyProduct extends CreateBuyProductDto {
-    id: string;
-    weight: number;
-    quality: string;
-    status: string;
-    create: {
-        date: string;
-        user: string;
-    };
-    verified: StatusBlock;
-    received: StatusBlock;
-    finished: StatusBlock;
-    done: StatusBlock;
-    cancelled: StatusBlock;
-    price: {
-        purchase_price_per_unit: number;
-        cost_price: number;
-        transportation_price: number;
-    };
+export interface Warehouse extends CreateWarehouseDto {
+  id: string;
+  is_active: boolean;
+  create_date: DateInfo;
 }
 
 /**
- * Represents the response for a list of buy products.
+ * Represents the response for a list of warehouses.
  */
-export interface OrdersResponse {
-    data: BuyProduct[];
+export interface WarehouseResponse {
+  data: Warehouse[];
 }
 
 /**
@@ -130,8 +53,11 @@ export type FilterValue =
   | boolean
   | (string | number)[];
 
+/**
+ * Represents a filter.
+ */
 export interface Filter {
-  type: "range" | "range-box" | "switch" | "select-box" | "autocomplete" | "multi-select";
+  type: "range" | "range-box" | "switch" | "select-box" | "autocomplete" | "multi-select" | "boolean";
   name: string;
   value: FilterValue;
 }

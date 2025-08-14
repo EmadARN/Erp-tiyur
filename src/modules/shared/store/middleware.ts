@@ -8,13 +8,14 @@ import { orderInvoiceApi } from "@/modules/buys/api/orderInvoiceApi.ts";
 import { orderPaymentApi } from "@/modules/buys/api/orderPaymentApi.ts";
 import { purchaseOrderApi } from "@/modules/buys/api/orderPurchaseOrderApi";
 import { productionApi } from "@/modules/production/api/productionApi";
-import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
+import { warehouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
 import { inventoryApi } from "@/modules/wareHouse/api/inventoryApi.ts";
 import { orderApi } from "@/modules/sales/api/orderApi";
 import { orderItemsApi } from "@/modules/sales/api/orderItemsApi";
 import { truckLoadingApi } from "@/modules/sales/api/truckLoadingApi";
+import { transactionApi } from "@/modules/wareHouse/api/transactionApi";
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
 
@@ -38,6 +39,7 @@ export const middlewares: Middleware[] = [
   purchaseOrderApi.middleware,
 
   //wareHouseApi:
-  wareHouseApi.middleware,
+  warehouseApi.middleware,
   inventoryApi.middleware,
+  transactionApi.middleware
 ];

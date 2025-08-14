@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { useGetWarehousesQuery } from "../api/wareHouseApi";
+import { useGetTransactionsQuery } from "../api/transactionApi";
 import type {
-  Warehouse,
+  Transaction,
   FiltersRecord,
-  WarehouseResponse,
-} from "../model/warehouseTypes";
-import { tableHead } from "../model/inventoryIndex";
+  TransactionResponse,
+} from "../model/transactionTypes";
+import { tableHead } from "../model/transactionIndex";
 
 // Helper function to get a value by a nested path.
-function getValueByPath(obj: Warehouse, path: string): unknown {
+function getValueByPath(obj: Transaction, path: string): unknown {
   if (!obj || !path) return "";
 
   return path.split(".").reduce<unknown>((acc, key) => {
@@ -19,24 +19,24 @@ function getValueByPath(obj: Warehouse, path: string): unknown {
   }, obj);
 }
 
-export const useWarehouseData = () => {
+export const useTransactionData = () => {
   const [paramsfilterData, setParamsFilterData] = useState<Record<string, any>>(
     {}
   );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: warehouses, isLoading } = useGetWarehousesQuery(
+  const { data: transactions, isLoading } = useGetTransactionsQuery(
     paramsfilterData,
     {
       refetchOnMountOrArgChange: true,
     }
   );
-  const [displayData, setDisplayData] = useState<WarehouseResponse | null>(null);
+  const [displayData, setDisplayData] = useState<TransactionResponse | null>(null);
 
   useEffect(() => {
-    if (warehouses) {
-      setDisplayData(warehouses);
+    if (transactions) {
+      setDisplayData(transactions);
     }
-  }, [warehouses]);
+  }, [transactions]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -68,15 +68,15 @@ export const useWarehouseData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && warehouses) {
-      setDisplayData(warehouses);
+    if (searchTerm === "" && transactions) {
+      setDisplayData(transactions);
       return;
     }
 
     const lowerSearch = searchTerm.toString().toLowerCase();
 
-    if (warehouses) {
-      const result = warehouses.data.filter((row) =>
+    if (transactions) {
+      const result = transactions.data.filter((row) =>
         tableHead.some(({ row_id }) => {
           const value = getValueByPath(row, row_id);
           return String(value ?? "")
@@ -89,7 +89,7 @@ export const useWarehouseData = () => {
   };
 
   return {
-    warehouses: displayData,
+    transactions: displayData,
     isLoading,
     filterData,
     setFilterData,
