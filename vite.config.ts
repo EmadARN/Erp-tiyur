@@ -8,12 +8,12 @@ export default defineConfig({
   server: {
     proxy: {
       "/api/kernel": {
-        target: "http://192.168.43.201:8000",
+        target: "http://192.168.76.162:8000",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/kernel/, "/api/v1"),
       },
       "/api/buy": {
-        target: "http://192.168.43.201:8001",
+        target: "http://192.168.76.162:8001",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/buy/, "/api/v1"),
       },
@@ -22,9 +22,9 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/sale/, "/api/v1"),
       },
- 
+
       "/api/warehouse": {
-        target: "http://192.168.43.201:8003",
+        target: "http://192.168.76.162:8003",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/warehouse/, "/api/v1"),
       },

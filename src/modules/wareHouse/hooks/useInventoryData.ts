@@ -34,7 +34,7 @@ export const useInventoryData = () => {
     null
   );
 
-  console.log("iiiii",inventories)
+  // console.log("iiiii",inventories)
 
   useEffect(() => {
     if (inventories) {

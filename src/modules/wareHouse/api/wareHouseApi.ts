@@ -4,13 +4,14 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   Inventory,
   CreateInventoryDto,
-  OrdersResponse,
+
 } from "../model/inventoryTypes";
+import type { OrdersResponse } from "../model/wareHouseType";
 
 export const wareHouseApi = createApi({
-  reducerPath: "buysApi",
+  reducerPath: "wareHouseApi",
   baseQuery: axiosBaseQuery(http.wareHouseApi),
-  tagTypes: ["BuyProduct"], // Tag for cache management
+  tagTypes: ["wareHouse"], // Tag for cache management
   endpoints: (builder) => ({
     getBuyProduct: builder.query<OrdersResponse, Record<string, any>>({
       query: (filters = {}) => ({
@@ -18,7 +19,7 @@ export const wareHouseApi = createApi({
         method: "get",
         params: filters, // Support for filter and search parameters
       }),
-      providesTags: ["BuyProduct"], // This query provides the BuyProduct tag
+      providesTags: ["wareHouse"], // This query provides the BuyProduct tag
     }),
     getBuyProductDetails: builder.query<Inventory, { id: string }>({
       query: ({ id }) => ({
@@ -32,7 +33,7 @@ export const wareHouseApi = createApi({
         method: "post",
         data: body,
       }),
-      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after POST
+      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after POST
     }),
     patchBuyProduct: builder.mutation<
       Inventory,
@@ -43,7 +44,7 @@ export const wareHouseApi = createApi({
         method: "patch",
         data,
       }),
-      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after PATCH
+      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after PATCH
     }),
     deleteBulkBuyProduct: builder.mutation<void, { data: { data: string[] } }>({
       query: ({ data }) => ({
@@ -51,14 +52,14 @@ export const wareHouseApi = createApi({
         method: "delete",
         data,
       }),
-      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after DELETE
+      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after DELETE
     }),
     deleteBuyProduct: builder.mutation<void, { id: string }>({
       query: ({ id }) => ({
         url: `/buy-product/c/${id}/`,
         method: "delete",
       }),
-      invalidatesTags: ["BuyProduct"], // Invalidates the BuyProduct tag after DELETE
+      invalidatesTags: ["wareHouse"], // Invalidates the BuyProduct tag after DELETE
     }),
   }),
 });
