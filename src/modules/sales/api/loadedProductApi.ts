@@ -4,8 +4,8 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import type { LoadedProduct, CreateLoadedProductDto, LoadedProductsResponse } from "../model/loadedProductTypes";
 
 export const loadedProductApi = createApi({
-  reducerPath: "loadedProductApi",
-  baseQuery: axiosBaseQuery(http.buyApi),
+  reducerPath: "loadedProductsApi",
+  baseQuery: axiosBaseQuery(http.saleApi),
   tagTypes: ["LoadedProduct"],
   endpoints: (builder) => ({
     getLoadedProducts: builder.query<LoadedProductsResponse, Record<string, any>>({

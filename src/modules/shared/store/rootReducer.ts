@@ -13,6 +13,9 @@ import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
+import {orderApi} from "@/modules/sales/api/orderApi.ts";
+import {orderItemsApi} from "@/modules/sales/api/orderItemsApi.ts";
+import {truckLoadingApi} from "@/modules/sales/api/truckLoadingApi.ts";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -25,8 +28,11 @@ export const rootReducer = combineReducers({
   [salesApi.reducerPath]: salesApi.reducer,
   [loadedProductItemsApi.reducerPath]: loadedProductItemsApi.reducer,
   [loadedProductApi.reducerPath]: loadedProductApi.reducer,
+  [orderApi.reducerPath]: orderApi.reducer,
+  [orderItemsApi.reducerPath]: orderItemsApi.reducer,
+  [truckLoadingApi.reducerPath]: truckLoadingApi.reducer,
 
-  
+
 
   //buysApi: 
   [buyProductApi.reducerPath]: buyProductApi.reducer,
