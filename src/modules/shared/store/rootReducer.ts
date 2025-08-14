@@ -30,7 +30,7 @@ export const rootReducer = combineReducers({
 
   //buysApi:
   [buyProductApi.reducerPath]: buyProductApi.reducer,
-  // [bankAccountApi.reducerPath]: bankAccountApi.reducer,
+  [bankAccountApi.reducerPath]: bankAccountApi.reducer,
   [orderInvoiceApi.reducerPath]: orderInvoiceApi.reducer,
   [orderPaymentApi.reducerPath]: orderPaymentApi.reducer,
   [purchaseOrderApi.reducerPath]: purchaseOrderApi.reducer,

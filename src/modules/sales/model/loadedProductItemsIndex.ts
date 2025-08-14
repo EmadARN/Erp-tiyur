@@ -9,51 +9,19 @@ export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
   { columnName: "Weight", row_id: "weight", type: "number" },
   { columnName: "Number", row_id: "number", type: "number" },
-  {
-    columnName: "Product",
-    row_id: "loaded_product.product.product",
-    type: "string",
-  },
-  {
-    columnName: "Product Owner",
-    row_id: "loaded_product.product.product_owner",
-    type: "string",
-  },
+  { columnName: "Product", row_id: "loaded_product.product.product", type: "string" },
+  { columnName: "Product Owner", row_id: "loaded_product.product.product_owner", type: "string" },
 ];
 
 export const getCreateDialogConfigs = (): any[] => [
-  {
-    name: "weight",
-    label: "Weight",
-    type: "int-input",
-    defaultValue: 0,
-    required: true,
-  },
-  {
-    name: "number",
-    label: "Number",
-    type: "int-input",
-    defaultValue: 0,
-    required: true,
-  },
+  { name: "weight", label: "Weight", type: "int-input", defaultValue: 0, required: true },
+  { name: "number", label: "Number", type: "int-input", defaultValue: 0, required: true },
 ];
 
 export const getUpdateDialogConfigs = (): any[] => [
   ...getCreateDialogConfigs(),
-  {
-    name: "loaded_product.product.product",
-    label: "Product",
-    type: "string-input",
-    defaultValue: "",
-    required: true,
-  },
-  {
-    name: "loaded_product.product.product_owner",
-    label: "Product Owner",
-    type: "string-input",
-    defaultValue: "",
-    required: true,
-  },
+  { name: "loaded_product.product.product", label: "Product", type: "string-input", defaultValue: "", required: true },
+  { name: "loaded_product.product.product_owner", label: "Product Owner", type: "string-input", defaultValue: "", required: true },
 ];
 
 export const updateDialogDocs: DeepPartial<LoadedProductItem> = {
@@ -80,18 +48,6 @@ export const updateDialogDocs: DeepPartial<LoadedProductItem> = {
 };
 
 export const tableFilter: TableFilter[] = [
-  {
-    name: "loaded_product__product__product",
-    label: "Product",
-    type: "autocomplete",
-    options: [],
-    defaultValue: "",
-  },
-  {
-    name: "loaded_product__product__product_owner",
-    label: "Product Owner",
-    type: "autocomplete",
-    options: [],
-    defaultValue: "",
-  },
+  { name: "loaded_product__product__product", label: "Product", type: "autocomplete", options: [], defaultValue: "" },
+  { name: "loaded_product__product__product_owner", label: "Product Owner", type: "autocomplete", options: [], defaultValue: "" },
 ];

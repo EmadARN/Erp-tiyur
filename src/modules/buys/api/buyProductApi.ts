@@ -8,7 +8,7 @@ import type {
 } from "../model/buysProduct";
 
 export const buyProductApi = createApi({
-  reducerPath: "buysApi",
+  reducerPath: "buyProductApi",
   baseQuery: axiosBaseQuery(http.buyApi),
   tagTypes: ["BuyProduct"], // Tag for cache management
   endpoints: (builder) => ({
