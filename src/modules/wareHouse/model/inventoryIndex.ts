@@ -8,8 +8,8 @@ type DeepPartial<T> = {
 
 export const tableHead: TableColumn[] = [
   { columnName: "ID", row_id: "id", type: "string" },
-  { columnName: "Product", row_id: "product.product", type: "string" },
-  { columnName: "Product Owner", row_id: "product.product_owner", type: "string" },
+  { columnName: "Product", row_id: "product.product.name", type: "string" },
+  { columnName: "Product Owner", row_id: "product.product_owner.contact.name", type: "string" },
   { columnName: "Production Date", row_id: "shelf_life.production_date", type: "string" },
   { columnName: "Expire Date", row_id: "shelf_life.expire_date", type: "string" },
   { columnName: "Warehouse", row_id: "warehouse.name", type: "string" },

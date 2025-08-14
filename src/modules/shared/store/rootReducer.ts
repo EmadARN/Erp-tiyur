@@ -13,6 +13,7 @@ import { productionApi } from "@/modules/production/api/productionApi";
 import { wareHouseApi } from "@/modules/wareHouse/api/wareHouseApi";
 import { loadedProductItemsApi } from "@/modules/sales/api/loadedProductItemsApi";
 import { loadedProductApi } from "@/modules/sales/api/loadedProductApi";
+import {inventoryApi} from "@/modules/wareHouse/api/inventoryApi.ts";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -26,7 +27,7 @@ export const rootReducer = combineReducers({
   [loadedProductItemsApi.reducerPath]: loadedProductItemsApi.reducer,
   [loadedProductApi.reducerPath]: loadedProductApi.reducer,
 
-  
+
 
   //buysApi: 
   [buyProductApi.reducerPath]: buyProductApi.reducer,
@@ -37,6 +38,7 @@ export const rootReducer = combineReducers({
 
   //wareHouseApi:
   [wareHouseApi.reducerPath]: wareHouseApi.reducer,
+  [inventoryApi.reducerPath]: inventoryApi.reducer,
 
   uiSetting: uiSettingsReducer,
   theme: themeReducer,
