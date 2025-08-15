@@ -228,16 +228,32 @@ export function getUpdateDialogConfigs({
 }
 
 export const updateDialogDocs: DeepPartial<Inventory> = {
-  id: "136",
-  name: "string",
-  is_active: true,
-  description: "",
-  is_production_warehouse: true,
-  create_date: {
-    date: "2025-08-14 09:06",
-    user: "string",
+  "id": "143",
+  "product": {
+    "product": "string",
+    "product_owner": "string"
   },
-};
+  "shelf_life": {
+    "production_date": "string",
+    "expire_date": "string",
+    "is_perishable": true
+  },
+  "quantity": {
+    "weight": 0,
+    "number": 0,
+    "is_weight_base": true
+  },
+  "warehouse": {
+    "name": "string",
+    "is_active": true,
+    "description": "",
+    "is_production_warehouse": true,
+    "create_date": {
+      "date": "2025-08-14 09:06",
+      "user": "string"
+    }
+  }
+}
 
 export const tableFilter: TableFilter[] = [
   {

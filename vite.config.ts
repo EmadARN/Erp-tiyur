@@ -31,7 +31,7 @@ export default defineConfig({
       "/api/production": {
         target: "http://192.168.76.162:8004",
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/sale/, "/api/v1"),
+        rewrite: (path) => path.replace(/^\/api\/production/, "/api/v1"),
       },
     },
   },
