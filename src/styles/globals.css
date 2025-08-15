@@ -87,6 +87,18 @@ body {
     width: 0;
     height: 0;
   }
+  .hero-bg {
+    background: linear-gradient(135deg, #6B46C1 0%, #2DD4BF 100%);
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.btn-hover:hover {
+  transform: scale(1.05);
+}
 
   /* خط نازک کناری (سمت inline-end که با RTL/LTR هماهنگه) */
   .scrollbar-ghost::after {
