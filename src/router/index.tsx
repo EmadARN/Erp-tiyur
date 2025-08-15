@@ -6,6 +6,7 @@ import { wareHouseRoutes } from "@/modules/wareHouse/routes";
 import { authRoutes } from "@/modules/auth/routes";
 import { buysRoutes } from "@/modules/buys/routes";
 import { NotFoundPage, ServerErrorPage } from "@/modules/errors";
+import { LandingRoute } from "@/modules/landing/routes";
 
 export const AppRoutes = () => {
   const routes = [
@@ -14,6 +15,7 @@ export const AppRoutes = () => {
     ...buysRoutes,
     ...productionRoutes,
     ...wareHouseRoutes,
+    ...LandingRoute,
     {
       path: "/500",
       element: <ServerErrorPage />,
