@@ -103,6 +103,18 @@ const PoultryCuttingImportPage = () => {
           description="فیلترهای خود را تنظیم کنید یا محصول وارداتی جدیدی ایجاد کنید."
           icon={<FiBox className="w-12 h-12 text-blue-500" />}
         />
+        <CreateDialog
+          open={createIndex !== null}
+          onClose={() => setCreateIndex(null)}
+          onConfirm={handleCreateConfirm}
+          configs={getCreateDialogConfigs(kernelData)}
+          customMessage={
+            isKernelDataEmpty
+              ? "نمی‌توان سری برنامه‌ریزی جدیدی ایجاد کرد زیرا داده‌های ضروری (مانند کاربران) وجود ندارد."
+              : undefined
+          }
+          isConfirmDisabled={isKernelDataEmpty}
+        />
       </div>
     );
   }

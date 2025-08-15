@@ -103,6 +103,18 @@ const PlanningCellPage = () => {
           description="فیلترهای خود را تنظیم کنید یا سلول برنامه‌ریزی جدیدی ایجاد کنید."
           icon={<FiBox className="w-12 h-12 text-blue-500" />}
         />
+        <CreateDialog
+          open={createIndex !== null}
+          onClose={() => setCreateIndex(null)}
+          onConfirm={handleCreateConfirm}
+          configs={getCreateDialogConfigs(kernelData)}
+          customMessage={
+            isKernelDataEmpty
+              ? "نمی‌توان سلول برنامه‌ریزی جدیدی ایجاد کرد زیرا داده‌های ضروری (مانند نوع ورودی یا شناسه ورودی) وجود ندارد."
+              : undefined
+          }
+          isConfirmDisabled={isKernelDataEmpty}
+        />
       </div>
     );
   }
