@@ -1,7 +1,7 @@
 import http from "@/modules/shared/lib/httpService";
 import { axiosBaseQuery } from "@/modules/shared/lib/rtkQueryBase";
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { PoultryCuttingReturn, CreatePoultryCuttingReturnDto, PoultryCuttingReturnsResponse } from "../model/poultryCuttingReturnTypes";
+import type { PoultryCuttingReturn, CreatePoultryCuttingReturnDto, PoultryCuttingReturnsResponse } from "../model/poultryCuttingReturnType";
 
 export const poultryCuttingReturnApi = createApi({
     reducerPath: "poultryCuttingReturnsApi",
