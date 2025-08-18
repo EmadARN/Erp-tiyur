@@ -7,65 +7,78 @@ type DeepPartial<T> = {
 };
 
 export const tableHead: TableColumn[] = [
-    { columnName: "شناسه", row_id: "id", type: "string" },
-    { columnName: "اولویت", row_id: "priority", type: "number" },
-    { columnName: "نوع ورودی", row_id: "import_type", type: "string" },
-    { columnName: "شناسه ورودی", row_id: "import_id", type: "string" },
+    { columnName: "id", row_id: "id", type: "string" },
+    { columnName: "Priority", row_id: "priority", type: "number" },
+    { columnName: "import Type", row_id: "import_type", type: "string" },
+    { columnName: "import ID", row_id: "import_id", type: "string" },
 ];
 
-export function getCreateDialogConfigs({ import_types, import_ids }: KernelData): ConfigItem[] {
+export function getCreateDialogConfigs(): ConfigItem[] {
     return [
         {
             name: "priority",
-            label: "اولویت",
+            label: "Priority",
             type: "int-input",
             defaultValue: 1,
             required: true,
         },
         {
             name: "import_type",
-            label: "نوع ورودی",
+            label: "import Type",
             type: "select-box",
-            options: import_types,
-            defaultValue: import_types?.[0]?.value,
+            options: [
+
+                {label:'production external import', value:'production external import'},
+                {label:'production warehouse import', value:'production warehouse import'},
+                {label:'poultry cutting production productionUnit import', value:'poultry cutting production productionUnit import'},
+                {label:'poultry cutting production warehouse import', value:'poultry cutting production warehouse import'},
+
+            ],
+            defaultValue: 'poultry cutting production warehouse import',
             required: true,
         },
         {
             name: "import_id",
-            label: "شناسه ورودی",
-            type: "select-box",
-            options: import_ids,
-            defaultValue: import_ids?.[0]?.value,
+            label: "import ID",
+            type: "string-input",
+            defaultValue: "1",
             required: true,
         },
     ];
 }
 
-export function getUpdateDialogConfigs({ import_types, import_ids }: KernelData): ConfigItem[] {
+export function getUpdateDialogConfigs(): ConfigItem[] {
     return [
         {
             name: "priority",
-            label: "اولویت",
+            label: "Priority",
             type: "int-input",
             defaultValue: 1,
             required: true,
         },
         {
             name: "import_type",
-            label: "نوع ورودی",
+            label: "import Type",
             type: "select-box",
-            options: import_types,
-            defaultValue: import_types?.[0]?.value,
+            options: [
+
+                {label:'production external import', value:'production external import'},
+                {label:'production warehouse import', value:'production warehouse import'},
+                {label:'poultry cutting production productionUnit import', value:'poultry cutting production productionUnit import'},
+                {label:'poultry cutting production warehouse import', value:'poultry cutting production warehouse import'},
+
+            ],
+            defaultValue: 'poultry cutting production warehouse import',
             required: true,
         },
         {
             name: "import_id",
-            label: "شناسه ورودی",
-            type: "select-box",
-            options: import_ids,
-            defaultValue: import_ids?.[0]?.value,
+            label: "import ID",
+            type: "string-input",
+            defaultValue: "1",
             required: true,
         },
+
     ];
 }
 
@@ -79,7 +92,7 @@ export const updateDialogDocs: DeepPartial<PlanningCell> = {
 export const tableFilter: TableFilter[] = [
     {
         name: "priority",
-        label: "اولویت",
+        label: "Priority",
         type: "range",
         min: 0,
         max: 100,
@@ -88,18 +101,18 @@ export const tableFilter: TableFilter[] = [
     },
     {
         name: "import_type",
-        label: "نوع ورودی",
+        label: "Input Type",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی نوع ورودی",
+        placeholder: "Search Input Type",
         defaultValue: "",
     },
     {
         name: "import_id",
-        label: "شناسه ورودی",
+        label: "Input ID",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی شناسه ورودی",
+        placeholder: "Search Input ID",
         defaultValue: "",
     },
 ];

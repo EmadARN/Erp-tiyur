@@ -7,91 +7,92 @@ type DeepPartial<T> = {
 };
 
 export const tableHead: TableColumn[] = [
-    { columnName: "شناسه", row_id: "id", type: "string" },
-    { columnName: "صاحب محصول", row_id: "product_owner", type: "number" },
-    { columnName: "وضعیت", row_id: "status", type: "string" },
-    { columnName: "تاریخ ایجاد", row_id: "create.date", type: "string" },
-    { columnName: "کاربر ایجادکننده", row_id: "create.user", type: "string" },
-    { columnName: "تاریخ شروع", row_id: "start.date", type: "string" },
-    { columnName: "کاربر شروع‌کننده", row_id: "start.user", type: "string" },
-    { columnName: "تاریخ اتمام", row_id: "finish.date", type: "string" },
-    { columnName: "کاربر اتمام‌کننده", row_id: "finish.user", type: "string" },
+    { columnName: "ID", row_id: "id", type: "string" },
+    { columnName: "Product Owner", row_id: "product_owner.contact.name", type: "number" },
+    { columnName: "Status", row_id: "status", type: "string" },
+    { columnName: "Creation Date", row_id: "create.date", type: "string" },
+    { columnName: "Created By", row_id: "create.user", type: "string" },
+    { columnName: "Start Date", row_id: "start.date", type: "string" },
+    { columnName: "Started By", row_id: "start.user", type: "string" },
+    { columnName: "Finish Date", row_id: "finish.date", type: "string" },
+    { columnName: "Finished By", row_id: "finish.user", type: "string" },
 ];
 
-export function getCreateDialogConfigs({ product_owners }: KernelData): ConfigItem[] {
+export function getCreateDialogConfigs({ owners }: KernelData): ConfigItem[] {
     return [
         {
             name: "product_owner",
-            label: "صاحب محصول",
+            label: "Product Owner",
             type: "select-box",
-            options: product_owners,
-            defaultValue: product_owners?.[0]?.value,
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
     ];
 }
 
-export function getUpdateDialogConfigs({ product_owners, users, statuses }: KernelData): ConfigItem[] {
+export function getUpdateDialogConfigs({ owners }: KernelData): ConfigItem[] {
     return [
         {
             name: "product_owner",
-            label: "صاحب محصول",
+            label: "Product Owner",
             type: "select-box",
-            options: product_owners,
-            defaultValue: product_owners?.[0]?.value,
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
         {
             name: "create.date",
-            label: "تاریخ ایجاد",
+            label: "Creation Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "create.user",
-            label: "کاربر ایجادکننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Created By",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "start.date",
-            label: "تاریخ شروع",
+            label: "Start Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "start.user",
-            label: "کاربر شروع‌کننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Started By",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "finish.date",
-            label: "تاریخ اتمام",
+            label: "Finish Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "finish.user",
-            label: "کاربر اتمام‌کننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Finished By",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "status",
-            label: "وضعیت",
+            label: "Status",
             type: "select-box",
-            options: statuses,
-            defaultValue: statuses?.[0]?.value || "pending",
+            options: [
+                { label: "Pending", value: "pending" },
+                { label: "Started", value: "started" },
+                { label: "Finished", value: "finished" },
+            ],
+            defaultValue: "pending",
             required: true,
         },
     ];
@@ -118,41 +119,41 @@ export const updateDialogDocs: DeepPartial<ProductionSeries> = {
 export const tableFilter: TableFilter[] = [
     {
         name: "product_owner",
-        label: "صاحب محصول",
+        label: "Product Owner",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی صاحب محصول",
+        placeholder: "Search Product Owner",
         defaultValue: "",
     },
     {
         name: "status",
-        label: "وضعیت",
+        label: "Status",
         type: "select-box",
         options: [], // Populate dynamically from API
         defaultValue: "pending",
     },
     {
         name: "create__date",
-        label: "تاریخ ایجاد",
+        label: "Creation Date",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی تاریخ ایجاد",
+        placeholder: "Search Creation Date",
         defaultValue: "",
     },
     {
         name: "start__date",
-        label: "تاریخ شروع",
+        label: "Start Date",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی تاریخ شروع",
+        placeholder: "Search Start Date",
         defaultValue: "",
     },
     {
         name: "finish__date",
-        label: "تاریخ اتمام",
+        label: "Finish Date",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی تاریخ اتمام",
+        placeholder: "Search Finish Date",
         defaultValue: "",
     },
 ];

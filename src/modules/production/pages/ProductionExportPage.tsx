@@ -5,10 +5,10 @@ import { useGetProductionExportDetailsQuery } from "../api/productionExportApi";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
-  getCreateDialogConfigs,
-  getUpdateDialogConfigs,
-  tableFilter,
-  tableHead,
+    getCreateDialogConfigs,
+    getUpdateDialogConfigs,
+    tableFilter,
+    tableHead,
 } from "../model/productionExportIndex";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
@@ -21,173 +21,158 @@ import { useProductionExportData } from "../hooks/useProductionExportData";
 import { useProductionExportActions } from "../hooks/useProductionExportActions";
 
 const ProductionExportPage = () => {
-  const [createIndex, setCreateIndex] = useState<number | null>(null);
-  const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
+    const [createIndex, setCreateIndex] = useState<number | null>(null);
+    const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
-  const {
-    kernelData,
-    isLoading: isLoadingKernel,
-    isError: isErrorKernel,
-  } = useKernelData();
-  const {
-    productionExports,
-    isLoading: isLoadingProductionExports,
-    filterData,
-    setFilterData,
-    handleFilterOnChange,
-    handleSearch,
-  } = useProductionExportData();
-  const {
-    deleteHandler,
-    bulkDeleteHandler,
-    handleCreateConfirm,
-    handleUpdateConfirm,
-  } = useProductionExportActions();
+    const {
+        kernelData,
+        isLoading: isLoadingKernel,
+        isError: isErrorKernel,
+    } = useKernelData();
+    const {
+        productionExports,
+        isLoading: isLoadingProductionExports,
+        filterData,
+        setFilterData,
+        handleFilterOnChange,
+        handleSearch,
+    } = useProductionExportData();
+    const {
+        deleteHandler,
+        bulkDeleteHandler,
+        handleCreateConfirm,
+        handleUpdateConfirm,
+    } = useProductionExportActions();
 
-  const breadcrumbItems = [
-    { label: "داشبورد", href: "/dashboard" },
-    { label: "تولید", href: "/dashboard/production" },
-    { label: "محصولات صادراتی" },
-  ];
+    const breadcrumbItems = [
+        { label: "Dashboard", href: "/dashboard" },
+        { label: "Production", href: "/dashboard/production" },
+        { label: "Export Products" },
+    ];
 
-  const OnCreate = (index: number | null) => {
-    setCreateIndex(index);
-  };
+    const OnCreate = (index: number | null) => {
+        setCreateIndex(index);
+    };
 
-  const isLoading = isLoadingProductionExports || isLoadingKernel;
+    const isLoading = isLoadingProductionExports || isLoadingKernel;
 
-  if (isLoading) {
-    return <Loading />;
-  }
+    if (isLoading) {
+        return <Loading />;
+    }
 
-  if (isErrorKernel) {
-    return (
-      <NoData
-        title="خطا در بارگذاری داده‌های ضروری"
-        description="نمی‌توان داده‌های مورد نیاز مانند محصولات یا کاربران را بارگذاری کرد. لطفاً بعداً دوباره امتحان کنید."
-        icon={<FiBox className="w-12 h-12 text-red-500" />}
-      />
-    );
-  }
-
-  if (!productionExports?.data || productionExports.data.length === 0) {
-    return (
-      <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
-        <PageHeader
-          title="محصولات صادراتی"
-          breadcrumbItems={breadcrumbItems}
-          onCreate={() => OnCreate(1)}
-          createLabel="افزودن محصول صادراتی"
-        />
-        <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
-          <div className="w-full md:w-1/3">
-            <SearchInput
-              value={
-                typeof filterData.search === "string" ? filterData.search : ""
-              }
-              onSearch={handleSearch}
+    if (isErrorKernel) {
+        return (
+            <NoData
+                title="Error Loading Required Data"
+                description="Unable to load necessary data such as products or users. Please try again later."
+                icon={<FiBox className="w-12 h-12 text-red-500" />}
             />
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setFilterDrawerOpen(true)}
-            className="w-full md:w-auto"
-          >
-            <FiFilter className="mr-2" />
-            فیلترها
-          </Button>
+        );
+    }
+
+    if (!productionExports?.data || productionExports.data.length === 0) {
+        return (
+            <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+                <PageHeader
+                    title="Export Products"
+                    breadcrumbItems={breadcrumbItems}
+                    onCreate={() => OnCreate(1)}
+                    createLabel="Add Export Product"
+                />
+                <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
+                    <div className="w-full md:w-1/3">
+                        <SearchInput
+                            value={
+                                typeof filterData.search === "string" ? filterData.search : ""
+                            }
+                            onSearch={handleSearch}
+                        />
+                    </div>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFilterDrawerOpen(true)}
+                        className="w-full md:w-auto"
+                    >
+                        <FiFilter className="mr-2" />
+                        Filters
+                    </Button>
+                </div>
+                <NoData
+                    title="No Export Products Found"
+                    description="Adjust your filters or create a new export product."
+                    icon={<FiBox className="w-12 h-12 text-blue-500" />}
+                />
+                <CreateDialog
+                    open={createIndex !== null}
+                    onClose={() => setCreateIndex(null)}
+                    onConfirm={handleCreateConfirm}
+                    configs={getCreateDialogConfigs(kernelData)}
+                />
+            </div>
+        );
+    }
+
+    const isKernelDataEmpty =
+        !kernelData.products.length ||
+        !kernelData.owners.length;
+
+    return (
+        <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
+            <PageHeader
+                title="Export Products"
+                breadcrumbItems={breadcrumbItems}
+                onCreate={() => OnCreate(1)}
+                createLabel="Add Export Product"
+                isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
+            />
+
+            <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
+                <div className="w-full md:w-1/3">
+                    <SearchInput
+                        value={
+                            typeof filterData.search === "string" ? filterData.search : ""
+                        }
+                        onSearch={handleSearch}
+                    />
+                </div>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setFilterDrawerOpen(true)}
+                    className="w-full md:w-auto"
+                >
+                    <FiFilter className="mr-2" />
+                    Filters
+                </Button>
+            </div>
+
+            <DataTable
+                tableHead={tableHead}
+                data={productionExports.data ?? []}
+                deleteHandler={deleteHandler}
+                bulkDeleteHandler={bulkDeleteHandler}
+                useGetBuyProductDetailsQuery={useGetProductionExportDetailsQuery}
+                tableFilters={tableFilter}
+                filterData={filterData}
+                setFilterData={setFilterData}
+                applyFilter={handleFilterOnChange}
+                updateDialogConfigs={getUpdateDialogConfigs(kernelData)}
+                onUpdateConfirm={handleUpdateConfirm}
+                showFilterButton={false}
+                isFilterDrawerOpen={isFilterDrawerOpen}
+                onFilterDrawerClose={() => setFilterDrawerOpen(false)}
+                onFilterIconClick={() => setFilterDrawerOpen(true)}
+            />
+
+            <CreateDialog
+                open={createIndex !== null}
+                onClose={() => setCreateIndex(null)}
+                onConfirm={handleCreateConfirm}
+                configs={getCreateDialogConfigs(kernelData)}
+            />
         </div>
-        <NoData
-          title="هیچ محصول صادراتی یافت نشد"
-          description="فیلترهای خود را تنظیم کنید یا محصول صادراتی جدیدی ایجاد کنید."
-          icon={<FiBox className="w-12 h-12 text-blue-500" />}
-        />
-        <CreateDialog
-          open={createIndex !== null}
-          onClose={() => setCreateIndex(null)}
-          onConfirm={handleCreateConfirm}
-          configs={getCreateDialogConfigs(kernelData)}
-          customMessage={
-            isKernelDataEmpty
-              ? "نمی‌توان سری برنامه‌ریزی جدیدی ایجاد کرد زیرا داده‌های ضروری (مانند کاربران) وجود ندارد."
-              : undefined
-          }
-          isConfirmDisabled={isKernelDataEmpty}
-        />
-      </div>
     );
-  }
-
-  const isKernelDataEmpty =
-    !kernelData.products.length ||
-    !kernelData.receiver_delivery_units.length ||
-    !kernelData.product_owners.length ||
-    !kernelData.users.length ||
-    !kernelData.statuses.length;
-
-  return (
-    <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
-      <PageHeader
-        title="محصولات صادراتی"
-        breadcrumbItems={breadcrumbItems}
-        onCreate={() => OnCreate(1)}
-        createLabel="افزودن محصول صادراتی"
-        isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
-      />
-
-      <div className="flex flex-col md:flex-row items-center justify-between mb-2 mt-12 gap-4">
-        <div className="w-full md:w-1/3">
-          <SearchInput
-            value={
-              typeof filterData.search === "string" ? filterData.search : ""
-            }
-            onSearch={handleSearch}
-          />
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setFilterDrawerOpen(true)}
-          className="w-full md:w-auto"
-        >
-          <FiFilter className="mr-2" />
-          فیلترها
-        </Button>
-      </div>
-
-      <DataTable
-        tableHead={tableHead}
-        data={productionExports.data ?? []}
-        deleteHandler={deleteHandler}
-        bulkDeleteHandler={bulkDeleteHandler}
-        useGetProductionExportDetailsQuery={useGetProductionExportDetailsQuery}
-        tableFilters={tableFilter}
-        filterData={filterData}
-        setFilterData={setFilterData}
-        applyFilter={handleFilterOnChange}
-        updateDialogConfigs={getUpdateDialogConfigs(kernelData)}
-        onUpdateConfirm={handleUpdateConfirm}
-        showFilterButton={false}
-        isFilterDrawerOpen={isFilterDrawerOpen}
-        onFilterDrawerClose={() => setFilterDrawerOpen(false)}
-        onFilterIconClick={() => setFilterDrawerOpen(true)}
-      />
-
-      <CreateDialog
-        open={createIndex !== null}
-        onClose={() => setCreateIndex(null)}
-        onConfirm={handleCreateConfirm}
-        configs={getCreateDialogConfigs(kernelData)}
-        customMessage={
-          isKernelDataEmpty
-            ? "نمی‌توان محصول صادراتی جدیدی ایجاد کرد زیرا داده‌های ضروری (مانند محصولات، واحدها، یا کاربران) وجود ندارد."
-            : undefined
-        }
-        isConfirmDisabled={isKernelDataEmpty}
-      />
-    </div>
-  );
 };
 
 export default ProductionExportPage;

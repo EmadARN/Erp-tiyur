@@ -87,8 +87,8 @@ export const usePoultryCuttingExportActions = () => {
     const handleCreateConfirm = async (data: Record<string, any>) => {
         const formattedData: Partial<CreatePoultryCuttingExportDto> = {
             product: {
-                product: data.product?.product || 0,
-                product_owner: data.product?.product_owner || 0,
+                product: data.product?.product || '0',
+                product_owner: data.product?.product_owner || '0',
             },
             product_information: {
                 weight: data.product_information?.weight || 0,
