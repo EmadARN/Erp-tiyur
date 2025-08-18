@@ -119,7 +119,6 @@ const ProductionImportByCarPage = () => {
         !kernelData.cars.length ||
         !kernelData.products.length ||
         !kernelData.owners.length;
-    console.log(productionImportsByCar)
     return (
         <div className="p-6 bg-white rounded-xl shadow-sm min-h-screen">
             <PageHeader
