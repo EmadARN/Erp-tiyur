@@ -16,7 +16,7 @@ const buyApi = axios.create({
 });
 
 const productionApi = axios.create({
-  baseURL: import.meta.env.VITE_API_BUY_URL,
+  baseURL: import.meta.env.VITE_API_PRODUCTION_URL,
   withCredentials: true,
 });
 const wareHouseApi = axios.create({

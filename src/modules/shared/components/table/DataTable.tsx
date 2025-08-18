@@ -264,6 +264,12 @@ export const DataTable: React.FC<DataTableProps> = ({
                                   {value}
                                 </Button>
                               );
+                            case "boolean":
+                              return (
+                                  <span className="text-sm">
+                                     {value ? "✅" : "❌"}
+                                  </span>
+                              );
                             case "input":
                               return (
                                 <input

@@ -7,17 +7,17 @@ type DeepPartial<T> = {
 };
 
 export const tableHead: TableColumn[] = [
-    { columnName: "شناسه", row_id: "id", type: "string" },
-    { columnName: "تاریخ ایجاد", row_id: "create.date", type: "string" },
-    { columnName: "کاربر ایجادکننده", row_id: "create.user", type: "string" },
-    { columnName: "وضعیت اتمام", row_id: "is_finished", type: "boolean" },
+    { columnName: "ID", row_id: "id", type: "string" },
+    { columnName: "Created Date", row_id: "create.date", type: "string" },
+    { columnName: "Created By", row_id: "create.user", type: "string" },
+    { columnName: "Completion Status", row_id: "is_finished", type: "boolean" },
 ];
 
-export function getCreateDialogConfigs({ users }: KernelData): ConfigItem[] {
+export function getCreateDialogConfigs(): ConfigItem[] {
     return [
         {
             name: "is_finished",
-            label: "وضعیت اتمام",
+            label: "Completion Status",
             type: "switch",
             defaultValue: false,
             required: true,
@@ -25,28 +25,27 @@ export function getCreateDialogConfigs({ users }: KernelData): ConfigItem[] {
     ];
 }
 
-export function getUpdateDialogConfigs({ users }: KernelData): ConfigItem[] {
+export function getUpdateDialogConfigs(): ConfigItem[] {
     return [
         {
             name: "is_finished",
-            label: "وضعیت اتمام",
+            label: "Completion Status",
             type: "switch",
             defaultValue: false,
             required: true,
         },
         {
             name: "create.date",
-            label: "تاریخ ایجاد",
+            label: "Created Date",
             type: "string-input",
             defaultValue: "",
             required: false,
         },
         {
             name: "create.user",
-            label: "کاربر ایجادکننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Created By",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
     ];
@@ -64,22 +63,22 @@ export const updateDialogDocs: DeepPartial<PlanningSeries> = {
 export const tableFilter: TableFilter[] = [
     {
         name: "is_finished",
-        label: "وضعیت اتمام",
+        label: "Completion Status",
         type: "boolean",
         defaultValue: false,
     },
     {
         name: "create__date",
-        label: "تاریخ ایجاد",
+        label: "Created Date",
         type: "range-date",
         defaultValue: ["2025-01-01", "2025-12-31"],
     },
     {
         name: "create__user",
-        label: "کاربر ایجادکننده",
+        label: "Created By",
         type: "autocomplete",
         options: [], // Populate dynamically from API
-        placeholder: "جستجوی کاربر ایجادکننده",
+        placeholder: "Search Created By",
         defaultValue: "",
     },
 ];

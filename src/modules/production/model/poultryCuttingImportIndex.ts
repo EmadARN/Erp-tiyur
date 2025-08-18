@@ -7,25 +7,25 @@ type DeepPartial<T> = {
 };
 
 export const tableHead: TableColumn[] = [
-    { columnName: "شناسه", row_id: "id", type: "string" },
-    { columnName: "محصول", row_id: "product.product", type: "number" },
-    { columnName: "صاحب محصول", row_id: "product.product_owner", type: "number" },
-    { columnName: "وزن", row_id: "product_information.weight", type: "number" },
-    { columnName: "تعداد", row_id: "product_information.number", type: "number" },
-    { columnName: "وضعیت تولید", row_id: "production_status", type: "string" },
-    { columnName: "واحد اعزام", row_id: "dispatch_unit", type: "string" },
-    { columnName: "وضعیت اعزام", row_id: "dispatch.status", type: "boolean" },
-    { columnName: "وضعیت تأیید", row_id: "verified.status", type: "boolean" },
-    { columnName: "وضعیت لغو", row_id: "cancelled.status", type: "boolean" },
-    { columnName: "تاریخ ایجاد", row_id: "create_date.date", type: "string" },
-    { columnName: "وضعیت سری تولید", row_id: "poultry_cutting_production_series.status", type: "string" },
+    { columnName: "ID", row_id: "id", type: "string" },
+    { columnName: "Product", row_id: "product.product.name", type: "number" },
+    { columnName: "Product Owner", row_id: "product.product_owner.contact.name", type: "number" },
+    { columnName: "Weight", row_id: "product_information.weight", type: "number" },
+    { columnName: "Quantity", row_id: "product_information.number", type: "number" },
+    { columnName: "Production Status", row_id: "production_status", type: "string" },
+    { columnName: "Dispatch Unit", row_id: "dispatch_unit", type: "string" },
+    { columnName: "Dispatch Status", row_id: "dispatch.status", type: "boolean" },
+    { columnName: "Verification Status", row_id: "verified.status", type: "boolean" },
+    { columnName: "Cancellation Status", row_id: "cancelled.status", type: "boolean" },
+    { columnName: "Creation Date", row_id: "create_date.date", type: "string" },
+    { columnName: "Production Series Status", row_id: "poultry_cutting_production_series.status", type: "string" },
 ];
 
-export function getCreateDialogConfigs({ products, product_owners, dispatch_units, users, statuses }: KernelData): ConfigItem[] {
+export function getCreateDialogConfigs({ products, owners }: KernelData): ConfigItem[] {
     return [
         {
             name: "product.product",
-            label: "محصول",
+            label: "Product",
             type: "select-box",
             options: products,
             defaultValue: products?.[0]?.value,
@@ -33,102 +33,61 @@ export function getCreateDialogConfigs({ products, product_owners, dispatch_unit
         },
         {
             name: "product.product_owner",
-            label: "صاحب محصول",
+            label: "Product Owner",
             type: "select-box",
-            options: product_owners,
-            defaultValue: product_owners?.[0]?.value,
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
         {
             name: "product_information.weight",
-            label: "وزن",
-            type: "int-input",
-            defaultValue: 0,
-            required: true,
-        },
-        {
-            name: "product_information.number",
-            label: "تعداد",
+            label: "Weight",
             type: "int-input",
             defaultValue: 0,
             required: true,
         },
         {
             name: "dispatch_unit",
-            label: "واحد اعزام",
-            type: "select-box",
-            options: dispatch_units,
-            defaultValue: dispatch_units?.[0]?.value,
+            label: "Dispatch Unit",
+            type: "string-input",
+            defaultValue: "2025-08-14 10:26",
+            required: false,
+        },
+        {
+            name: "product_information.number",
+            label: "Quantity",
+            type: "int-input",
+            defaultValue: 0,
             required: true,
         },
         {
             name: "poultry_cutting_production_series.product_owner",
-            label: "صاحب محصول سری تولید",
-            type: "string-input",
-            defaultValue: "",
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.create.date",
-            label: "تاریخ ایجاد سری تولید",
-            type: "string-input",
-            defaultValue: "2025-08-14 10:26",
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.create.user",
-            label: "کاربر ایجادکننده سری تولید",
+            label: "Production Series Owner",
             type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.start.date",
-            label: "تاریخ شروع سری تولید",
-            type: "string-input",
-            defaultValue: "2025-08-14 10:26",
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.start.user",
-            label: "کاربر شروع‌کننده سری تولید",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.finished.date",
-            label: "تاریخ اتمام سری تولید",
-            type: "string-input",
-            defaultValue: "2025-08-14 10:26",
-            required: true,
-        },
-        {
-            name: "poultry_cutting_production_series.finished.user",
-            label: "کاربر اتمام‌کننده سری تولید",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
         {
             name: "poultry_cutting_production_series.status",
-            label: "وضعیت سری تولید",
+            label: "Production Series Status",
             type: "select-box",
-            options: statuses,
-            defaultValue: statuses?.[0]?.value || "pending",
+            options: [
+                { label: "Pending", value: "pending" },
+                { label: "Started", value: "started" },
+                { label: "Finished", value: "finished" },
+            ],
+            defaultValue: "pending",
             required: true,
         },
     ];
 }
 
-export function getUpdateDialogConfigs({ products, product_owners, dispatch_units, users, statuses }: KernelData): ConfigItem[] {
+export function getUpdateDialogConfigs({ products, owners }: KernelData): ConfigItem[] {
     return [
         {
             name: "product.product",
-            label: "محصول",
+            label: "Product",
             type: "select-box",
             options: products,
             defaultValue: products?.[0]?.value,
@@ -136,261 +95,260 @@ export function getUpdateDialogConfigs({ products, product_owners, dispatch_unit
         },
         {
             name: "product.product_owner",
-            label: "صاحب محصول",
+            label: "Product Owner",
             type: "select-box",
-            options: product_owners,
-            defaultValue: product_owners?.[0]?.value,
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
         {
             name: "product_information.weight",
-            label: "وزن",
+            label: "Weight",
             type: "int-input",
             defaultValue: 0,
             required: true,
         },
         {
             name: "product_information.number",
-            label: "تعداد",
+            label: "Quantity",
             type: "int-input",
             defaultValue: 0,
             required: true,
         },
         {
             name: "production_status",
-            label: "وضعیت تولید",
+            label: "Production Status",
             type: "select-box",
-            options: statuses,
-            defaultValue: statuses?.[0]?.value || "pending",
+            options: [
+                { label: "Pending", value: "pending" },
+                { label: "Started", value: "started" },
+                { label: "Finished", value: "finished" },
+            ],
+            defaultValue: "pending",
             required: true,
         },
         {
             name: "dispatch_unit",
-            label: "واحد اعزام",
-            type: "select-box",
-            options: dispatch_units,
-            defaultValue: dispatch_units?.[0]?.value,
-            required: true,
+            label: "Dispatch Unit",
+            type: "string-input",
+            defaultValue: "2025-08-14 10:26",
+            required: false,
         },
         {
             name: "dispatch.status",
-            label: "وضعیت اعزام",
+            label: "Dispatch Status",
             type: "switch",
             defaultValue: false,
             required: false,
         },
         {
             name: "dispatch.user_date.date",
-            label: "تاریخ اعزام",
+            label: "Dispatch Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "dispatch.user_date.user",
-            label: "کاربر اعزام‌کننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Dispatch User",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "verified.status",
-            label: "وضعیت تأیید",
+            label: "Verification Status",
             type: "switch",
             defaultValue: false,
             required: false,
         },
         {
             name: "verified.user_date.date",
-            label: "تاریخ تأیید",
+            label: "Verification Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "verified.user_date.user",
-            label: "کاربر تأییدکننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Verification User",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "cancelled.status",
-            label: "وضعیت لغو",
+            label: "Cancellation Status",
             type: "switch",
             defaultValue: false,
             required: false,
         },
         {
             name: "cancelled.user_date.date",
-            label: "تاریخ لغو",
+            label: "Cancellation Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "cancelled.user_date.user",
-            label: "کاربر لغوکننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Cancellation User",
+            type: "string-input",
+            defaultValue: "",
             required: false,
         },
         {
             name: "create_date.date",
-            label: "تاریخ ایجاد",
+            label: "Creation Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "create_date.user",
-            label: "کاربر ایجادکننده",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Creation User",
+            type: "string-input",
+            defaultValue: "2025-08-14 10:26",
             required: false,
         },
         {
             name: "poultry_cutting_production_series.product_owner",
-            label: "صاحب محصول سری تولید",
-            type: "string-input",
-            defaultValue: "",
+            label: "Production Series Owner",
+            type: "select-box",
+            options: owners,
+            defaultValue: owners?.[0]?.value,
             required: true,
         },
         {
             name: "poultry_cutting_production_series.create.date",
-            label: "تاریخ ایجاد سری تولید",
+            label: "Production Series Creation Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.create.user",
-            label: "کاربر ایجادکننده سری تولید",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Production Series Creation User",
+            type: "string-input",
+            defaultValue: "",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.start.date",
-            label: "تاریخ شروع سری تولید",
+            label: "Production Series Start Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.start.user",
-            label: "کاربر شروع‌کننده سری تولید",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Production Series Start User",
+            type: "string-input",
+            defaultValue: "",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.finished.date",
-            label: "تاریخ اتمام سری تولید",
+            label: "Production Series Finish Date",
             type: "string-input",
             defaultValue: "2025-08-14 10:26",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.finished.user",
-            label: "کاربر اتمام‌کننده سری تولید",
-            type: "select-box",
-            options: users,
-            defaultValue: users?.[0]?.value,
+            label: "Production Series Finish User",
+            type: "string-input",
+            defaultValue: "2025-08-14 10:26",
             required: true,
         },
         {
             name: "poultry_cutting_production_series.status",
-            label: "وضعیت سری تولید",
+            label: "Production Series Status",
             type: "select-box",
-            options: statuses,
-            defaultValue: statuses?.[0]?.value || "pending",
+            options: [
+                { label: "Pending", value: "pending" },
+                { label: "Started", value: "started" },
+                { label: "Finished", value: "finished" },
+            ],
+            defaultValue: "pending",
             required: true,
         },
     ];
 }
-
-export const updateDialogDocs: DeepPartial<PoultryCuttingImport> = {
-    id: "156",
-    product: {
-        product: 0,
-        product_owner: 0,
+export const updateDialogDocs = {
+    "id": "162",
+    "product": {
+        "product": 0,
+        "product_owner": 0
     },
-    product_information: {
-        weight: 0,
-        number: 0,
+    "product_information": {
+        "weight": 0,
+        "number": 0
     },
-    production_status: "pending",
-    dispatch_unit: "",
-    dispatch: {
-        status: false,
-        user_date: {
-            date: "2025-08-14 10:26",
-            user: "",
+    "production_status": "pending",
+    "dispatch_unit": "",
+    "dispatch": {
+        "status": false,
+        "user_date": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
+        }
+    },
+    "verified": {
+        "status": false,
+        "user_date": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
+        }
+    },
+    "cancelled": {
+        "status": false,
+        "user_date": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
+        }
+    },
+    "create_date": {
+        "date": "2025-08-18 05:16",
+        "user": "string"
+    },
+    "poultry_cutting_production_series": {
+        "product_owner": "",
+        "create": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
         },
-    },
-    verified: {
-        status: false,
-        user_date: {
-            date: "2025-08-14 10:26",
-            user: "",
+        "start": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
         },
-    },
-    cancelled: {
-        status: false,
-        user_date: {
-            date: "2025-08-14 10:26",
-            user: "",
+        "finished": {
+            "date": "2025-08-18 05:16",
+            "user": "string"
         },
-    },
-    create_date: {
-        date: "2025-08-14 10:26",
-        user: "",
-    },
-    poultry_cutting_production_series: {
-        product_owner: "",
-        create: {
-            date: "2025-08-14 10:26",
-            user: "",
-        },
-        start: {
-            date: "2025-08-14 10:26",
-            user: "",
-        },
-        finished: {
-            date: "2025-08-14 10:26",
-            user: "",
-        },
-        status: "pending",
-    },
-};
-
+        "status": "pending"
+    }
+}
 export const tableFilter: TableFilter[] = [
     {
         name: "product__product",
-        label: "محصول",
+        label: "Product",
         type: "autocomplete",
-        options: [], // Populate dynamically from API
-        placeholder: "جستجوی محصول",
+        options: [],
+        placeholder: "Search Product",
         defaultValue: "",
     },
     {
         name: "product__product_owner",
-        label: "صاحب محصول",
+        label: "Product Owner",
         type: "autocomplete",
-        options: [], // Populate dynamically from API
-        placeholder: "جستجوی صاحب محصول",
+        options: [],
+        placeholder: "Search Product Owner",
         defaultValue: "",
     },
     {
         name: "product_information__weight",
-        label: "وزن",
+        label: "Weight",
         type: "range",
         min: 0,
         max: 1000,
@@ -399,7 +357,7 @@ export const tableFilter: TableFilter[] = [
     },
     {
         name: "product_information__number",
-        label: "تعداد",
+        label: "Quantity",
         type: "range",
         min: 0,
         max: 1000,
@@ -408,48 +366,48 @@ export const tableFilter: TableFilter[] = [
     },
     {
         name: "production_status",
-        label: "وضعیت تولید",
+        label: "Production Status",
         type: "select-box",
-        options: [], // Populate dynamically from API
+        options: [],
         defaultValue: "pending",
     },
     {
         name: "dispatch_unit",
-        label: "واحد اعزام",
+        label: "Dispatch Unit",
         type: "autocomplete",
-        options: [], // Populate dynamically from API
-        placeholder: "جستجوی واحد اعزام",
+        options: [],
+        placeholder: "Search Dispatch Unit",
         defaultValue: "",
     },
     {
         name: "dispatch__status",
-        label: "وضعیت اعزام",
+        label: "Dispatch Status",
         type: "boolean",
         defaultValue: false,
     },
     {
         name: "verified__status",
-        label: "وضعیت تأیید",
+        label: "Verification Status",
         type: "boolean",
         defaultValue: false,
     },
     {
         name: "cancelled__status",
-        label: "وضعیت لغو",
+        label: "Cancellation Status",
         type: "boolean",
         defaultValue: false,
     },
     {
         name: "create_date__date",
-        label: "تاریخ ایجاد",
+        label: "Creation Date",
         type: "range-date",
         defaultValue: ["2025-01-01", "2025-12-31"],
     },
     {
         name: "poultry_cutting_production_series__status",
-        label: "وضعیت سری تولید",
+        label: "Production Series Status",
         type: "select-box",
-        options: [], // Populate dynamically from API
+        options: [],
         defaultValue: "pending",
     },
 ];

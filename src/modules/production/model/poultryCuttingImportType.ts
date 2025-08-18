@@ -18,8 +18,8 @@ export interface KernelData {
  * Represents the product information.
  */
 export interface Product {
-  product: number;
-  product_owner: number;
+  product: string;
+  product_owner: string;
 }
 
 /**
