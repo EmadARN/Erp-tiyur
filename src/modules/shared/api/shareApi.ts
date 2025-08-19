@@ -60,13 +60,33 @@ export const shareApi = createApi({
       }),
       providesTags: ["shareApi"],
     }),
+
+    getUnits: builder.query<any, any>({
+      query: (filters = {}) => ({
+        url: "/admin/product/unit/",
+        method: "get",
+        params: filters,
+      }),
+      providesTags: ["shareApi"],
+    }),
+
+    getRoles: builder.query<any, any>({
+      query: (filters = {}) => ({
+        url: "/admin/accounts/role/",
+        method: "get",
+        params: filters,
+      }),
+      providesTags: ["shareApi"],
+    }),
   }),
 });
 
 export const {
   useGetProductQuery,
+  useGetUnitsQuery,
   useGetProductOwnerQuery,
   useGetCarQuery,
+  useGetRolesQuery,
   useGetDriverQuery,
   useGetAgricultureQuery,
   useGetCityQuery,

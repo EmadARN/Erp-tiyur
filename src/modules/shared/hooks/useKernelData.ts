@@ -5,6 +5,8 @@ import {
   useGetCarQuery,
   useGetDriverQuery,
   useGetAgricultureQuery,
+  useGetUnitsQuery,
+  useGetRolesQuery,
 } from "@/modules/shared/api/shareApi";
 import type {
   ProductType,
@@ -37,16 +39,30 @@ export const useKernelData = () => {
     isError: isErrorDrivers,
   } = useGetDriverQuery({});
   const {
+    data: unitsData,
+    isLoading: isLoadingUnit,
+    isError: isErrorUnit,
+  } = useGetUnitsQuery({});
+
+  const {
     data: agricultureData,
     isLoading: isLoadingAgriculture,
     isError: isErrorAgriculture,
   } = useGetAgricultureQuery({});
+
+  const {
+    data: rolesData,
+    isLoading: isLoadingRoles,
+    isError: isErrorRoles,
+  } = useGetRolesQuery({});
 
   const isLoading =
     isLoadingProducts ||
     isLoadingOwners ||
     isLoadingCars ||
     isLoadingDrivers ||
+    isLoadingUnit ||
+    isLoadingRoles||
     isLoadingAgriculture;
 
   const isError =
@@ -54,6 +70,8 @@ export const useKernelData = () => {
     isErrorOwners ||
     isErrorCars ||
     isErrorDrivers ||
+    isErrorUnit ||
+    isErrorRoles||
     isErrorAgriculture;
 
   const kernelData: KernelData = useMemo(() => {
@@ -83,8 +101,19 @@ export const useKernelData = () => {
           value: String(item.id),
           label: item.name,
         })) || [],
+        units:
+        unitsData?.map((item:any) => ({
+          value: String(item.id),
+          label: item.name,
+        })) || [],
+
+      roles:
+        rolesData?.map((item:any) => ({
+          value: String(item.id),
+          label: item.role_name,
+        })) || [],
     };
-  }, [productsData, ownersData, carsData, driversData, agricultureData]);
+  }, [productsData, ownersData, carsData, driversData, agricultureData,unitsData,rolesData]);
 
   return { kernelData, isLoading, isError };
 };

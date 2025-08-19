@@ -18,17 +18,19 @@ import { orderApi } from "@/modules/sales/api/orderApi";
 import { orderItemsApi } from "@/modules/sales/api/orderItemsApi";
 import { truckLoadingApi } from "@/modules/sales/api/truckLoadingApi";
 import { transactionApi } from "@/modules/wareHouse/api/transactionApi";
-import {planningSeriesApi} from "@/modules/production/api/plannigSeriesApi.ts";
-import {planningCellApi} from "@/modules/production/api/planningCellApi.ts";
-import {poultryCuttingExportApi} from "@/modules/production/api/poultryCuttingExportApi.ts";
-import {poultryCuttingImportApi} from "@/modules/production/api/poultryCuttingImportApi.ts";
-import {poultryCuttingReturnApi} from "@/modules/production/api/poultryCuttingReturnApi.ts";
-import {poultryCuttingSeriesApi} from "@/modules/production/api/poultryCuttingSeriesApi.ts";
-import {productionExportApi} from "@/modules/production/api/productionExportApi.ts";
-import {productionImportByCarApi} from "@/modules/production/api/productionImportByCarApi.ts";
-import {productionImportFromWarehouseApi} from "@/modules/production/api/productionImportFromWarehouseApi.ts";
-import {productionReturnProductApi} from "@/modules/production/api/productionReturnProductApi.ts";
-import {productionSeriesApi} from "@/modules/production/api/productionSeriesApi.ts";
+import { planningSeriesApi } from "@/modules/production/api/plannigSeriesApi.ts";
+import { planningCellApi } from "@/modules/production/api/planningCellApi.ts";
+import { poultryCuttingExportApi } from "@/modules/production/api/poultryCuttingExportApi.ts";
+import { poultryCuttingImportApi } from "@/modules/production/api/poultryCuttingImportApi.ts";
+import { poultryCuttingReturnApi } from "@/modules/production/api/poultryCuttingReturnApi.ts";
+import { poultryCuttingSeriesApi } from "@/modules/production/api/poultryCuttingSeriesApi.ts";
+import { productionExportApi } from "@/modules/production/api/productionExportApi.ts";
+import { productionImportByCarApi } from "@/modules/production/api/productionImportByCarApi.ts";
+import { productionImportFromWarehouseApi } from "@/modules/production/api/productionImportFromWarehouseApi.ts";
+import { productionReturnProductApi } from "@/modules/production/api/productionReturnProductApi.ts";
+import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
+import { contactApi } from "@/modules/kernel/api/ContactApi";
+import { userApi } from "@/modules/kernel/api/userApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -44,10 +46,10 @@ export const rootReducer = combineReducers({
   [poultryCuttingSeriesApi.reducerPath]: poultryCuttingSeriesApi.reducer,
   [productionExportApi.reducerPath]: productionExportApi.reducer,
   [productionImportByCarApi.reducerPath]: productionImportByCarApi.reducer,
-  [productionImportFromWarehouseApi.reducerPath]: productionImportFromWarehouseApi.reducer,
+  [productionImportFromWarehouseApi.reducerPath]:
+    productionImportFromWarehouseApi.reducer,
   [productionReturnProductApi.reducerPath]: productionReturnProductApi.reducer,
   [productionSeriesApi.reducerPath]: productionSeriesApi.reducer,
-
 
   //saleApi:
   [salesApi.reducerPath]: salesApi.reducer,
@@ -56,7 +58,6 @@ export const rootReducer = combineReducers({
   [orderApi.reducerPath]: orderApi.reducer,
   [orderItemsApi.reducerPath]: orderItemsApi.reducer,
   [truckLoadingApi.reducerPath]: truckLoadingApi.reducer,
-
 
   //buysApi:
   [buyProductApi.reducerPath]: buyProductApi.reducer,
@@ -69,6 +70,11 @@ export const rootReducer = combineReducers({
   [warehouseApi.reducerPath]: warehouseApi.reducer,
   [inventoryApi.reducerPath]: inventoryApi.reducer,
   [transactionApi.reducerPath]: transactionApi.reducer,
+
+  //kernel
+  [contactApi.reducerPath]: contactApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
+  
 
   uiSetting: uiSettingsReducer,
   theme: themeReducer,
