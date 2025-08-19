@@ -38,7 +38,7 @@ const Sidebar = () => {
   return (
     <motion.aside
       className={cn(
-        "relative top-0 h-screen flex flex-col transition-colors duration-300",
+        "relative top-0 h-screen flex flex-col transition-colors  duration-300",
         rtl ? "right-0 text-right" : "left-0 text-left",
         { "items-center": isCollapsed }
       )}
