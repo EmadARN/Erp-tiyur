@@ -1,57 +1,91 @@
-import { GiCow } from "react-icons/gi";
-import { FaShoppingCart, FaDollarSign, FaWarehouse } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaDollarSign,
+  FaIndustry,
+  FaWarehouse,
+} from "react-icons/fa";
 import type { IconType } from "react-icons/lib";
 
+export interface StatCardStat {
+  label: string;
+  value: string;
+}
+
+export type TrendType = "up" | "down" | "check" | "alert";
+
+export interface StatCardTrend {
+  type: TrendType;
+  value: string;
+  desc: string;
+}
+
 export interface StatCardData {
-    id: string;
-    title: string;
-    value: string;
-    change: string;
-    changeType: "up" | "down";
-    description: string;
-    color: string;
-    icon: IconType;
+  id: string;
+  title: string;
+  gradient: string;
+  icon: IconType;
+  stat: string;
+  desc?: string;
+  stats?: StatCardStat[];
+  trend?: StatCardTrend;
+  statusDot?: string;
 }
 
 export const statCards: StatCardData[] = [
-    {
-        id: "production",
-        title: "Production",
-        value: "320 Heads",
-        change: "+5%",
-        changeType: "up",
-        description: "vs last week",
-        color: "from-blue-500 to-blue-600",
-        icon: GiCow,
-    },
-    {
-        id: "buy",
-        title: "Buy",
-        value: "210 Heads",
-        change: "-3%",
-        changeType: "down",
-        description: "vs last week",
-        color: "from-green-500 to-green-600",
-        icon: FaShoppingCart,
-    },
-    {
-        id: "sell",
-        title: "Sell",
-        value: "$45,200",
-        change: "+12%",
-        changeType: "up",
-        description: "vs last week",
-        color: "from-yellow-500 to-yellow-600",
-        icon: FaDollarSign,
-    },
-    {
-        id: "warehouse",
-        title: "Warehouse",
-        value: "82% Capacity",
-        change: "+4%",
-        changeType: "up",
-        description: "inventory usage",
-        color: "from-purple-500 to-purple-600",
-        icon: FaWarehouse,
-    },
+  {
+    id: "buy",
+    title: "Buy",
+    gradient: "from-green-700 via-green-600 to-green-500",
+    icon: FaShoppingCart,
+    stat: "1,247",
+    desc: "Livestock purchased this month with average weight of 485kg per head",
+    stats: [
+      { label: "Total Cost", value: "$542,800" },
+      { label: "Avg Price/Head", value: "$435" },
+    ],
+    trend: { type: "up", value: "+12.3%", desc: "vs last month" },
+    statusDot: "bg-green-500",
+  },
+  {
+    id: "sell",
+    title: "Sell",
+    gradient: "from-blue-800 via-blue-700 to-blue-600",
+    icon: FaDollarSign,
+    stat: "$847K",
+    desc: "Revenue from meat products and byproducts sold to retailers and distributors",
+    stats: [
+      { label: "Units Sold", value: "2,340 tons" },
+      { label: "Avg Price/kg", value: "$8.45" },
+    ],
+    trend: { type: "up", value: "+18.7%", desc: "vs last month" },
+    statusDot: "bg-blue-500",
+  },
+  {
+    id: "production",
+    title: "Production",
+    gradient: "from-orange-800 via-orange-600 to-orange-500",
+    icon: FaIndustry,
+    stat: "1,156",
+    desc: "Animals processed with 87.4% yield efficiency and premium quality standards",
+    stats: [
+      { label: "Meat Yield", value: "1,890 tons" },
+      { label: "Efficiency", value: "87.4%" },
+    ],
+    trend: { type: "check", value: "On Target", desc: "Quality: Grade A" },
+    statusDot: "bg-orange-500",
+  },
+  {
+    id: "warehouse",
+    title: "Warehouse",
+    gradient: "from-purple-800 via-purple-700 to-purple-600",
+    icon: FaWarehouse,
+    stat: "78.4%",
+    desc: "Storage capacity utilization across cold storage and dry goods facilities",
+    stats: [
+      { label: "Total Capacity", value: "2,450 tons" },
+      { label: "Available", value: "529 tons" },
+    ],
+    trend: { type: "alert", value: "5 Alerts", desc: "Low stock items" },
+    statusDot: "bg-purple-500",
+  },
 ];
