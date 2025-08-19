@@ -6,12 +6,17 @@ import BankAccount from "./pages/bankAccountPage.tsx";
 import OrderInvoice from "@/modules/buys/pages/orderInvoicePage.tsx";
 import OrderPayment from "@/modules/buys/pages/orderPaymentPage.tsx";
 import PurchaseOrderPage from "./pages/PurchaseOrderPage.tsx";
+import { DashboardOverview } from "../home/index.ts";
 
 export const buysRoutes: RouteObject[] = [
   {
     path: "/dashboard",
     element: React.createElement(DashboardLayout),
     children: [
+      {
+        index: true,
+        element: React.createElement(DashboardOverview),
+      },
       {
         path: "buy/product",
         element: React.createElement(BuyPage),

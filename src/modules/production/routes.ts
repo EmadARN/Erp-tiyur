@@ -15,12 +15,17 @@ import {
   ProductionReturnProductPage,
   ProductionSeriesPage,
 } from "./index";
+import { DashboardOverview } from "../home";
 
 export const productionRoutes: RouteObject[] = [
   {
     path: "/dashboard",
     element: React.createElement(DashboardLayout),
     children: [
+      {
+        index: true,
+        element: React.createElement(DashboardOverview),
+      },
       { path: "production/product", element: React.createElement(ProductionPage) },
       { path: "production/series", element: React.createElement(ProductionSeriesPage) },
       { path: "production/export", element: React.createElement(ProductionExportPage) },

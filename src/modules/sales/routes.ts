@@ -7,6 +7,7 @@ import LoadedProductPage from "./pages/LoadedProductPage";
 import OrderPage from "@/modules/sales/pages/orderPage.tsx";
 import OrderItemsPage from "@/modules/sales/pages/OrderItemsPage.tsx";
 import TruckLoadingPage from "@/modules/sales/pages/TruckLoadingPage.tsx";
+import { DashboardOverview } from "../home";
 
 
 export const saleRoutes: RouteObject[] = [
@@ -14,6 +15,10 @@ export const saleRoutes: RouteObject[] = [
     path: "/dashboard",
     element: React.createElement(DashboardLayout),
     children: [
+      {
+        index: true,
+        element: React.createElement(DashboardOverview),
+      },
       {
         path: "sale/product",
         element: React.createElement(SalePage),
@@ -37,7 +42,7 @@ export const saleRoutes: RouteObject[] = [
       {
         path: "sale/truck-loading",
         element: React.createElement(TruckLoadingPage),
-      },    ],
-    
+      },],
+
   },
 ];

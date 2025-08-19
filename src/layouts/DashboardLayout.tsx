@@ -30,14 +30,14 @@ const DashboardLayout = () => {
       </div>
 
       {/* بخش محتوای اصلی */}
+
       <div
-        className={cn(
-          "flex flex-1 flex-col",
-          // در موبایل padding جانبی کمتر و در دسکتاپ فاصله به sidebar
-          rtl
-            ? "mr-0 sm:mr-4 md:mr-6 lg:mr-12"
-            : "ml-0 sm:ml-4 md:ml-6 lg:ml-12"
-        )}
+          className={cn(
+              "flex flex-1 flex-col min-w-0", // ⬅ min-w-0 اضافه شد
+              rtl
+                  ? "mr-0 sm:mr-4 md:mr-6 lg:mr-12"
+                  : "ml-0 sm:ml-4 md:ml-6 lg:ml-12"
+          )}
       >
         <Header />
         <main className="p-4 overflow-auto min-h-0 flex-1">
