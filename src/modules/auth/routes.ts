@@ -10,6 +10,7 @@ export const authRoutes: RouteObject[] = [
         path: "login",
         element:  React.createElement(LoginPage),
       },
+      
     ],
   },
 ];

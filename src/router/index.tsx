@@ -2,34 +2,42 @@ import { useRoutes } from "react-router-dom";
 import { saleRoutes } from "@/modules/sales/routes";
 import { productionRoutes } from "@/modules/production/routes";
 import { wareHouseRoutes } from "@/modules/wareHouse/routes";
-
 import { authRoutes } from "@/modules/auth/routes";
 import { buysRoutes } from "@/modules/buys/routes";
 import { NotFoundPage, ServerErrorPage } from "@/modules/errors";
 import { LandingRoute } from "@/modules/landing/routes";
 import { kernelRoutes } from "@/modules/kernel/routes";
 import { HomeRoutes } from "@/modules/home/route";
+import { RequireAuth } from "@/modules/auth/RequireAuth";
+import { GuestOnly } from "@/modules/auth/GuestOnly";
 
 export const AppRoutes = () => {
   const routes = [
-    ...HomeRoutes,
-    ...saleRoutes,
-    ...authRoutes,
-    ...buysRoutes,
-    ...productionRoutes,
-    ...wareHouseRoutes,
+    // مسیرهای عمومی (همه می‌بینن)
     ...LandingRoute,
-    ...kernelRoutes,
+
+    // مسیرهایی که فقط برای مهمان‌ها (غیر لاگین) هستن
     {
-      path: "/500",
-      element: <ServerErrorPage />,
+      element: <GuestOnly />,
+      children: [...authRoutes], // login, register, forgot password ...
     },
+
+    // مسیرهایی که نیاز به لاگین دارن
     {
-      path: "*",
-      element: <NotFoundPage />,
+      element: <RequireAuth />,
+      children: [
+        ...HomeRoutes,
+        ...saleRoutes,
+        ...buysRoutes,
+        ...productionRoutes,
+        ...wareHouseRoutes,
+        ...kernelRoutes,
+      ],
     },
+
+    { path: "/500", element: <ServerErrorPage /> },
+    { path: "*", element: <NotFoundPage /> },
   ];
 
-  const element = useRoutes(routes);
-  return element;
+  return useRoutes(routes);
 };
