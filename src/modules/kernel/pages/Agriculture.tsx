@@ -9,7 +9,7 @@ import {
   getUpdateDialogConfigs,
   tableFilter,
   tableHead,
-} from "../model/agricultureIndex.ts";
+} from "../model/AgricultureIndex.ts";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";

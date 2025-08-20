@@ -31,6 +31,13 @@ import { productionReturnProductApi } from "@/modules/production/api/productionR
 import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
+import { driverApi } from "@/modules/kernel/api/DriverApi";
+import { agricultureApi } from "@/modules/kernel/api/agricultureApi";
+import { cityApi } from "@/modules/kernel/api/cityApi";
+import { productApi } from "@/modules/kernel/api/productApi";
+import { productCategoryApi } from "@/modules/kernel/api/productCategoryApi";
+import { productOwnerApi } from "@/modules/kernel/api/productOwnerApi";
+import { unitApi } from "@/modules/kernel/api/unitApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -74,6 +81,13 @@ export const rootReducer = combineReducers({
   //kernel
   [contactApi.reducerPath]: contactApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [driverApi.reducerPath]: driverApi.reducer,
+  [agricultureApi.reducerPath]: agricultureApi.reducer,
+  [cityApi.reducerPath]: cityApi.reducer,
+  [productApi.reducerPath]: productApi.reducer,
+  [productCategoryApi.reducerPath]: productCategoryApi.reducer,
+  [productOwnerApi.reducerPath]: productOwnerApi.reducer,
+  [unitApi.reducerPath]: unitApi.reducer,
   
 
   uiSetting: uiSettingsReducer,

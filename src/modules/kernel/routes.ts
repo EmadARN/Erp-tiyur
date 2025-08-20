@@ -2,7 +2,12 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 import React from "react";
 import type { RouteObject } from "react-router-dom";
 import Contact from "./pages/Contact.tsx";
-import user from "./pages/User.tsx";
+import agriculture from "./pages/Agriculture.tsx";
+import Driver from "./pages/Driver.tsx";
+import Product from "./pages/Product.tsx";
+import ProductCategory from "./pages/productCategory.tsx";
+import productOwner from "./pages/ProductOwner.tsx";
+import unit from "./pages/Unit.tsx";
 
 export const kernelRoutes: RouteObject[] = [
   {
@@ -14,9 +19,31 @@ export const kernelRoutes: RouteObject[] = [
         element: React.createElement(Contact),
       },
       {
-        path: "kernel/user",
-        element: React.createElement(user),
+        path: "kernel/agriculture",
+        element: React.createElement(agriculture),
       },
+      {
+        path: "kernel/driver",
+        element: React.createElement(Driver),
+      },
+      {
+        path: "kernel/product",
+        element: React.createElement(Product),
+      },
+      {
+        path: "kernel/productcategory",
+        element: React.createElement(ProductCategory),
+      },
+      {
+        path: "kernel/productowner",
+        element: React.createElement(productOwner),
+      },
+      {
+        path: "kernel/unit",
+        element: React.createElement(unit),
+      },
+
+
     ],
   },
 ];
