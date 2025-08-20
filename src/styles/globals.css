@@ -116,6 +116,38 @@ body {
   .scrollbar-ghost:hover::after {
     opacity: 0.3;
   }
+
+  .react-hot-toast > div {
+    min-width: 300px !important;
+    max-width: 400px !important;
+  }
+
+  @keyframes float_slow {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-4px);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-float_slow {
+    animation: float_slow 3s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    animation: shimmer 3s infinite;
+  }
 }
 
 @layer base {
@@ -135,36 +167,4 @@ body {
     color: rgb(var(--foreground));
     font-size: var(--app-font-size);
   }
-}
-
-.react-hot-toast > div {
-  min-width: 300px !important;
-  max-width: 400px !important;
-}
-
-@keyframes float_slow {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
-
-.animate-float_slow {
-  animation: float_slow 3s ease-in-out infinite;
-}
-
-.animate-shimmer {
-  animation: shimmer 3s infinite;
 }

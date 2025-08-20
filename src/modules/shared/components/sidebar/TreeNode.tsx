@@ -10,7 +10,6 @@ interface TreeChild {
   id: string;
   label: string;
   path: string;
-  icon: React.ReactNode;
 }
 
 interface TreeNodeData {
@@ -58,6 +57,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
         {nodes.map((node) => {
           const hasChildren = node.children && node.children.length > 0;
 
+          // لینک اصلی هر node
           const nodeLink = (
             <a
               href={node.path}
@@ -66,7 +66,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
                 handleNodeClick(node);
               }}
               className={cn(
-                "flex items-center justify-between p-4 rounded hover:bg-gray-700 cursor-pointer whitespace-nowrap",
+                "flex items-center justify-between p-3 rounded hover:bg-gray-600 cursor-pointer whitespace-nowrap transition",
                 { "flex-row-reverse": rtl, "flex-row": !rtl }
               )}
             >
@@ -95,7 +95,7 @@ export const TreeNode: FC<TreeNodeProps> = ({
               </div>
 
               {/* Chevron */}
-              {hasChildren && isCollapsed && (
+              {hasChildren && (
                 <span
                   className={cn("mt-0.5 text-sm text-gray-400", {
                     "mr-2": rtl,
@@ -103,16 +103,24 @@ export const TreeNode: FC<TreeNodeProps> = ({
                   })}
                 >
                   {rtl ? (
-                    <MdChevronLeft className="w-4 h-4" />
+                    <MdChevronLeft
+                      className={cn("w-4 h-4 transition-transform", {
+                        "rotate-90": openNodes[node.id],
+                      })}
+                    />
                   ) : (
-                    <MdChevronRight className="w-4 h-4" />
+                    <MdChevronRight
+                      className={cn("w-4 h-4 transition-transform", {
+                        "rotate-90": openNodes[node.id],
+                      })}
+                    />
                   )}
                 </span>
               )}
             </a>
           );
 
-          // Child list in popover
+          // لیست بچه‌ها برای Popover در حالت collapse
           const childList = (
             <div className="min-w-[200px]">
               {node.children.map((child) => (
@@ -124,11 +132,10 @@ export const TreeNode: FC<TreeNodeProps> = ({
                     handleChildClick(child.path);
                   }}
                   className={cn(
-                    "flex items-center p-2 rounded hover:bg-gray-700 text-sm whitespace-nowrap",
+                    "flex items-center p-2 rounded hover:bg-gray-600 text-sm whitespace-nowrap cursor-pointer",
                     { "flex-row-reverse": rtl, "flex-row": !rtl }
                   )}
                 >
-                  <span className="text-xl">{child.icon}</span>
                   <span className={rtl ? "mr-2" : "ml-2"}>{child.label}</span>
                 </a>
               ))}
@@ -138,48 +145,59 @@ export const TreeNode: FC<TreeNodeProps> = ({
           return (
             <li key={node.id}>
               {isCollapsed && hasChildren ? (
+                // حالت collapse → بچه‌ها داخل Popover
                 <Popover content={childList} position={rtl ? "left" : "right"}>
                   {nodeLink}
                 </Popover>
               ) : (
                 <>
                   {nodeLink}
+                  {/* حالت باز → tree با شاخه گرد */}
                   <AnimatePresence>
-                    {openNodes[node.id] && (
+                    {openNodes[node.id] && hasChildren && (
                       <motion.ul
-                        className={rtl ? "mr-6" : "ml-6"}
+                        className={cn("relative", rtl ? "mr-6" : "ml-6")}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        {node.children.map((child) => (
-                          <li key={child.id}>
-                            <a
-                              href={child.path}
-                              onClick={(e) => {
-                                e.preventDefault();
-                                handleChildClick(child.path);
-                              }}
-                              className={cn(
-                                "flex items-center p-2 rounded hover:bg-gray-700",
-                                { "flex-row-reverse": rtl, "flex-row": !rtl }
-                              )}
-                            >
-                              <span className="text-xl">{child.icon}</span>
-                              <motion.span
-                                className={rtl ? "mr-3" : "ml-3"}
-                                variants={textVariants}
-                                initial="collapsed"
-                                animate="expanded"
-                                exit="collapsed"
-                                transition={{ duration: 0.2 }}
+                        {node.children.map((child, idx) => {
+                          const isLast = idx === node.children.length - 1;
+                          return (
+                            <li key={child.id} className="relative pl-6">
+                              {/* خط عمودی */}
+                              <span
+                                className={cn(
+                                  "absolute left-0 top-0 border-l border-gray-300",
+                                  isLast ? "h-1/2" : "h-full"
+                                )}
+                              />
+                              {/* شاخه گرد */}
+                              <span className="absolute left-0 top-2 w-4 h-4 border-l border-b border-gray-300 rounded-bl" />
+
+                              <a
+                                href={child.path}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleChildClick(child.path);
+                                }}
+                                className="flex items-center p-2 rounded hover:bg-gray-600 text-sm cursor-pointer"
                               >
-                                {child.label}
-                              </motion.span>
-                            </a>
-                          </li>
-                        ))}
+                                <motion.span
+                                  className={rtl ? "mr-3" : "ml-3"}
+                                  variants={textVariants}
+                                  initial="collapsed"
+                                  animate="expanded"
+                                  exit="collapsed"
+                                  transition={{ duration: 0.2 }}
+                                >
+                                  {child.label}
+                                </motion.span>
+                              </a>
+                            </li>
+                          );
+                        })}
                       </motion.ul>
                     )}
                   </AnimatePresence>
