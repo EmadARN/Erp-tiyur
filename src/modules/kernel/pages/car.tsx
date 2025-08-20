@@ -18,7 +18,7 @@ import { useKernelData } from "@/modules/shared/hooks/useKernelData";
 import { usecarData } from "../hooks/useCarData.ts";
 import { usecarActions } from "../hooks/useCarActions.ts";
 
-const car = () => {
+const Car = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -173,4 +173,4 @@ const car = () => {
   );
 };
 
-export default car;
+export default Car;
