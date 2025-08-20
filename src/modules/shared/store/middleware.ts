@@ -29,6 +29,7 @@ import { productionReturnProductApi } from "@/modules/production/api/productionR
 import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
+import {agricultureApi} from "@/modules/kernel/api/agricultureApi.ts";
 
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
@@ -71,4 +72,5 @@ export const middlewares: Middleware[] = [
   //kernel
   contactApi.middleware,
   userApi.middleware,
+  agricultureApi.middleware,
 ];
