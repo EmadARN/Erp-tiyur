@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useGetContactsQuery } from "../api/ContactApi.ts";
+import { useGetdriversQuery } from "../api/DriverApi.ts";
 import type {
-  Contact,
+  driver,
   FiltersRecord,
-  ContactsResponse,
-} from "../model/contact.ts";
-import { tableHead } from "../model/ContactIndex.ts";
+  driversResponse,
+} from "../model/driver.ts";
+import { tableHead } from "../model/DriverIndex.ts";
 
-function getValueByPath(obj: Contact, path: string): unknown {
+function getValueByPath(obj: driver, path: string): unknown {
   if (!obj || !path) return "";
   return path.split(".").reduce<unknown>((acc, key) => {
     if (acc && typeof acc === "object" && acc !== null && key in acc) {
@@ -22,16 +22,16 @@ export const usedriverData = () => {
     {}
   );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: contacts, isLoading } = useGetContactsQuery(paramsFilterData, {
+  const { data: drivers, isLoading } = useGetdriversQuery(paramsFilterData, {
     refetchOnMountOrArgChange: true,
   });
-  const [displayData, setDisplayData] = useState<ContactsResponse | null>(null);
+  const [displayData, setDisplayData] = useState<driversResponse | null>(null);
 
   useEffect(() => {
-    if (contacts) {
-      setDisplayData(contacts);
+    if (drivers) {
+      setDisplayData(drivers);
     }
-  }, [contacts]);
+  }, [drivers]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -55,13 +55,13 @@ export const usedriverData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && contacts) {
-      setDisplayData(contacts);
+    if (searchTerm === "" && drivers) {
+      setDisplayData(drivers);
       return;
     }
     const lowerSearch = searchTerm.toLowerCase();
-    if (contacts) {
-      const result = contacts.filter((row) =>
+    if (drivers) {
+      const result = drivers.filter((row) =>
         tableHead.some(({ row_id }) => {
           const value = getValueByPath(row, row_id);
           return String(value ?? "")
@@ -75,7 +75,7 @@ export const usedriverData = () => {
   };
 
   return {
-    contacts: displayData,
+    drivers: displayData,
     isLoading,
     filterData,
     setFilterData,
