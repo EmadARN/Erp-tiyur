@@ -1,9 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import http from "@/modules/shared/lib/httpService";
+import { MdDashboard } from "react-icons/md";
 
 const Header = () => {
-
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await http.kernelApi.get("/auth/validate", { withCredentials: true });
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
   return (
     <header className="fixed top-0 w-full bg-white shadow-sm z-50">
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -25,7 +44,7 @@ const Header = () => {
             href="#why"
             className="text-gray-900 hover:text-purple-600 transition-colors"
           >
-           Why Slaughter ERP
+            Why Slaughter ERP
           </a>
           <a
             href="#contact"
@@ -34,9 +53,27 @@ const Header = () => {
             Contact
           </a>
         </div>
-        <button onClick={() => navigate("/auth/login")} className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-500 transition-all btn-hover">
-          Get Started
-        </button>
+
+        {!loading && (
+          <>
+            {isAuthenticated ? (
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="flex items-center gap-2 bg-purple-600 text-white px-6 py-2 rounded-lg shadow hover:bg-purple-500 transition-all"
+              >
+                <MdDashboard size={20} />
+                <span>Dashboard</span>
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate("/auth/login")}
+                className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-500 transition-all btn-hover"
+              >
+                Get Started
+              </button>
+            )}
+          </>
+        )}
       </nav>
     </header>
   );
