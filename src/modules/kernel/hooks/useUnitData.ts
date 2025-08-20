@@ -5,7 +5,7 @@ import type {
   FiltersRecord,
   unitsResponse,
 } from "../model/unit.ts";
-import { tableHead } from "../model/unitIndex.ts";
+import { tableHead } from "../model/UnitIndex.ts";
 
 function getValueByPath(obj: unit, path: string): unknown {
   if (!obj || !path) return "";
