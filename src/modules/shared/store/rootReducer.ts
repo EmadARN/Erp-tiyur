@@ -32,6 +32,7 @@ import { productionSeriesApi } from "@/modules/production/api/productionSeriesAp
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
 import {agricultureApi} from "@/modules/kernel/api/agricultureApi.ts";
+import {cityApi} from "@/modules/kernel/api/cityApi.ts";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -76,6 +77,7 @@ export const rootReducer = combineReducers({
   [contactApi.reducerPath]: contactApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
   [agricultureApi.reducerPath]: agricultureApi.reducer,
+  [cityApi.reducerPath]: cityApi.reducer,
 
 
   uiSetting: uiSettingsReducer,
