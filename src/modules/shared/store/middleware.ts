@@ -32,6 +32,7 @@ import { userApi } from "@/modules/kernel/api/userApi";
 import {agricultureApi} from "@/modules/kernel/api/agricultureApi.ts";
 import {cityApi} from "@/modules/kernel/api/cityApi.ts";
 import {productOwnerApi} from "@/modules/kernel/api/productOwnerApi.ts";
+import {productCategoryApi} from "@/modules/kernel/api/productCategoryApi.ts";
 
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
@@ -77,5 +78,6 @@ export const middlewares: Middleware[] = [
   agricultureApi.middleware,
   cityApi.middleware,
   productOwnerApi.middleware,
+  productCategoryApi.middleware,
 
 ];
