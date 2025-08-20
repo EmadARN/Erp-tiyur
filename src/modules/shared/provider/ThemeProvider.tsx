@@ -1,6 +1,5 @@
 import { useEffect, type PropsWithChildren } from "react";
 import { useThemeSettings } from "../hooks/useThemeSettings";
-
 import { type PresetColor } from "../store/slice/themeSlice";
 
 const presetColorMap: Record<PresetColor, string> = {
@@ -11,7 +10,8 @@ const presetColorMap: Record<PresetColor, string> = {
 };
 
 export function ThemeProvider({ children }: PropsWithChildren) {
-  const { mode, preset, font, fontSize, direction, sidebarColor } = useThemeSettings();
+  const { mode, preset, font, fontSize, direction, sidebarColor } =
+    useThemeSettings();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -32,13 +32,12 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 
     // Apply sidebar color
     if (sidebarColor === "white") {
-      root.style.setProperty("--sidebar-bg", "#ffffff");
+      root.style.setProperty("--sidebar-bg", "#fff");
       root.style.setProperty("--sidebar-text", "#111827");
     } else {
       root.style.setProperty("--sidebar-bg", "rgb(16,24,40)");
-      root.style.setProperty("--sidebar-text", "#ffffff");
+      root.style.setProperty("--sidebar-text", "#fff");
     }
-
   }, [mode, preset, font, fontSize, direction, sidebarColor]);
 
   return <>{children}</>;
