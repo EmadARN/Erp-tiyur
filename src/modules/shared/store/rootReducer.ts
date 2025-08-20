@@ -31,6 +31,7 @@ import { productionReturnProductApi } from "@/modules/production/api/productionR
 import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
+import { driverApi } from "@/modules/kernel/api/DriverApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -74,6 +75,7 @@ export const rootReducer = combineReducers({
   //kernel
   [contactApi.reducerPath]: contactApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [driverApi.reducerPath]: driverApi.reducer,
   
 
   uiSetting: uiSettingsReducer,
