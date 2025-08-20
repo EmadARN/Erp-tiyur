@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useGetusersQuery } from "../api/userApi.ts";
+import { useGetproductOwnersQuery } from "../api/productOwnerApi.ts";
 import type {
-  user,
+  productOwner,
   FiltersRecord,
-  usersResponse,
-} from "../model/user.ts";
-import { tableHead } from "../model/UserIndex.ts";
+  productOwnersResponse,
+} from "../model/productOwner.ts";
+import { tableHead } from "../model/productOwnerIndex.ts";
 
-function getValueByPath(obj: user, path: string): unknown {
+function getValueByPath(obj: productOwner, path: string): unknown {
   if (!obj || !path) return "";
   return path.split(".").reduce<unknown>((acc, key) => {
     if (acc && typeof acc === "object" && acc !== null && key in acc) {
@@ -17,21 +17,21 @@ function getValueByPath(obj: user, path: string): unknown {
   }, obj);
 }
 
-export const useuserData = () => {
+export const useproductOwnerData = () => {
   const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
     {}
   );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: users, isLoading } = useGetusersQuery(paramsFilterData, {
+  const { data: productOwners, isLoading } = useGetproductOwnersQuery(paramsFilterData, {
     refetchOnMountOrArgChange: true,
   });
-  const [displayData, setDisplayData] = useState<usersResponse | null>(null);
+  const [displayData, setDisplayData] = useState<productOwnersResponse | null>(null);
 
   useEffect(() => {
-    if (users) {
-      setDisplayData(users);
+    if (productOwners) {
+      setDisplayData(productOwners);
     }
-  }, [users]);
+  }, [productOwners]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -55,13 +55,13 @@ export const useuserData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && users) {
-      setDisplayData(users);
+    if (searchTerm === "" && productOwners) {
+      setDisplayData(productOwners);
       return;
     }
     const lowerSearch = searchTerm.toLowerCase();
-    if (users) {
-      const result = users.filter((row) =>
+    if (productOwners) {
+      const result = productOwners.filter((row) =>
         tableHead.some(({ row_id }) => {
           const value = getValueByPath(row, row_id);
           return String(value ?? "")
@@ -75,7 +75,7 @@ export const useuserData = () => {
   };
 
   return {
-    users: displayData,
+    productOwners: displayData,
     isLoading,
     filterData,
     setFilterData,

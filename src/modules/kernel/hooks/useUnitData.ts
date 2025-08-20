@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useGetusersQuery } from "../api/userApi.ts";
+import { useGetunitsQuery } from "../api/unitApi.ts";
 import type {
-  user,
+  unit,
   FiltersRecord,
-  usersResponse,
-} from "../model/user.ts";
-import { tableHead } from "../model/UserIndex.ts";
+  unitsResponse,
+} from "../model/unit.ts";
+import { tableHead } from "../model/UnitIndex.ts";
 
-function getValueByPath(obj: user, path: string): unknown {
+function getValueByPath(obj: unit, path: string): unknown {
   if (!obj || !path) return "";
   return path.split(".").reduce<unknown>((acc, key) => {
     if (acc && typeof acc === "object" && acc !== null && key in acc) {
@@ -17,21 +17,21 @@ function getValueByPath(obj: user, path: string): unknown {
   }, obj);
 }
 
-export const useuserData = () => {
+export const useunitData = () => {
   const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
     {}
   );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: users, isLoading } = useGetusersQuery(paramsFilterData, {
+  const { data: units, isLoading } = useGetunitsQuery(paramsFilterData, {
     refetchOnMountOrArgChange: true,
   });
-  const [displayData, setDisplayData] = useState<usersResponse | null>(null);
+  const [displayData, setDisplayData] = useState<unitsResponse | null>(null);
 
   useEffect(() => {
-    if (users) {
-      setDisplayData(users);
+    if (units) {
+      setDisplayData(units);
     }
-  }, [users]);
+  }, [units]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -55,13 +55,13 @@ export const useuserData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && users) {
-      setDisplayData(users);
+    if (searchTerm === "" && units) {
+      setDisplayData(units);
       return;
     }
     const lowerSearch = searchTerm.toLowerCase();
-    if (users) {
-      const result = users.filter((row) =>
+    if (units) {
+      const result = units.filter((row) =>
         tableHead.some(({ row_id }) => {
           const value = getValueByPath(row, row_id);
           return String(value ?? "")
@@ -75,7 +75,7 @@ export const useuserData = () => {
   };
 
   return {
-    users: displayData,
+    units: displayData,
     isLoading,
     filterData,
     setFilterData,

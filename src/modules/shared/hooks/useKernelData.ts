@@ -6,7 +6,7 @@ import {
   useGetDriverQuery,
   useGetAgricultureQuery,
   useGetUnitsQuery,
-  useGetRolesQuery,
+  useGetRolesQuery, useGetCityQuery, useGetContactQuery,useGetCategoriesQuery
 } from "@/modules/shared/api/shareApi";
 import type {
   ProductType,
@@ -56,13 +56,32 @@ export const useKernelData = () => {
     isError: isErrorRoles,
   } = useGetRolesQuery({});
 
+  const {
+    data: citiesData,
+    isLoading: isLoadingCities,
+    isError: isErrorCities,
+  } = useGetCityQuery({});
+  const {
+    data: contactsData,
+    isLoading: isLoadingContacts,
+    isError: isErrorContacts,
+  } = useGetContactQuery({});
+  const {
+    data: categoriesData,
+    isLoading: isLoadingCategoriesData,
+    isError: isErrorCategories,
+  } = useGetCategoriesQuery({});
+
   const isLoading =
     isLoadingProducts ||
     isLoadingOwners ||
     isLoadingCars ||
     isLoadingDrivers ||
     isLoadingUnit ||
-    isLoadingRoles||
+      isLoadingRoles ||
+      isLoadingCities ||
+      isLoadingContacts ||
+      isLoadingCategoriesData ||
     isLoadingAgriculture;
 
   const isError =
@@ -71,7 +90,10 @@ export const useKernelData = () => {
     isErrorCars ||
     isErrorDrivers ||
     isErrorUnit ||
-    isErrorRoles||
+      isErrorRoles||
+      isErrorCities||
+      isErrorContacts||
+      isErrorCategories ||
     isErrorAgriculture;
 
   const kernelData: KernelData = useMemo(() => {
@@ -112,8 +134,26 @@ export const useKernelData = () => {
           value: String(item.id),
           label: item.role_name,
         })) || [],
+
+      contacts:
+          contactsData?.map((item:any) => ({
+            value: String(item.id),
+            label: item.name,
+          })) || [],
+
+      cities:
+          citiesData?.map((item:any) => ({
+            value: String(item.id),
+            label: item.name,
+          })) || [],
+
+      categories:
+          categoriesData?.map((item:any) => ({
+            value: String(item.id),
+            label: item.name,
+          })) || [],
     };
-  }, [productsData, ownersData, carsData, driversData, agricultureData,unitsData,rolesData]);
+  }, [productsData, ownersData, carsData, driversData, agricultureData, unitsData,rolesData, citiesData, contactsData, categoriesData]);
 
   return { kernelData, isLoading, isError };
 };
