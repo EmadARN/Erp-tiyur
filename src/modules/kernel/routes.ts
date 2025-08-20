@@ -8,6 +8,7 @@ import Product from "./pages/Product.tsx";
 import ProductCategory from "./pages/productCategory.tsx";
 import productOwner from "./pages/ProductOwner.tsx";
 import unit from "./pages/Unit.tsx";
+import Car from "./pages/car.tsx";
 
 export const kernelRoutes: RouteObject[] = [
   {
@@ -31,16 +32,20 @@ export const kernelRoutes: RouteObject[] = [
         element: React.createElement(Product),
       },
       {
-        path: "kernel/productcategory",
+        path: "kernel/product-category",
         element: React.createElement(ProductCategory),
       },
       {
-        path: "kernel/productowner",
+        path: "kernel/product-owner",
         element: React.createElement(productOwner),
       },
       {
         path: "kernel/unit",
         element: React.createElement(unit),
+      },
+      {
+        path: "kernel/car",
+        element: React.createElement(Car),
       },
 
 

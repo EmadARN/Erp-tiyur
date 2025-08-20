@@ -38,6 +38,7 @@ import { productApi } from "@/modules/kernel/api/productApi";
 import { productCategoryApi } from "@/modules/kernel/api/productCategoryApi";
 import { productOwnerApi } from "@/modules/kernel/api/productOwnerApi";
 import { unitApi } from "@/modules/kernel/api/unitApi";
+import { carApi } from "@/modules/kernel/api/carApi";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -88,6 +89,7 @@ export const rootReducer = combineReducers({
   [productCategoryApi.reducerPath]: productCategoryApi.reducer,
   [productOwnerApi.reducerPath]: productOwnerApi.reducer,
   [unitApi.reducerPath]: unitApi.reducer,
+  [carApi.reducerPath]: carApi.reducer,
   
 
   uiSetting: uiSettingsReducer,

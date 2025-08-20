@@ -33,10 +33,10 @@ import { driverApi } from "@/modules/kernel/api/DriverApi";
 import { agricultureApi } from "@/modules/kernel/api/agricultureApi";
 import { cityApi } from "@/modules/kernel/api/cityApi";
 import { productApi } from "@/modules/kernel/api/productApi";
-import productCategory from "@/modules/kernel/pages/productCategory";
 import { productCategoryApi } from "@/modules/kernel/api/productCategoryApi";
 import { productOwnerApi } from "@/modules/kernel/api/productOwnerApi";
 import { unitApi } from "@/modules/kernel/api/unitApi";
+import { carApi } from "@/modules/kernel/api/carApi";
 
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
@@ -86,4 +86,5 @@ export const middlewares: Middleware[] = [
   productCategoryApi.middleware,
   productOwnerApi.middleware,
   unitApi.middleware,
+  carApi.middleware,
 ];
