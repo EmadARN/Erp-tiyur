@@ -31,11 +31,6 @@ import { productionReturnProductApi } from "@/modules/production/api/productionR
 import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
-import {agricultureApi} from "@/modules/kernel/api/agricultureApi.ts";
-import {cityApi} from "@/modules/kernel/api/cityApi.ts";
-import {productOwnerApi} from "@/modules/kernel/api/productOwnerApi.ts";
-import {productCategoryApi} from "@/modules/kernel/api/productCategoryApi.ts";
-import {productApi} from "@/modules/kernel/api/productApi.ts";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -79,12 +74,7 @@ export const rootReducer = combineReducers({
   //kernel
   [contactApi.reducerPath]: contactApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
-  [agricultureApi.reducerPath]: agricultureApi.reducer,
-  [cityApi.reducerPath]: cityApi.reducer,
-  [productOwnerApi.reducerPath]: productOwnerApi.reducer,
-  [productCategoryApi.reducerPath]: productCategoryApi.reducer,
-  [productApi.reducerPath]: productApi.reducer,
-
+  
 
   uiSetting: uiSettingsReducer,
   theme: themeReducer,
