@@ -1,4 +1,3 @@
-
 import { Button } from "@/modules/shared/components/ui/Button";
 import {
   Dialog,
@@ -46,14 +45,20 @@ export function UpdateDialog({
     { id: data?.id || "" },
     { skip: !data?.id }
   );
+  console.log("detailData", detailData);
+  console.log("data", data);
 
   React.useEffect(() => {
     if (detailData) {
       setFormData(flattenObject(detailData));
-    } else if (data) {
+    }
+  }, [detailData]);
+
+  React.useEffect(() => {
+    if (!detailData && data) {
       setFormData(flattenObject(data));
     }
-  }, [detailData, data]);
+  }, [data, detailData]);
 
   function handleChange(
     name: string,
