@@ -15,10 +15,10 @@ import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";
 import { Button } from "@/modules/shared/components/ui/Button";
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
-import { useproductData } from "../hooks/useproductData.ts";
-import { useproductActions } from "../hooks/useproductActions.ts";
+import { useproductData } from "../hooks/useProductData.ts";
+import { useproductActions } from "../hooks/useProductActions.ts";
 
-const product = () => {
+const Product = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -173,4 +173,4 @@ const product = () => {
   );
 };
 
-export default product;
+export default Product;
