@@ -86,6 +86,14 @@ export const shareApi = createApi({
       }),
       providesTags: ["shareApi"],
     }),
+    getCategories: builder.query<any, any>({
+      query: (filters = {}) => ({
+        url: "/admin/product/product-category/",
+        method: "get",
+        params: filters,
+      }),
+      providesTags: ["shareApi"],
+    }),
   }),
 });
 
@@ -99,4 +107,5 @@ export const {
   useGetAgricultureQuery,
   useGetCityQuery,
   useGetContactQuery,
+  useGetCategoriesQuery,
 } = shareApi;
