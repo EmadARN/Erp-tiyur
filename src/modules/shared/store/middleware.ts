@@ -36,6 +36,7 @@ import { productApi } from "@/modules/kernel/api/productApi";
 import productCategory from "@/modules/kernel/pages/productCategory";
 import { productCategoryApi } from "@/modules/kernel/api/productCategoryApi";
 import { productOwnerApi } from "@/modules/kernel/api/productOwnerApi";
+import { unitApi } from "@/modules/kernel/api/unitApi";
 
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
@@ -84,4 +85,5 @@ export const middlewares: Middleware[] = [
   productApi.middleware,
   productCategoryApi.middleware,
   productOwnerApi.middleware,
+  unitApi.middleware,
 ];

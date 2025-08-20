@@ -7,6 +7,7 @@ import Driver from "./pages/Driver.tsx";
 import Product from "./pages/Product.tsx";
 import ProductCategory from "./pages/productCategory.tsx";
 import productOwner from "./pages/ProductOwner.tsx";
+import unit from "./pages/Unit.tsx";
 
 export const kernelRoutes: RouteObject[] = [
   {
@@ -37,6 +38,11 @@ export const kernelRoutes: RouteObject[] = [
         path: "kernel/productowner",
         element: React.createElement(productOwner),
       },
+      {
+        path: "kernel/unit",
+        element: React.createElement(unit),
+      },
+
 
     ],
   },
