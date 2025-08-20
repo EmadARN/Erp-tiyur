@@ -6,7 +6,7 @@ import {
   useGetDriverQuery,
   useGetAgricultureQuery,
   useGetUnitsQuery,
-  useGetRolesQuery, useGetCityQuery,
+  useGetRolesQuery, useGetCityQuery, useGetContactQuery,
 } from "@/modules/shared/api/shareApi";
 import type {
   ProductType,
@@ -61,6 +61,11 @@ export const useKernelData = () => {
     isLoading: isLoadingCities,
     isError: isErrorCities,
   } = useGetCityQuery({});
+  const {
+    data: contactsData,
+    isLoading: isLoadingContacts,
+    isError: isErrorContacts,
+  } = useGetContactQuery({});
 
   const isLoading =
     isLoadingProducts ||
@@ -70,6 +75,7 @@ export const useKernelData = () => {
     isLoadingUnit ||
       isLoadingRoles||
       isLoadingCities||
+      isLoadingContacts||
     isLoadingAgriculture;
 
   const isError =
@@ -80,6 +86,7 @@ export const useKernelData = () => {
     isErrorUnit ||
       isErrorRoles||
       isErrorCities||
+      isErrorContacts||
     isErrorAgriculture;
 
   const kernelData: KernelData = useMemo(() => {
@@ -120,13 +127,20 @@ export const useKernelData = () => {
           value: String(item.id),
           label: item.role_name,
         })) || [],
+
+      contacts:
+          contactsData?.map((item:any) => ({
+            value: String(item.id),
+            label: item.name,
+          })) || [],
+
       cities:
           citiesData?.map((item:any) => ({
             value: String(item.id),
             label: item.name,
           })) || [],
     };
-  }, [productsData, ownersData, carsData, driversData, agricultureData,unitsData,rolesData, citiesData]);
+  }, [productsData, ownersData, carsData, driversData, agricultureData, unitsData,rolesData, citiesData, contactsData]);
 
   return { kernelData, isLoading, isError };
 };

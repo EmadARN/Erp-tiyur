@@ -33,6 +33,7 @@ import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
 import {agricultureApi} from "@/modules/kernel/api/agricultureApi.ts";
 import {cityApi} from "@/modules/kernel/api/cityApi.ts";
+import {productOwnerApi} from "@/modules/kernel/api/productOwnerApi.ts";
 
 export const rootReducer = combineReducers({
   [LoginApi.reducerPath]: LoginApi.reducer,
@@ -78,6 +79,7 @@ export const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [agricultureApi.reducerPath]: agricultureApi.reducer,
   [cityApi.reducerPath]: cityApi.reducer,
+  [productOwnerApi.reducerPath]: productOwnerApi.reducer,
 
 
   uiSetting: uiSettingsReducer,

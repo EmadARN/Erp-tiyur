@@ -5,6 +5,8 @@ import Contact from "./pages/Contact.tsx";
 import user from "./pages/User.tsx";
 import agriculture from "@/modules/kernel/pages/Agriculture.tsx";
 import city from "@/modules/kernel/pages/City.tsx";
+import contact from "./pages/Contact.tsx";
+import ProductOwner from "@/modules/kernel/pages/ProductOwner.tsx";
 
 export const kernelRoutes: RouteObject[] = [
   {
@@ -26,6 +28,10 @@ export const kernelRoutes: RouteObject[] = [
       {
         path: "kernel/city",
         element: React.createElement(city),
+      },
+      {
+        path: "kernel/product-owner",
+        element: React.createElement(ProductOwner),
       },
     ],
   },
