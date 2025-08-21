@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { DataTable } from "@/modules/shared/components/table/DataTable";
 import { CreateDialog } from "@/modules/shared/components/dialogs/CreateDialog";
-import { useGetagriculturesDetailsQuery } from "../api/agricultureApi.ts";
+import { useGetcarsDetailsQuery } from "../api/carApi.ts";
 import PageHeader from "@/modules/shared/components/header/PageHeader";
 import { SearchInput } from "@/modules/shared/components/ui/SearchInput";
 import {
@@ -9,16 +9,16 @@ import {
   getUpdateDialogConfigs,
   tableFilter,
   tableHead,
-} from "../model/AgricultureIndex.ts";
+} from "../model/carIndex.ts";
 import Loading from "@/modules/shared/components/ui/Loading";
 import NoData from "@/modules/shared/components/ui/NoData";
 import { FiBox, FiFilter } from "react-icons/fi";
 import { Button } from "@/modules/shared/components/ui/Button";
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
-import { useagricultureData } from "../hooks/useAgricultureData.ts";
-import { useagricultureActions } from "../hooks/useAgricultureActions.ts";
+import { usecarData } from "../hooks/useCarData.ts";
+import { usecarActions } from "../hooks/useCarActions.ts";
 
-const agriculture = () => {
+const Car = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -28,24 +28,24 @@ const agriculture = () => {
     isError: isErrorKernel,
   } = useKernelData();
   const {
-    agricultures,
+    cars,
     isLoading: isLoadingBuyProducts,
     filterData,
     setFilterData,
     handleFilterOnChange,
     handleSearch,
-  } = useagricultureData();
+  } = usecarData();
   const {
     deleteHandler,
     bulkDeleteHandler,
     handleCreateConfirm,
     handleUpdateConfirm,
-  } = useagricultureActions();
+  } = usecarActions();
 
   const breadcrumbItems = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "Kernel", href: "/dashboard/kernel" },
-    { label: "agriculture" },
+    { label: "car" },
   ];
 
   const OnCreate = (index: number | null) => {
@@ -67,18 +67,18 @@ const agriculture = () => {
       />
     );
   }
-  const isKernelDataEmpty = !kernelData?.cities.length;
+  const isKernelDataEmpty = !kernelData?.cities.length || !kernelData?.categories.length || !kernelData?.drivers.length;
 
 
 
-  if (!agricultures || agricultures.length === 0) {
+  if (!cars || cars.length === 0) {
     return (
       <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
         <PageHeader
-          title="agricultures"
+          title="cars"
           breadcrumbItems={breadcrumbItems}
           onCreate={() => OnCreate(1)}
-          createLabel="Add agriculture"
+          createLabel="Add car"
         />
         <div className="flex flex-col md:flex-row items-center justify-between mb-4 gap-4">
           <div className="w-full md:w-1/3">
@@ -118,10 +118,10 @@ const agriculture = () => {
   return (
     <div className="p-2 sm:p-4 md:p-6 bg-white rounded-xl shadow-sm min-h-screen">
       <PageHeader
-        title="agricultures"
+        title="cars"
         breadcrumbItems={breadcrumbItems}
         onCreate={() => OnCreate(1)}
-        createLabel="Add agricultures"
+        createLabel="Add cars"
         isCreatingDisabled={isKernelDataEmpty || isLoadingKernel}
       />
 
@@ -147,10 +147,10 @@ const agriculture = () => {
 
       <DataTable
         tableHead={tableHead}
-        data={agricultures ?? []}
+        data={cars ?? []}
         deleteHandler={deleteHandler}
         bulkDeleteHandler={bulkDeleteHandler}
-        useGetBuyProductDetailsQuery={useGetagriculturesDetailsQuery}
+        useGetBuyProductDetailsQuery={useGetcarsDetailsQuery}
         tableFilters={tableFilter}
         filterData={filterData}
         setFilterData={setFilterData}
@@ -173,4 +173,4 @@ const agriculture = () => {
   );
 };
 
-export default agriculture;
+export default Car;

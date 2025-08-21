@@ -29,6 +29,14 @@ import { productionReturnProductApi } from "@/modules/production/api/productionR
 import { productionSeriesApi } from "@/modules/production/api/productionSeriesApi.ts";
 import { contactApi } from "@/modules/kernel/api/ContactApi";
 import { userApi } from "@/modules/kernel/api/userApi";
+import { driverApi } from "@/modules/kernel/api/DriverApi";
+import { agricultureApi } from "@/modules/kernel/api/agricultureApi";
+import { cityApi } from "@/modules/kernel/api/cityApi";
+import { productApi } from "@/modules/kernel/api/productApi";
+import { productCategoryApi } from "@/modules/kernel/api/productCategoryApi";
+import { productOwnerApi } from "@/modules/kernel/api/productOwnerApi";
+import { unitApi } from "@/modules/kernel/api/unitApi";
+import { carApi } from "@/modules/kernel/api/carApi";
 
 export const middlewares: Middleware[] = [
   LoginApi.middleware,
@@ -71,4 +79,12 @@ export const middlewares: Middleware[] = [
   //kernel
   contactApi.middleware,
   userApi.middleware,
+  driverApi.middleware,
+  agricultureApi.middleware,
+  cityApi.middleware,
+  productApi.middleware,
+  productCategoryApi.middleware,
+  productOwnerApi.middleware,
+  unitApi.middleware,
+  carApi.middleware,
 ];

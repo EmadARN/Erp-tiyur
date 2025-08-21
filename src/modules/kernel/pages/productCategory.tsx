@@ -16,9 +16,9 @@ import { FiBox, FiFilter } from "react-icons/fi";
 import { Button } from "@/modules/shared/components/ui/Button";
 import { useKernelData } from "@/modules/shared/hooks/useKernelData";
 import { useproductCategoryData } from "../hooks/useproductCategoryData.ts";
-import { useproductCategoryActions } from "../hooks/useproductCategoryActions.ts";
+import { useproductCategoryActions } from "../hooks/useProductCategoryActions.ts";
 
-const productCategory = () => {
+const ProductCategory = () => {
   const [createIndex, setCreateIndex] = useState<number | null>(null);
   const [isFilterDrawerOpen, setFilterDrawerOpen] = useState(false);
 
@@ -173,4 +173,4 @@ const productCategory = () => {
   );
 };
 
-export default productCategory;
+export default ProductCategory;

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
-import { useGetdriversQuery } from "../api/DriverApi.ts";
+import { useGetcarsQuery } from "../api/carApi.ts";
 import type {
-  driver,
+  car,
   FiltersRecord,
-  driversResponse,
-} from "../model/driver.ts";
-import { tableHead } from "../model/DriverIndex.ts";
+  carsResponse,
+} from "../model/car.ts";
+import { tableHead } from "../model/carIndex.ts";
 
-function getValueByPath(obj: driver, path: string): unknown {
+function getValueByPath(obj: car, path: string): unknown {
   if (!obj || !path) return "";
   return path.split(".").reduce<unknown>((acc, key) => {
     if (acc && typeof acc === "object" && acc !== null && key in acc) {
@@ -17,21 +17,21 @@ function getValueByPath(obj: driver, path: string): unknown {
   }, obj);
 }
 
-export const usedriverData = () => {
+export const usecarData = () => {
   const [paramsFilterData, setParamsFilterData] = useState<Record<string, any>>(
     {}
   );
   const [filterData, setFilterData] = useState<FiltersRecord>({});
-  const { data: drivers, isLoading } = useGetdriversQuery(paramsFilterData, {
+  const { data: cars, isLoading } = useGetcarsQuery(paramsFilterData, {
     refetchOnMountOrArgChange: true,
   });
-  const [displayData, setDisplayData] = useState<driversResponse | null>(null);
+  const [displayData, setDisplayData] = useState<carsResponse | null>(null);
 
   useEffect(() => {
-    if (drivers) {
-      setDisplayData(drivers);
+    if (cars) {
+      setDisplayData(cars);
     }
-  }, [drivers]);
+  }, [cars]);
 
   const handleFilterOnChange = () => {
     const processFilterData = (dataObj: FiltersRecord): Record<string, any> => {
@@ -55,13 +55,13 @@ export const usedriverData = () => {
   };
 
   const handleSearch = (searchTerm: string) => {
-    if (searchTerm === "" && drivers) {
-      setDisplayData(drivers);
+    if (searchTerm === "" && cars) {
+      setDisplayData(cars);
       return;
     }
     const lowerSearch = searchTerm.toLowerCase();
-    if (drivers) {
-      const result = drivers.filter((row) =>
+    if (cars) {
+      const result = cars.filter((row) =>
         tableHead.some(({ row_id }) => {
           const value = getValueByPath(row, row_id);
           return String(value ?? "")
@@ -75,7 +75,7 @@ export const usedriverData = () => {
   };
 
   return {
-    drivers: displayData,
+    cars: displayData,
     isLoading,
     filterData,
     setFilterData,
