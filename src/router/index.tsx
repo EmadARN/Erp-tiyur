@@ -24,7 +24,7 @@ export const AppRoutes = () => {
 
     // مسیرهایی که نیاز به لاگین دارن
     {
-      element: <RequireAuth />,
+      // element: <RequireAuth />,
       children: [
         ...HomeRoutes,
         ...saleRoutes,

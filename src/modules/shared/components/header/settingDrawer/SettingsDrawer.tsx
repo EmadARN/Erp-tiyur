@@ -71,9 +71,7 @@ export function SettingsDrawer({ open, onClose, dashboardRef }: Props) {
           transition={{ duration: 0.3 }}
           className={cn(
             "fixed top-0 h-full w-[400px] shadow-lg z-50 p-5",
-            isRtl
-              ? "left-0 rounded-r-2xl overflow-y-auto"
-              : "right-0 rounded-l-2xl overflow-y-auto",
+            isRtl ? "left-0  overflow-y-auto" : "right-0  overflow-y-auto",
             mode === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"
           )}
           ref={drawerRef}

@@ -4,19 +4,22 @@ import { useDispatch } from "react-redux";
 
 export function FontSizeSection() {
   const dispatch = useDispatch();
-  const { fontSize, rtl: isRtl, direction } = useThemeSettings();
+  const { fontSize, rtl: isRtl, mode } = useThemeSettings();
+
+  const trackColor = mode === "dark" ? "#2563EB" : "#3B82F6";
 
   return (
     <div className="mt-8">
       <p
-        className={`text-gray-600 mb-2 ${
-          isRtl ? "text-right" : "text-left"
+        className={`mb-2 ${isRtl ? "text-right" : "text-left"} ${
+          mode === "dark" ? "text-gray-300" : "text-gray-600"
         }`}
       >
         Size
       </p>
+
       <div
-        className={`relative w-full mt-6 ${isRtl ? "direction-rtl" : ""}`}
+        className={`relative w-full mt-6`}
         style={{ direction: isRtl ? "rtl" : "ltr" }}
       >
         <input
@@ -26,20 +29,22 @@ export function FontSizeSection() {
           step={1}
           value={fontSize}
           onChange={(e) => dispatch(setFontSize(parseInt(e.target.value)))}
-          className={`w-full h-2 rounded-lg bg-green-900 appearance-none cursor-pointer accent-primary ${
-            isRtl ? "rtl-range" : ""
-          }`}
-          style={{ direction: isRtl ? "rtl" : "ltr" }}
+          className="w-full h-2 rounded-lg appearance-none cursor-pointer"
+          style={{
+            accentColor: trackColor,
+            background: `linear-gradient(to right, ${trackColor} 0%, ${trackColor} ${
+              ((fontSize - 12) / (19 - 12)) * 100
+            }%, #d1d5db ${((fontSize - 12) / (19 - 12)) * 100}%, #d1d5db 100%)`,
+          }}
         />
+
         <div
           className="absolute -top-8 bg-gray-900 text-white px-2 py-1 rounded shadow"
           style={{
-            [isRtl ? "left" : "left"]: `${
-              isRtl
-                ? ((24 - fontSize) / (24 - 12)) * 100
-                : ((fontSize - 12) / (24 - 12)) * 100
+            [isRtl ? "right" : "left"]: `${
+              ((fontSize - 12) / (19 - 12)) * 100
             }%`,
-            transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
+            transform: "translateX(-50%)",
           }}
         >
           {fontSize}px

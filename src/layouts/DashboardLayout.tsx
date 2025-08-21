@@ -9,18 +9,19 @@ import { cn } from "@/modules/shared/helpers";
 
 const DashboardLayout = () => {
   const dashboardRef = useRef<HTMLDivElement>(null);
-  const { rtl } = useThemeSettings();
+  const { rtl, mode } = useThemeSettings();
 
   return (
     <div
       ref={dashboardRef}
       className={cn(
         "flex h-screen min-h-screen",
-        rtl ? "flex-row-reverse" : "flex-row"
+        rtl ? "flex-row-reverse" : "flex-row",
+        mode === "dark" ? "bg-gray-700 text-white" : "bg-white text-gray-700"
       )}
     >
       {/* Sidebar desc */}
-      <div className="hidden lg:block ">
+      <div className="hidden lg:block">
         <Sidebar />
       </div>
 
@@ -29,18 +30,25 @@ const DashboardLayout = () => {
         <Menu />
       </div>
 
-      {/*main section*/}
-
+      {/* Main section */}
       <div
         className={cn(
-          "flex flex-1 flex-col min-w-0", // ⬅ min-w-0 اضافه شد
-          rtl
-            ? "mr-0 sm:mr-4 md:mr-6 lg:mr-12"
-            : "ml-0 sm:ml-4 md:ml-6 lg:ml-12"
+          "flex flex-1 flex-col min-w-0",
+          mode === "dark"
+            ? "bg-gray-900 text-gray-100"
+            : "bg-white text-gray-900"
         )}
       >
         <Header />
-        <main className="p-4 overflow-auto min-h-0 flex-1">
+        <main
+          className={cn(
+            "p-4 overflow-auto min-h-0 flex-1 transition-colors duration-300",
+            rtl
+              ? "mr-0 sm:mr-4 md:mr-6 lg:mr-12"
+              : "ml-0 sm:ml-4 md:ml-6 lg:ml-12",
+           
+          )}
+        >
           <Outlet />
         </main>
       </div>

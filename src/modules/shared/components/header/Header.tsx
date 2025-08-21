@@ -7,25 +7,29 @@ import { openSettingsDrawer } from "../../store/slice/settingsSlice";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { useThemeSettings } from "../../hooks/useThemeSettings";
 import SearchDropdown from "./SearchDropdown";
+import { cn } from "@/modules/shared/helpers";
 
 const Header = () => {
   const dispatch = useAppDispatch();
-  const { rtl } = useThemeSettings();
+  const { rtl, mode } = useThemeSettings();
 
   return (
     <header
-      className={`flex flex-col sm:flex-row justify-end items-center p-4 bg-white ${
-        rtl ? "flex-row-reverse" : "flex-row"
-      }`}
+      className={cn(
+        "flex flex-col sm:flex-row items-center p-4",
+        rtl ? "flex-row-reverse justify-start" : "flex-row justify-end",
+        mode === "dark" ? "bg-gray-800 text-white" : "bg-white text-gray-800"
+      )}
     >
       <div
-        className={`flex items-center ${
-          rtl ? "flex-row-reverse space-x-4 space-x-reverse" : "space-x-4"
-        }`}
+        className={cn(
+          "flex items-center space-x-4",
+          rtl && "flex-row-reverse space-x-reverse"
+        )}
       >
         <SearchDropdown />
         <Badge content={4} color="bg-orange-600">
-          <FiBell className="text-xl text-gray-700 cursor-pointer" />
+          <FiBell className="text-xl cursor-pointer" />
         </Badge>
 
         <div className="w-6 h-6 rounded-full flex items-center justify-center cursor-pointer">

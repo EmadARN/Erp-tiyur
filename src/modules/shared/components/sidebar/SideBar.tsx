@@ -14,7 +14,7 @@ interface OpenNodes {
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [openNodes, setOpenNodes] = useState<OpenNodes>({});
-  const { rtl } = useThemeSettings();
+  const { rtl, mode } = useThemeSettings();
 
   const toggleSidebar = () => setIsCollapsed((prev) => !prev);
 
@@ -38,20 +38,19 @@ const Sidebar = () => {
   return (
     <motion.aside
       className={cn(
-        "relative top-0 h-screen flex flex-col transition-colors  duration-300",
+        "relative top-0 h-screen flex flex-col transition-colors duration-300 border-r-2 ",
         rtl ? "right-0 text-right" : "left-0 text-left",
-        { "items-center": isCollapsed }
+        { "items-center": isCollapsed },
+        mode === "dark"
+          ? "bg-gray-800 text-white border-[#9991]"
+          : "bg-white text-gray-800 border-gray-100"
       )}
-      style={{
-        backgroundColor: "var(--sidebar-bg)",
-        color: "var(--sidebar-text)",
-      }}
       variants={sidebarVariants}
       animate={isCollapsed ? "collapsed" : "expanded"}
       transition={{ duration: 0.3 }}
     >
       {/* دکمه باز/بستن */}
-      <div className={cn("absolute top-5", rtl ? "-left-8.5" : "-right-8.5")}>
+      <div className={cn("absolute top-5", rtl ? "-left-8.5" : "-right-6.5")}>
         <ToggleButton isCollapsed={isCollapsed} onToggle={toggleSidebar} />
       </div>
 
@@ -66,7 +65,12 @@ const Sidebar = () => {
       </div>
 
       {/* بخش وسط که اسکرول می‌خوره */}
-      <div className="flex-1 overflow-y-auto scrollbar-ghost">
+      <div
+        className={cn(
+          "flex-1",
+          !isCollapsed && "overflow-y-auto scrollbar-ghost"
+        )}
+      >
         <TreeNode
           isCollapsed={isCollapsed}
           nodes={treeData}

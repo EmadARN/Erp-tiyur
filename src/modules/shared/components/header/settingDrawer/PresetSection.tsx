@@ -15,26 +15,21 @@ const presets: { value: PresetColor; color: string }[] = [
 export function PresetSection() {
   const { preset, mode, rtl: isRtl, direction } = useThemeSettings();
   const dispatch = useDispatch();
-
   const isDark = mode === "dark";
 
   return (
     <div className="mt-8">
       {/* Title */}
-
       <p
-        className={`text-gray-600 mb-2 ${
-          isRtl ? "text-right" : "text-left"
+        className={`mb-2 ${isRtl ? "text-right" : "text-left"} ${
+          isDark ? "text-gray-300" : "text-gray-600"
         }`}
       >
         Preset
       </p>
 
       {/* Preset Grid */}
-      <div
-        className={`grid grid-cols-2 gap-4 ${isRtl ? "direction-rtl" : ""}`}
-        style={{ direction }}
-      >
+      <div className={`grid grid-cols-2 gap-4`} style={{ direction }}>
         {presets.map(({ value, color }) => {
           const isActive = preset === value;
 
@@ -42,12 +37,12 @@ export function PresetSection() {
             <button
               key={value}
               onClick={() => dispatch(setPreset(value))}
-              className={`w-full aspect-video flex items-center justify-center rounded-xl
+              className={`w-full aspect-video flex items-center justify-center rounded-xl transition-all duration-200 cursor-pointer
                 ${
                   isActive
-                    ? "bg-gray-100 ring-2 ring-offset-2 ring-green-500"
+                    ? `${isDark ? "bg-gray-700  " : "bg-gray-100  "}`
                     : isDark
-                    ? "hover:bg-gray-700"
+                    ? "hover:bg-gray-800"
                     : "hover:bg-gray-50"
                 }
                 ${isRtl ? "flex-row-reverse" : "flex-row"}

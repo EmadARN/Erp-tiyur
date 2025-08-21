@@ -1,3 +1,4 @@
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
 import { FaBell } from "react-icons/fa";
 
 const notifications = [
@@ -7,16 +8,52 @@ const notifications = [
 ];
 
 const Notifications = () => {
+  const { mode, rtl } = useThemeSettings();
+
   return (
-    <div className="bg-white shadow-sm border border-gray-200 rounded-xl p-6 mb-8">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+    <div
+      className={`shadow-sm border rounded-xl p-6 mb-8 transition-colors duration-300
+        ${
+          mode === "dark"
+            ? "bg-gray-800 border-gray-700 text-gray-100"
+            : "bg-white border-gray-200 text-gray-900"
+        }
+      `}
+      dir={rtl ? "rtl" : "ltr"}
+    >
+      <h3
+        className={`text-lg font-semibold mb-4 flex items-center gap-2 ${
+          mode === "dark" ? "text-gray-100" : "text-gray-900"
+        }`}
+      >
         <FaBell className="text-blue-500" /> Notifications
       </h3>
-      <ul className="divide-y divide-gray-200">
+      <ul
+        className={`divide-y ${
+          mode === "dark" ? "divide-gray-700" : "divide-gray-200"
+        }`}
+      >
         {notifications.map((note, idx) => (
-          <li key={idx} className="py-3 flex justify-between items-center">
-            <span className="text-sm text-gray-700">{note.message}</span>
-            <span className="text-xs text-gray-400">{note.time}</span>
+          <li
+            key={idx}
+            className={`py-3 flex justify-between items-center ${
+              rtl ? "flex-row-reverse" : "flex-row"
+            }`}
+          >
+            <span
+              className={`${
+                mode === "dark" ? "text-gray-100" : "text-gray-700"
+              } text-sm`}
+            >
+              {note.message}
+            </span>
+            <span
+              className={`${
+                mode === "dark" ? "text-gray-400" : "text-gray-400"
+              } text-xs`}
+            >
+              {note.time}
+            </span>
           </li>
         ))}
       </ul>

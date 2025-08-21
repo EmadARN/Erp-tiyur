@@ -1,4 +1,6 @@
 import { forwardRef, type InputHTMLAttributes } from "react";
+import { useThemeSettings } from "@/modules/shared/hooks/useThemeSettings";
+import { cn } from "@/modules/shared/helpers"; // اطمینان از اینکه cn ایمپورت شده
 
 type InputTypes =
   | "text"
@@ -35,12 +37,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       onChange,
       inputClassName = "",
       className = "",
-      value = "", // مقدار پیش‌فرض برای جلوگیری از undefined
+      value = "",
       isFloat = false,
       ...rest
     },
     ref
   ) => {
+    const { mode } = useThemeSettings();
+    const isDark = mode === "dark";
     const step = inputType === "number" && isFloat ? "any" : undefined;
 
     return (
@@ -49,10 +53,19 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           ref={ref}
           type={inputType}
           placeholder={placeholder}
-          value={value ?? ""} // اطمینان از اینکه مقدار همیشه رشته است
-          onChange={(e) => onChange && onChange(e.target.value)}
+          value={value ?? ""}
+          onChange={(e) => onChange?.(e.target.value)}
           step={step}
-          className={`w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary text-[#111] ${inputClassName}`}
+          className={cn(
+            "w-full px-4 py-2 rounded-md ring-1 focus:outline-none focus:ring-2",
+            {
+              "ring-gray-700 focus:ring-blue-600 text-gray-200 placeholder-gray-400 bg-gray-900":
+                isDark,
+              "ring-gray-300 focus:ring-blue-500 text-gray-900 placeholder-gray-400 bg-white":
+                !isDark,
+            },
+            inputClassName
+          )}
           {...rest}
         />
       </div>

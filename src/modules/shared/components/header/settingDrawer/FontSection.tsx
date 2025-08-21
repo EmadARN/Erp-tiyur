@@ -11,11 +11,7 @@ export function FontSection() {
   const { rtl, font } = useThemeSettings();
   return (
     <div className="mt-8">
-      <p
-        className={`text-gray-600 mb-2 ${
-          rtl ? "text-right" : "text-left"
-        }`}
-      >
+      <p className={`text-gray-600 mb-2 ${rtl ? "text-right" : "text-left"}`}>
         Font
       </p>
       <p className="text-gray-600 mb-2 mt-4">Family</p>
@@ -30,7 +26,7 @@ export function FontSection() {
                 : "border-gray-200"
             }`}
           >
-            <div className={`mb-1 ${f.fontClass}`}>Aa</div>
+            <div className={`mb-1 text-gray-600 ${f.fontClass}`}>Aa</div>
             <div className="text-gray-700">{f.name}</div>
           </button>
         ))}
